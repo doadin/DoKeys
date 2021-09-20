@@ -1,37 +1,3 @@
-local mapidname = {
-    ["De Other Side"] = 1679,
-    ["Halls of Atonement"] = 1663,
-    ["Mists of Tirna Scithe"] = 1669,
-    ["Plaguefall"] = 1674,
-    ["Sanguine Depths"] = 1675,
-    ["Spires Of Ascension"] = 1693,
-    ["The Necrotic Wake"] = 1666,
-    ["Theater of Pain"] = 1683,
-}
-
-function DoKeys:CreateLink(data)
-    -- '|cffa335ee|Hkeystone:180653:244:2:10:0:0:0|h[Keystone: Atal'dazar (2)]|h|r'
-    local link
-    if string.len(data.CurrentKeyInstance) > 2 then
-        local mapedid
-        for mapname,id in pairs(mapidname) do
-            if mapname == data.CurrentKeyInstance then
-                mapedid = id
-            end
-        end
-        link = string.format(
-            '|cffa335ee|Hkeystone:180653:%d:%d:10:0:0:0|h[Keystone: %s (%d)]|h|r',
-            mapedid or 0, --data.mapId
-            data.CurrentKeyLevel, --data.level
-            data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-            data.CurrentKeyLevel --data.level
-        )
-    else
-        link = "None"
-    end
-    return link
-end
-
 --ADDON_LOADED
 --SAVED_VARIABLES_TOO_LARGE
 --SPELLS_CHANGED
@@ -74,3 +40,26 @@ end
 --
 --
 --DoKeysTestFrame:SetScript("OnEvent", EventOrder)
+
+--enabledState = GetAddOnEnableState(["character"], addonIndex or "AddOnName")
+--    enabledState
+--    Number - The enabled state of the addon.
+--    0 - disabled
+--    1 - enabled for some
+--    2 - enabled
+--name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo(index or "name")
+--_G.DoKeysUtility = {}
+--for i=1, GetNumAddOns() do
+--	--print(GetAddOnInfo(i))
+--	local name, _, _, loadable = GetAddOnInfo(i)
+--	if loadable then
+--		loadable = "enabled"
+--	else
+--		loadable = "disabled"
+--	end
+--	local value = loadable
+--	--regex " , -- \[. *.*\] "
+--	--print(name)
+--	tinsert(DoKeysUtility, i, value )
+--	--print("Hello ", i)
+--end

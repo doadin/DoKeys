@@ -1,161 +1,285 @@
---luacheck: no max line length
---luacheck: no redefined
-
+local realm = _G.GetRealmName()
 local CreateFrame = _G.CreateFrame
-local LibStub = _G.LibStub
+local SendChatMessage = _G.SendChatMessage
 local GetAddOnMetadata = _G.GetAddOnMetadata
-local tinsert = _G.tinsert
-local RAID_CLASS_COLORS = _G.RAID_CLASS_COLORS
-
-local eventframe = CreateFrame("Frame")
-eventframe:RegisterEvent("ADDON_LOADED")
+local DoKeysCurrentMaxLevel = _G.GetMaxLevelForExpansionLevel(_G.GetMaximumExpansionLevel())
 
 local AceGUI = LibStub("AceGUI-3.0")
 -- Create a container frame
 local MainFrame = AceGUI:Create("Frame")
---f:SetCallback("OnClose",function(widget) AceGUI:Release(widget) end)
+--MainFrame:SetCallback("OnClose",function(widget) AceGUI:Release(widget) end)
 MainFrame:SetTitle("DoKeys")
 MainFrame:SetStatusText("Dokeys" .. " " .. GetAddOnMetadata("DoKeys", "Version") )
-MainFrame:SetLayout("Fill")
+--MainFrame:SetLayout("Fill")  Makes everything in main frame fill the frame
 MainFrame:EnableResize(false)
 MainFrame:Hide()
 
-local scrollcontainer = AceGUI:Create("SimpleGroup") -- "InlineGroup" is also good
-scrollcontainer:SetFullWidth(true)
-scrollcontainer:SetFullHeight(true) -- probably?
-scrollcontainer:SetLayout("Fill") -- important!
+local PlayerHeading = AceGUI:Create("InlineGroup")
+--PlayerHeading:SetFullWidth(true)
+PlayerHeading:SetTitle("Player's Keys")
+MainFrame:AddChild(PlayerHeading)
 
-MainFrame:AddChild(scrollcontainer)
-
---local cleardatabtn = AceGUI:Create("Button")
---cleardatabtn:SetText("Clear Data!")
---cleardatabtn:SetCallback("OnClick", function() print("Click!") end)
---cleardatabtn:SetPoint("BOTTOM")
---MainFrame:AddChild(cleardatabtn)
-
---local scroll = AceGUI:Create("ScrollFrame")
---scroll:SetLayout("Flow") -- probably?
---scrollcontainer:AddChild(scroll)
+--local scrollcontainer = AceGUI:Create("SimpleGroup") -- "InlineGroup" is also good
+--scrollcontainer:SetFullWidth(true)
+----scrollcontainer:SetFullHeight(true) -- probably?
+--scrollcontainer:SetLayout("Fill") -- important!
+--MainFrame:AddChild(scrollcontainer)
 
 local columnHeaders = {
-    {
-        name = 'Name',
-        width = 50,
-        align = 'LEFT',
-        defaultsort = 'dsc',
-        sortnext = 3,
+	{
+		name = 'Name',
+		width = 50,
+		align = 'LEFT',
+		defaultsort = 'dsc',
+		sortnext = 3,
         --index = 'name',
-    },
-    {
-        name = 'Level',
-        width = 60,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'Level',
+		width = 60,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'level',
-    },
-    {
-        name = 'Weekly Best',
-        width = 80,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'Weekly Best',
+		width = 80,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'WeeklyBest',
-    },
-    {
-        name = 'CurrentKeyLevel',
-        width = 90,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'CurrentKeyLevel',
+		width = 90,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'WeeklyBest',
-    },
-    {
-        name = 'CurrentKeyInstance',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'CurrentKeyInstance',
+		width = 100,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'WeeklyBest',
-    },
-    {
-        name = 'Average Item Level',
-        width = 120,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'Average Item Level',
+		width = 120,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'avgItemLevel',
-    },
-    {
-        name = 'Current Season Score',
-        width = 120,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
+	},
+	{
+		name = 'Current Season Score',
+		width = 120,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
         --index = 'avgItemLevel',
-    },
+	},
 }
 
---local LibST = LibStub('ScrollingTable')
---local st = LibST:CreateST(columnHeaders,12,15)
---lib:CreateST(cols, numRows, rowHeight, highlight, parent, multiselection)
 local st = AceGUI:Create('lib-st')
-st:CreateST(columnHeaders,12,12)
---st:EnableSelection(true)
---st:SetWidth(470)
---st:SetHeight(700)
-scrollcontainer:AddChild(st)
+st:CreateST(columnHeaders,10,10)
+PlayerHeading:AddChild(st)
 
--- Create a button
---local btn = AceGUI:Create("Button")
---btn:SetWidth(170)
---btn:SetText("Button !")
---btn:SetCallback("OnClick", function() print("Click!") end)
----- Add the button to the container
---scroll:AddChild(btn)
+local scrollcontainer = AceGUI:Create("SimpleGroup") -- "InlineGroup" is also good
+scrollcontainer:SetFullWidth(true)
+--scrollcontainer:SetFullHeight(true) -- probably?
+scrollcontainer:SetLayout("Flow") -- important!
+MainFrame:AddChild(scrollcontainer)
 
-local realmName = _G.GetRealmName()
+local ReportToDropDownValue
+local function GetReportToDropDownValue(this, event, item)
+    ReportToDropDownValue = item
+end
 
---local function GetTable(_, event, one, _)
---    if event == "ADDON_LOADED" and one == "DoKeys" then
---        for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
---            local characternamelabel = AceGUI:Create("InteractiveLabel")
---            if _G.DoCharacters[realmName][character].level and _G.DoCharacters[realmName][character].level <= 60 then return end
---            if _G.DoCharacters[realmName][character].name then
---                if _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest then
---                    if _G.DoCharacters[realmName][character].avgItemLevel then
---                        characternamelabel:SetText(_G.DoCharacters[realmName][character].name .. " Weekly Best: " .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest .. " avgItemLevel: " .. _G.DoCharacters[realmName][character].avgItemLevel)
---                    end
---                end
---            end
---            characternamelabel:SetFullWidth(true)
---            scroll:AddChild(characternamelabel)
---        end
---    end
---end
-local function GetTable(_, _, _, _)
-    --GetTable(_, event, one, _)
+local ReportButton = AceGUI:Create("Button")
+ReportButton:SetWidth(140)
+ReportButton:SetHeight(20)
+ReportButton:SetText("Report Weekly Best To:")
+ReportButton:SetCallback(
+    "OnClick",
+    function()
+        for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+            if v.level == DoKeysCurrentMaxLevel then
+                SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, ReportToDropDownValue)
+            end
+        end
+        --print(ReportToDropDownValue)
+    end
+)
+scrollcontainer:AddChild(ReportButton)
+ReportButton:SetPoint('LEFT', "$parent", 'LEFT', 0, 0)
+
+
+local ReportToDropDown = AceGUI:Create("Dropdown")
+ReportToDropDown:SetWidth(200)
+ReportToDropDown:SetHeight(25)
+ReportToDropDown:SetList(
+    {
+        [""] = "",
+        ["GUILD"] = "Guild",
+        ["PARTY"] = "Party",
+        ["OFFICER"] = "Officer",
+    }
+)
+ReportToDropDown:SetCallback("OnValueChanged", GetReportToDropDownValue)
+scrollcontainer:AddChild(ReportToDropDown)
+ReportToDropDown:SetPoint('RIGHT', "$parent", 'RIGHT', 0, 0)
+
+--local Guildscrollcontainer = AceGUI:Create("SimpleGroup") -- "InlineGroup" is also good
+--Guildscrollcontainer:SetFullWidth(true)
+--Guildscrollcontainer:SetFullHeight(true) -- probably?
+--Guildscrollcontainer:SetLayout("Fill") -- important!
+--MainFrame:AddChild(Guildscrollcontainer)
+
+local GuildcolumnHeaders = {
+	{
+		name = 'Name',
+		width = 100,
+		align = 'LEFT',
+		defaultsort = 'dsc',
+		sortnext = 3,
+        --index = 'name',
+	},
+	{
+		name = 'Weekly Best',
+		width = 80,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
+        --index = 'WeeklyBest',
+	},
+	{
+		name = 'CurrentKeyLevel',
+		width = 90,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
+        --index = 'WeeklyBest',
+	},
+	{
+		name = 'CurrentKeyInstance',
+		width = 100,
+		align = 'RIGHT',
+		defaultsort = 'dsc',
+        --index = 'WeeklyBest',
+	},
+}
+
+local GuildHeading = AceGUI:Create("InlineGroup")
+--GuildHeading:SetFullWidth(true)
+GuildHeading:SetTitle("Guild Member's Keys")
+MainFrame:AddChild(GuildHeading)
+
+local Guildst = AceGUI:Create('lib-st')
+Guildst:CreateST(GuildcolumnHeaders,10,10)
+GuildHeading:AddChild(Guildst)
+
+local AffixIcons = {
+    ["Fortified"] = "Interface\\Icons\\ability_toughness",
+    ["Tyrannical"] = "Interface\\Icons\\achievement_boss_archaedas",
+    ["Bolsering"] = "Interface\\Icons\\ability_warrior_battleshout",
+    ["Bursting"] = "Interface\\Icons\\ability_ironmaidens_whirlofblood",
+    ["Explosive"] = "Interface\\Icons\\spell_fire_felflamering_red",
+    ["Grievous"] = "Interface\\Icons\\ability_backstab",
+    ["Inspiring"] = "Interface\\Icons\\spell_holy_prayerofspirit",
+    ["Necrotic"] = "Interface\\Icons\\spell_deathknight_necroticplague",
+    ["Quaking"] = "Interface\\Icons\\spell_nature_earthquake",
+    ["Raging"] = "Interface\\Icons\\ability_warrior_focusedrage",
+    ["Sanguine"] = "Interface\\Icons\\spell_shadow_bloodboil",
+    ["Spiteful"] = "Interface\\Icons\\spell_holy_prayerofshadowprotection",
+    ["Storming"] = "Interface\\Icons\\spell_nature_cyclone",
+    ["Volcanic"] = "Interface\\Icons\\spell_shaman_lavasurge",
+    ["Tormented"] = "Interface\\Icons\\spell_animamaw_orb",
+}
+
+local AffixHeading = AceGUI:Create("InlineGroup")
+AffixHeading:SetLayout("Flow")
+AffixHeading:SetFullWidth(true)
+AffixHeading:SetTitle("This Weeks Affix's")
+MainFrame:AddChild(AffixHeading)
+local GetAffixInfoOnce
+local function GetCurrentAffixes()
+    if not GetAffixInfoOnce then
+        local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
+        if not CurrentAffixes then C_Timer.After(1, GetCurrentAffixes) return end
+        local AffixOne = AceGUI:Create("Label")
+        local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
+        AffixOne:SetImage(AffixOnefiledataid)
+        --AffixOne:SetImageSize(32,32)
+        --AffixOne:SetWidth(40)
+        --AffixOne:SetHeight(40)
+        AffixOne:SetText("Level 2+: " .. AffixOnename)
+        AffixOne.tooltipText = AffixOnedescription
+        AffixHeading:AddChild(AffixOne)
+
+        local AffixTwo = AceGUI:Create("Label")
+        local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
+        AffixTwo:SetImage(AffixTwofiledataid)
+        --AffixTwo:SetImageSize(32,32)
+        --AffixTwo:SetWidth(40)
+        --AffixTwo:SetHeight(40)
+        AffixTwo:SetText("Level 4+: " .. AffixTwoname)
+        AffixTwo.tooltipText = AffixTwodescription
+        AffixHeading:AddChild(AffixTwo)
+
+        local AffixThree = AceGUI:Create("Label")
+        local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
+        AffixThree:SetImage(AffixThreefiledataid)
+        --AffixThree:SetImageSize(32,32)
+        --AffixThree:SetWidth(40)
+        --AffixThree:SetHeight(40)
+        AffixThree:SetText("Level 7+: " .. AffixThreename)
+        AffixThree.tooltipText = AffixThreedescription
+        AffixHeading:AddChild(AffixThree)
+
+        local AffixFour = AceGUI:Create("Label")
+        local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
+        AffixFour:SetImage(AffixFourfiledataid)
+        --AffixFour:SetImageSize(32,32)
+        --AffixFour:SetWidth(40)
+        --AffixFour:SetHeight(40)
+        AffixFour:SetText("Level 10+: " .. AffixFourname)
+        AffixFour.tooltipText = AffixFourdescription
+        AffixHeading:AddChild(AffixFour)
+        GetAffixInfoOnce = true
+    end
+end
+
+local eventframe = CreateFrame("Frame")
+--eventframe:RegisterEvent("PLAYER_ENTERING_WORLD")
+eventframe:RegisterEvent("LOADING_SCREEN_DISABLED")
+
+eventframe:SetScript("OnEvent", GetCurrentAffixes)
+
+local realmName = GetRealmName()
+
+local function GetTable()
     --local data = {
-    --	{
-    --		cols = {
-    --			{
-    --				value = 'Kelebros',
-    --				color = RAID_CLASS_COLORS['DRUID'],
-    --			},
-    --			{
-    --				value = '85',
-    --			},
-    --		},
-    --	},
-    --	{
-    --		cols = {
-    --			{
-    --				value = 'Humbaba',
-    --				color = RAID_CLASS_COLORS['WARLOCK'],
-    --			},
-    --			{
-    --				value = '85',
-    --			},
-    --		},
-    --	},
-    --}
-    --if event == "ADDON_LOADED" and one == "DoKeys" then
-        local data = {}
-        for character,_ in pairs(_G.DoCharacters[realmName]) do --character,characterinfo
+	--	{
+	--		cols = {
+	--			{
+	--				value = 'Kelebros',
+	--				color = RAID_CLASS_COLORS['DRUID'],
+	--			},
+	--			{
+	--				value = '85',
+	--			},
+	--		},
+	--	},
+	--	{
+	--		cols = {
+	--			{
+	--				value = 'Humbaba',
+	--				color = RAID_CLASS_COLORS['WARLOCK'],
+	--			},
+	--			{
+	--				value = '85',
+	--			},
+	--		},
+	--	},
+	--}
+        data = {}
+        for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
             --print(_G.DoCharacters[realmName][character].name)
             --tinsert(data, {
             --    Name       = _G.DoCharacters[realmName][character].name,
@@ -190,28 +314,48 @@ local function GetTable(_, _, _, _)
         end
         st.st:SetData(data,true)
         st.st:Show()
-        --st.st:SetDisplayCols(st.st.cols)
-        --st.st:RegisterEvents(st.st.DefaultEvents)
-        --st.st.Show = true
-    --end
+        guilddata = {}
+		for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
+			for character in pairs(NameRealm) do
+                tinsert(guilddata,
+                    { _G.DoKeysGuild[GuildName][character].name,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance,
+                    color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
+                    }
+                )
+			end
+		end
+		Guildst.st:SetData(guilddata,true)
+        Guildst.st:Show()
 end
-
---eventframe:SetScript("OnEvent", GetTable)
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("DoKeys", "AceConsole-3.0")
 local DoKeysLDB = LibStub("LibDataBroker-1.1"):NewDataObject("DoKeysLDB", {
 type = "data source",
 text = "DoKeys",
-icon = "Interface\\Icons\\INV_Chest_Cloth_17",
-OnClick = function()
-    if MainFrame:IsShown() then
-        MainFrame:Hide()
-    else
-        GetTable()
-        MainFrame:Show()
-    end
-end,
-})
+icon = "Interface\\Icons\\spell_nature_moonkey",
+OnClick = function(clickedframe, button)
+                if button == "LeftButton" then
+                    if MainFrame:IsShown() then
+                        MainFrame:Hide()
+                    else
+                        GetTable()
+                        MainFrame:Show()
+                    end
+                end
+                --if button == "RightButton" then
+                --    if GuildFrame:IsShown() then
+                --        GuildFrame:Hide()
+                --    else
+                --        GetTable()
+                --        GuildFrame:Show()
+                --    end
+                --end
+          end,
+    }
+)
 local icon = LibStub("LibDBIcon-1.0")
 
 function addon:OnInitialize()
@@ -220,8 +364,8 @@ function addon:OnInitialize()
     self:RegisterChatCommand("dokeys", "OpenUI")
 end
 
-function addon:OpenUI(one, _, _, _)
-    --OpenUI(one, two, three, four)
+function addon:OpenUI(one, two, three, four)
+    --print(one, two, three, four)
     --local AceConsole = LibStub("AceConsole-3.0")
     --print(AceConsole:GetArgs(str, numargs, startpos))
     if one == "toggle minimap" then
@@ -236,8 +380,8 @@ function addon:OpenUI(one, _, _, _)
         if MainFrame:IsShown() then
             MainFrame:Hide()
         else
-            MainFrame:Show()
             GetTable()
+            MainFrame:Show()
         end
     end
 end

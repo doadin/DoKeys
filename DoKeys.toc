@@ -2,13 +2,15 @@
 ## Title: DoKeys
 ## Version: 1.0
 
-## SavedVariables: DoCharacters,DoKeysDB
+## SavedVariables: DoCharacters,DoKeysGuild,DoKeysDB,DoKeysUtility
 
 libs\AceAddon-3.0\AceAddon-3.0.xml
 libs\AceConsole-3.0\AceConsole-3.0.xml
 libs\AceDB-3.0\AceDB-3.0.xml
 libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\LibDBIcon-1.0\embeds.xml
+libs\LibDeflate\lib.xml
+libs\AceSerializer-3.0\AceSerializer-3.0.lua
 libs\lib-st\lib-st.xml
 libs\AceGUIWidget-lib-st\AceGUIWidget-lib-st.lua
 

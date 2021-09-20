@@ -8,20 +8,21 @@ local GetOwnedKeystoneLevel = _G.C_MythicPlus.GetOwnedKeystoneLevel
 local GetAverageItemLevel = _G.GetAverageItemLevel
 local CreateFrame = _G.CreateFrame
 local C_ChallengeMode = _G.C_ChallengeMode
+local C_ChatInfo = _G.C_ChatInfo
 local C_MythicPlus = _G.C_MythicPlus
 local C_PlayerInfo = _G.C_PlayerInfo
---local isGuildMember = _G.IsInGuild()
-local UnitLevel = _G.UnitLevel
+local isGuildMember = _G.IsInGuild()
 local UnitClass = _G.UnitClass
+local UnitLevel = _G.UnitLevel
 
 local date = _G.date
 local time = _G.time
 local GetCurrentRegion = _G.GetCurrentRegion
 local GetServerTime = _G.GetServerTime
 local difftime = _G.difftime
---local wipe = _G.wipe
---local strsplit = _G.strsplit
---local GetGuildInfo = _G.GetGuildInfo
+local wipe = _G.wipe
+local strsplit = _G.strsplit
+local GetGuildInfo = _G.GetGuildInfo
 
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -44,27 +45,32 @@ DoKeysResetFrame:RegisterEvent("PLAYER_LOGIN")
 local DoKeysGearFrame = CreateFrame("FRAME")
 DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
 
---local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
---DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
+local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
+DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
 
---_G.DoCharacters = {}
+local DoKeysRequestAKKMGuildKeysFrame = CreateFrame("FRAME")
+DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
+DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
+DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
 local realmName = GetRealmName()
---local GuildName
---if isGuildMember then
---    GuildName = GetGuildInfo("player")
---end
---local playerName = UnitName("player")
+local GuildName
+if isGuildMember then
+    GuildName = GetGuildInfo("player")
+end
+local playerName = UnitName("player")
+local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
+local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
 
---local function checktable(table)
---    --print(type(table))
---    if type(table == "table") then
---        return true
---    else
---        error()
---        return false
---    end
---end
+local function checktable(table)
+    --print(type(table))
+    if type(table == "table") then
+        return true
+    else
+        error()
+        return false
+    end
+ end
 
 local function SetupDB(_, event, one, _)
     --ADDON_LOADED
@@ -72,62 +78,70 @@ local function SetupDB(_, event, one, _)
     --SPELLS_CHANGED
     --PLAYER_LOGIN
     --PLAYER_ENTERING_WORLD
+    C_MythicPlus.RequestRewards()
     if event == "ADDON_LOADED" and one == "DoKeys" then
-        if _G.DoCharacters then -- luacheck: ignore
+        if _G.DoCharacters then
         else
             _G.DoCharacters = {}
         end
-        if _G.DoCharacters[realmName] then -- luacheck: ignore
+        if _G.DoCharacters[realmName] then
         else
             _G.DoCharacters[realmName] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")] then
         else
             _G.DoCharacters[realmName][UnitName("player")] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
         end
-        --if isGuildMember then
-        --    if _G.DoCharacters[realmName][GuildName] then
-        --    else
-        --        _G.DoCharacters[realmName][GuildName] = {}
-        --    end
-        --end
+        if isGuildMember then
+            if _G.DoKeysGuild then
+            else
+                _G.DoKeysGuild = {}
+            end
+            if _G.DoKeysGuild[GuildName] then
+            else
+                _G.DoKeysGuild[GuildName] = {}
+            end
+        end
     end
-    --local DoCharacters = _G.DoCharacters
     if event == "PLAYER_ENTERING_WORLD" then
-        if _G.DoCharacters then -- luacheck: ignore
+        if _G.DoCharacters then
         else
             _G.DoCharacters = {}
         end
-        if _G.DoCharacters[realmName] then -- luacheck: ignore
+        if _G.DoCharacters[realmName] then
         else
             _G.DoCharacters[realmName] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")] then
         else
             _G.DoCharacters[realmName][UnitName("player")] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then -- luacheck: ignore
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
         end
-        --if isGuildMember then
-        --    if _G.DoCharacters[realmName][GuildName] then
-        --    else
-        --        _G.DoCharacters[realmName][GuildName] = {}
-        --    end
-        --end
+        if isGuildMember then
+            if _G.DoKeysGuild then
+            else
+                _G.DoKeysGuild = {}
+            end
+            if _G.DoKeysGuild[GuildName] then
+            else
+                _G.DoKeysGuild[GuildName] = {}
+            end
+        end
 
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel() --avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp
         _G.DoCharacters[realmName][UnitName("player")].avgItemLevel = avgItemLevel or 0
@@ -154,8 +168,7 @@ local function SetupDB(_, event, one, _)
         local maps = C_ChallengeMode.GetMapTable()
         local best = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
         for i = 1, #maps do
-            local _, weeklyLevel, _, _, _ = C_MythicPlus.GetWeeklyBestForMap(maps[i])
-            --print(durationSec, weeklyLevel, completionDate, affixIDs, members)
+            local durationSec, weeklyLevel, completionDate, affixIDs, members = C_MythicPlus.GetWeeklyBestForMap(maps[i])
             if (not weeklyLevel) then
                 weeklyLevel = 0
             end
@@ -163,28 +176,19 @@ local function SetupDB(_, event, one, _)
                 best = weeklyLevel
             end
         end
-        --Resets Before KeyExpire
-        --local runs = C_MythicPlus.GetRunHistory()
-        --local weeklyLevel = 0
-        --print(type(runs))
-        --for k,v in pairs(runs) do
-        --    print(k,v)
-        --    for key,value in pairs(v) do
-        --        print(key,value)
-        --        if key == "level" then
-        --            --print(value)
-        --            if value > weeklyLevel then
-        --                weeklyLevel = value
-        --            end
-        --        end
-        --    end
-        --end
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = best
+    end
+    if isAstralKeysRegistered then
+    else
+        C_ChatInfo.RegisterAddonMessagePrefix("AstralKeys")
+    end
+    if isKeystoneManagerRegistered then
+    else
+        C_ChatInfo.RegisterAddonMessagePrefix("KeystoneManager")
     end
 end
 
 local function UpdateKeyStone(_, _)
-
     local currentkeymapid = GetOwnedKeystoneChallengeMapID()
     local name = ""
     if type(currentkeymapid) == "number" then
@@ -192,11 +196,6 @@ local function UpdateKeyStone(_, _)
     end
     _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
     _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
-
-    --CHALLENGE_MODE_COMPLETED
-    --mapChallengeModeID, level, time, onTime, keystoneUpgradeLevels, practiceRun = C_ChallengeMode.GetCompletionInfo()
-    --C_MythicPlus.IsWeeklyRewardAvailable()
-    --MYTHIC_PLUS_NEW_WEEKLY_RECORD = mapChallengeModeID,completionMilliseconds, level
 end
 
 local function UpdateGear()
@@ -207,45 +206,7 @@ local function UpdateGear()
 end
 
 local function UpdateWeeklyBest(_, event, one, _, three)
-
     local timed
-
-    --if event == "CHALLENGE_MODE_COMPLETED" then
-    --    local mapChallengeModeID, level, _, _, keystoneUpgradeLevels, _ = C_ChallengeMode.GetCompletionInfo()
-    --    local name = ""
-    --    if type(mapChallengeModeID) == "number" then
-    --        name = C_ChallengeMode.GetMapUIInfo(mapChallengeModeID)
-    --    end
-    --    local weeklybest = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
-    --    if weeklybest <= level then
-    --        if keystoneUpgradeLevels == 3 then
-    --            timed = "+++"
-    --        elseif keystoneUpgradeLevels == 2 then
-    --            timed = "++"
-    --        elseif keystoneUpgradeLevels == 1 then
-    --            timed = "+"
-    --        elseif keystoneUpgradeLevels == 0 then -- or onTime = false
-    --            timed = "Not In Time"
-    --        end
-    --        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestInstanceName = name
-    --        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestLevel = level
-    --        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestLevelTimed = timed
-    --        local maps = C_ChallengeMode.GetMapTable()
-    --        local best = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
-    --        for i = 1, #maps do
-    --            local durationSec, weeklyLevel, completionDate, affixIDs, members = C_MythicPlus.GetWeeklyBestForMap(maps[i])
-    --            --print(durationSec, weeklyLevel, completionDate, affixIDs, members)
-    --            if (not weeklyLevel) then
-    --                weeklyLevel = 0
-    --            end
-    --            if weeklyLevel and weeklyLevel > best then
-    --                best = weeklyLevel
-    --            end
-    --        end
-    --        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = best
-    --    end
-    --end
-
     if event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" then
         local name = C_ChallengeMode.GetMapUIInfo(one)
         local _, _, _, _, keystoneUpgradeLevels, _ = C_ChallengeMode.GetCompletionInfo()
@@ -268,120 +229,212 @@ local function UpdateWeeklyBest(_, event, one, _, three)
         if best < three then
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = three
         end
+        if isAstralKeysRegistered then
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'updateWeekly ' .. three, 'GUILD')
+        end
     end
-
-    --CHALLENGE_MODE_COMPLETED
-    --mapChallengeModeID, level, time, onTime, keystoneUpgradeLevels, practiceRun = C_ChallengeMode.GetCompletionInfo()
-    --C_MythicPlus.IsWeeklyRewardAvailable()
-    --MYTHIC_PLUS_NEW_WEEKLY_RECORD = mapChallengeModeID,completionMilliseconds, level
-    --JAILERS_TOWER_LEVEL_UPDATE
 end
 
---local function CompressAndEncode(input)
---	local compressed = LibDeflate:CompressDeflate(self:Serialize(input));
---	return LibDeflate:EncodeForWoWAddonChannel(compressed);
---end
---
---local function DecompressAndDecode(input)
---	local decoded = LibDeflate:DecodeForWoWAddonChannel(input);
---	local success, deserialized = self:Deserialize(LibDeflate:DecompressDeflate(decoded));
---	if not success then
---		KeystoneManager:Print('There was issue with receiving guild keys, please report this to Addon Author.')
---	end
---	return deserialized;
---end
+local function CompressAndEncode(input)
+    local compressed = LibDeflate:CompressDeflate(self:Serialize(input));
+    return LibDeflate:EncodeForWoWAddonChannel(compressed);
+end
 
---if type(_G.ThisShouldNeverExistsWhatareYouDoing) == "table" then
---    print("This works")
---end
+local function DecompressAndDecode(input)
+    --local decoded = LibDeflate:DecodeForWoWAddonChannel(input);
+    --local success, deserialized = self:Deserialize(LibDeflate:DecompressDeflate(decoded));
+    --if not success then
+    --	KeystoneManager:Print('There was issue with receiving guild keys, please report this to Addon Author.')
+    --end
+    --return deserialized;
+    local LibDeflate = LibStub:GetLibrary("LibDeflate")
+    local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
+    local decoded = LibDeflate:DecodeForWoWAddonChannel(input);
+    local success, deserialized = AceSerializer:Deserialize(LibDeflate:DecompressDeflate(decoded));
+    if not success then
+        print('There was issue with receiving guild keys, please report this to Addon Author.')
+    end
+    return deserialized;
+    --local LibDeflate = LibStub:GetLibrary("LibDeflate")
+    --local decoded = LibDeflate:DecodeForWoWAddonChannel(input)
+    --return decoded
+end
 
---local function TrackGuildKeys(_, _, prefix, text, _, _, _, _, _, _, _)
---    --self, event, prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
---    --local name, rank, rankIndex, level, class, zone, note,  officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index)
---    --CHAT_MSG_ADDON: prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
---    -- sync5: text: Character Name-Realm,Class,KeyMapID,KeyLevel,WeekltBest,Week
---    -- request: text: request channel:  GUILD sender:  CurrentPlayer-Realm target:  CurrentPlayer-Realm
---
---    --_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest
---    --if isGuildMember then
---        --RegisterAstralKeys = C_ChatInfo.RegisterAddonMessagePrefix("AstralKeys")
---        --RegisterKeystoneManager = C_ChatInfo.RegisterAddonMessagePrefix("KeystoneManager")
---        --if not RegisterAstralKeys and not RegisterKeystoneManager then
---        --    print("Error Registering Addon Prefixes")
---        --    return
---        --end
---        --for i = 1, GetNumGuildMembers() do
---        --    local name, _, _, level, _, _, _,  _, online, _, _, _, _, isMobile = GetGuildRosterInfo(i)
---        --end
---    --end
---    if prefix == "AstralKeys" then
---        --print("prefix: ", prefix, "text: ", text, "channel: ", channel, "sender: ", sender, "target: ", target, "zoneChannelID: ", zoneChannelID, "localID: ", localID, "name: ", name, "instanceID: ", instanceID)
---        --for word in string.gmatch(text, '([^:]+)') do
---        --    print(word)
---        --end
---
---        if text == "request" or text == "updateV8" or strsplit(" ", text) == "updateWeekly" then
---            return
---        end
---
---        if text then
---            local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 5 Player Units
---            if NewText2 then
---                local one = strsplit("_",NewText2)
---                if one then
---                    local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week = strsplit(":",NewText2)
---                    --setupdb
---                    --if #_G.DoCharacters[realmName] <= 0 then
---                    --    _G.DoCharacters[realmName][GuildName] = {}
---                    --end
---                    for GuildNameList in pairs(_G.DoCharacters[realmName]) do
---                        if GuildNameList == GuildName then
---                            --print("match for guild moving on")
---                            if #_G.DoCharacters[realmName][GuildName] <= 0 then
---                                --print("guild table empty setting up...")
---                                _G.DoCharacters[realmName][GuildName][NameRealm] = {}
---                                _G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"] = {}
---                                _G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
---                            else
---                                for k,_ in pairs(_G.DoCharacters[realmName][GuildName]) do
---                                    if not k or not k == NameRealm then
---                                        --print("no match in guild table for character setting up...")
---                                        _G.DoCharacters[realmName][GuildName][NameRealm] = {}
---                                        _G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"] = {}
---                                        _G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
---                                    end
---                                end
---                            end
---                        else
---                            --_G.DoCharacters[realmName][GuildName] = {}
---                            --_G.DoCharacters[realmName][GuildName][NameRealm] = {}
---                            --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"] = {}
---                            --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
---                        end
---                    end
---                    -- Add Data
---                    --local guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)
---                    --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
---                    --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
---                    --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = WeeklyBest
---                    --_G.DoCharacters[realmName][GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
---                    --_G.DoCharacters[realmName][GuildName][NameRealm].Class = Class
---                    --print("characterName: ", NameRealm)
---                    --print("Class: ", Class)
---                    --print("KeyMapID: ", KeyMapID)
---                    --print("KeyLevel: ", KeyLevel)
---                    --print("WeekltBest: ", WeekltBest)
---                    --print("Week: ", Week)
---                end
---            end
---        end
---
---    end
---    --GUILD_ROSTER_UPDATE
---    --GUILD_MOTD
---    --CHAT_MSG_GUILD
---    --CHAT_MSG_ADDON
---end
+local function RequestGuildKeys(_, event)
+    --local now = GetTime();
+    --if now - lastRequested < 5 then
+    --	KeystoneManager:Print('Can only request guild keys once per 5 seconds');
+    --	return;
+    --end
+    --lastRequested = now;
+    --self:SendCommMessage(self.MessagePrefix, 'request', 'GUILD');
+    --self:SendCommand('request');
+    if event == "LOADING_SCREEN_DISABLED" or event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" or event == "CHALLENGE_MODE_COMPLETED" then
+        if isAstralKeysRegistered then
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
+        end
+        if isKeystoneManagerRegistered then
+            C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
+        end
+    end
+end
+
+local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _)
+    --self, event, prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
+    --local name, rank, rankIndex, level, class, zone, note,  officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index)
+    -- CHAT_MSG_ADDON: prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
+    -- sync5: prefix:"AstralKeys" text: Character Name-Realm,Class,KeyMapID,KeyLevel,WeekltBest,Week
+    -- request: prefix:"AstralKeys" text: request channel:  GUILD sender:  CurrentPlayer-Realm target:  CurrentPlayer-Realm
+    -- updateWeekly: prefix:"AstralKeys" text: "updateWeekly" + " " + new weekly best channel: channel sender: sender-realm
+    --    C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
+    --    C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
+    if not isGuildMember then
+        return
+    end
+    local method = text:match('%w+');
+    if prefix == "AstralKeys" then
+        if text == "request" or strsplit(" ", text) == "updateV8" then
+            return
+        end
+        if method == "sync5" then --Handle received syncs
+            local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
+            if NewText2 then
+                local AstralCharacterTable = {strsplit("_",NewText2)}
+                for i,data in pairs(AstralCharacterTable) do
+                    if data then
+                        local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week = strsplit(":",data)
+                        if not NameRealm or not Class or not KeyMapID or not KeyLevel or not WeeklyBest or not Week then
+                            return
+                        end
+                        for GuildNameList in pairs(_G.DoKeysGuild) do
+                            if GuildNameList == GuildName then
+                                if _G.DoKeysGuild then
+                                else
+                                    _G.DoKeysGuild = {}
+                                end
+                                if _G.DoKeysGuild[GuildName] then
+                                else
+                                    _G.DoKeysGuild[GuildName] = {}
+                                end
+                                if _G.DoKeysGuild[GuildName][NameRealm] then
+                                else
+                                    _G.DoKeysGuild[GuildName][NameRealm] = {}
+                                end
+                                if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
+                                else
+                                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                                end
+                                if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
+                                else
+                                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                                end
+                            end
+                        end
+                        -- Add Data
+                        local guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = WeeklyBest
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
+                        _G.DoKeysGuild[GuildName][NameRealm].Class = Class
+                        _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+                    end
+                end
+            end
+        end
+        if method == "updateWeekly" and channel == "GUILD" then --Handle new weekly best from characters
+            local _,WeeklyBest = strsplit(" ", text)
+            local NameRealm = sender
+            if not WeeklyBest then
+                return
+            end
+            for GuildNameList in pairs(_G.DoKeysGuild) do
+                if GuildNameList == GuildName then
+                    if _G.DoKeysGuild then
+                    else
+                        _G.DoKeysGuild = {}
+                    end
+                    if _G.DoKeysGuild[GuildName] then
+                    else
+                        _G.DoKeysGuild[GuildName] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    end
+                end
+            end
+            -- Add Data
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = WeeklyBest
+            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+        end
+    end
+    if prefix == "KeystoneManager" then
+        local request = DecompressAndDecode(text) --table
+        if type(request) ~= 'table' then return end
+        if request.command == 'updateKeys' then
+            if type(request.data) ~= 'table' then return end
+            for name, keyInfo in pairs(request.data) do
+                --local keyInfo = {
+                --    name       = playerName,
+                --    shortName  = KeystoneManager:NameWithoutRealm(playerName),
+                --    class      = 'MAGE',
+                --    weeklyBest = 0,
+                --    mapId      = mapId,
+                --    timestamp  = timestamp,
+                --    week       = week,
+                --    mapName    = KeystoneManager.mapNames[mapId],
+                --    level      = level,
+                --    guild      = self.CurrentGuild
+                --}
+                for GuildNameList in pairs(_G.DoKeysGuild) do
+                    if GuildNameList == GuildName then
+                        if _G.DoKeysGuild then
+                        else
+                            _G.DoKeysGuild = {}
+                        end
+                        if _G.DoKeysGuild[GuildName] then
+                        else
+                            _G.DoKeysGuild[GuildName] = {}
+                        end
+                        if _G.DoKeysGuild[GuildName][keyInfo.name] then
+                        else
+                            _G.DoKeysGuild[GuildName][keyInfo.name] = {}
+                        end
+                        if _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"] then
+                        else
+                            _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"] = {}
+                        end
+                        if _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"] then
+                        else
+                            _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"] = {}
+                        end
+                    end
+                end
+                -- Add Data
+                local guildkeyname = C_ChallengeMode.GetMapUIInfo(keyInfo.mapId)
+                _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyLevel = keyInfo.level
+                _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+                _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].WeeklyBest = keyInfo.weeklyBest
+                _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].Week = keyInfo.week
+                _G.DoKeysGuild[GuildName][keyInfo.name].Class = keyInfo.class
+                _G.DoKeysGuild[GuildName][keyInfo.name].name = keyInfo.name
+            end
+        end
+    end
+    --GUILD_ROSTER_UPDATE
+    --GUILD_MOTD
+    --CHAT_MSG_GUILD
+    --CHAT_MSG_ADDON
+end
 
 local initializeTime = {}
 initializeTime[1] = 1500390000 -- US Tuesday at reset
@@ -406,25 +459,13 @@ local function DoWeeklyKeyReset()
                         v.WeeklyBest =  0
                         v.CurrentKeyLevel = 0
                         v.CurrentKeyInstance = ""
-                        --v.CurrentKeyLevel = _G.C_MythicPlus.GetOwnedKeystoneLevel() or 0
-                        --local currentkeymapid = GetOwnedKeystoneChallengeMapID()
-                        --local name
-                        --if currentkeymapid then
-                        --    name = C_ChallengeMode.GetMapUIInfo(currentkeymapid)
-                        --end
-                        --v.CurrentKeyInstance = name or ""
                     end
                  end
               end
            end
         end
     end
-    --Wipe Current Guild Doesn't Account for Characters with different guild then current characters
-    --if isGuildMember then
-    --    if _G.DoCharacters[realmName][GuildName] and type(_G.DoCharacters[realmName][GuildName]) == "table" then
-    --        wipe(_G.DoCharacters[realmName][GuildName])
-    --    end
-    --end
+    wipe(_G.DoKeysGuild)
 end
 
 local function DataResetTime()
@@ -531,7 +572,8 @@ local function Reset()
     end
 end
 
---DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
+DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
+DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
 DoKeysResetFrame:SetScript("OnEvent", Reset)
 DoKeysKeyStoneWeeklyBestFrame:SetScript("OnEvent", UpdateWeeklyBest)
 DoKeysKeyStoneTrackingFrame:SetScript("OnEvent", UpdateKeyStone)
