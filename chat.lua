@@ -44,16 +44,16 @@ local lastrunpartydookies
 
 local DoKeysCurrentMaxLevel = GetMaxLevelForExpansionLevel(GetMaximumExpansionLevel())
 
-local mapidname = {
-	["De Other Side"] = 1679,
-	["Halls of Atonement"] = 1663,
-	["Mists of Tirna Scithe"] = 1669,
-	["Plaguefall"] = 1674,
-	["Sanguine Depths"] = 1675,
-	["Spires Of Ascension"] = 1693,
-	["The Necrotic Wake"] = 1666,
-	["Theater of Pain"] = 1683,
-}
+--local mapidname = {
+--	["De Other Side"] = 1679,
+--	["Halls of Atonement"] = 1663,
+--	["Mists of Tirna Scithe"] = 1669,
+--	["Plaguefall"] = 1674,
+--	["Sanguine Depths"] = 1675,
+--	["Spires Of Ascension"] = 1693,
+--	["The Necrotic Wake"] = 1666,
+--	["Theater of Pain"] = 1683,
+--}
 
 local function CreateLink(data)
     --name, description, filedataid = C_ChallengeMode.GetAffixInfo(affixID)
@@ -75,21 +75,55 @@ local function CreateLink(data)
     --  seasonID=6
     --}
 	-- '|cffa335ee|Hkeystone:180653:244:2:10:0:0:0|h[Keystone: Atal'dazar (2)]|h|r'
+    local AffixTable = C_MythicPlus.GetCurrentAffixes()
 	local link
-	if string.len(data.CurrentKeyInstance) > 2 then
-		local mapedid
-		for mapname,id in pairs(mapidname) do
-			if mapname == data.CurrentKeyInstance then
-				mapedid = id
-			end
-		end
-	    link = string.format(
-	    	'|cffa335ee|Hkeystone:180653:%d:%d:10:0:0:0|h[Keystone: %s (%d)]|h|r',
-	    	mapedid or 0, --data.mapId
-	    	data.CurrentKeyLevel, --data.level
-	    	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	    	data.CurrentKeyLevel --data.level
-	    )
+	if type(data) == "table" then
+        if data.CurrentKeyLevel <= 3 then
+	        link = string.format(
+	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	        	data.currentkeymapid or 0, --data.mapId
+	        	data.CurrentKeyLevel, --data.level
+                AffixTable[1].id or 0,
+	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	        	data.CurrentKeyLevel --data.level
+	        )
+        end
+        if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
+	        link = string.format(
+	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	        	data.currentkeymapid or 0, --data.mapId
+	        	data.CurrentKeyLevel, --data.level
+                AffixTable[1].id or 0,
+                AffixTable[2].id or 0,
+	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	        	data.CurrentKeyLevel --data.level
+	        )
+        end
+        if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
+	        link = string.format(
+	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	        	data.currentkeymapid or 0, --data.mapId
+	        	data.CurrentKeyLevel, --data.level
+                AffixTable[1].id or 0,
+                AffixTable[2].id or 0,
+                AffixTable[3].id or 0,
+	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	        	data.CurrentKeyLevel --data.level
+	        )
+        end
+        if data.CurrentKeyLevel >= 10 then
+	        link = string.format(
+	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	        	data.currentkeymapid or 0, --data.mapId
+	        	data.CurrentKeyLevel, --data.level
+                AffixTable[1].id or 0,
+                AffixTable[2].id or 0,
+                AffixTable[3].id or 0,
+                AffixTable[4].id or 0,
+	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	        	data.CurrentKeyLevel --data.level
+	        )
+        end
 	else
 		link = "None"
 	end

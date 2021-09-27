@@ -41,6 +41,7 @@ DoKeysKeyStoneWeeklyBestFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 
 local DoKeysResetFrame = CreateFrame("FRAME")
 DoKeysResetFrame:RegisterEvent("PLAYER_LOGIN")
+DoKeysResetFrame:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
 
 local DoKeysGearFrame = CreateFrame("FRAME")
 DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
@@ -52,6 +53,9 @@ local DoKeysRequestAKKMGuildKeysFrame = CreateFrame("FRAME")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+
+local UpdateSeasonBestsFrame = CreateFrame("FRAME")
+UpdateSeasonBestsFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
 local realmName = GetRealmName()
 local GuildName
@@ -100,6 +104,10 @@ local function SetupDB(_, event, one, _)
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
         end
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"]  = {}
+        end
         if isGuildMember then
             if _G.DoKeysGuild then
             else
@@ -132,6 +140,10 @@ local function SetupDB(_, event, one, _)
         else
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
         end
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"]  = {}
+        end
         if isGuildMember then
             if _G.DoKeysGuild then
             else
@@ -158,6 +170,7 @@ local function SetupDB(_, event, one, _)
         end
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyChestRewardLevel = C_MythicPlus.GetWeeklyChestRewardLevel() or 0
+        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
         local data = C_PlayerInfo.GetPlayerMythicPlusRatingSummary("player")
         local seasonScore = data and data.currentSeasonScore
         if seasonScore and seasonScore > 0 then
@@ -174,6 +187,40 @@ local function SetupDB(_, event, one, _)
             end
             if weeklyLevel and weeklyLevel > best then
                 best = weeklyLevel
+            end
+
+            local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
+            local name = C_ChallengeMode.GetMapUIInfo(maps[i])
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+            for mapid,affix in pairs(affixScores) do
+                if affix.name then
+                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+                end
+                if affix.overTime then
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+                else
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+                end
+            end
+            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
+            else
+                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
+            end
+            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
+            else
+                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+            end
+
+            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
+            else
+                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+            end
+            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
+            else
+                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
             end
         end
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = best
@@ -196,6 +243,7 @@ local function UpdateKeyStone(_, _)
     end
     _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
     _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
+    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
 end
 
 local function UpdateGear()
@@ -231,6 +279,45 @@ local function UpdateWeeklyBest(_, event, one, _, three)
         end
         if isAstralKeysRegistered then
             C_ChatInfo.SendAddonMessage('AstralKeys', 'updateWeekly ' .. three, 'GUILD')
+        end
+    end
+end
+
+local function UpdateSeasonBests(_, event)
+    local maps = C_ChallengeMode.GetMapTable()
+    for i = 1, #maps do
+        local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
+        local name = C_ChallengeMode.GetMapUIInfo(maps[i])
+        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+        for mapid,affix in pairs(affixScores) do
+            if affix.name then
+                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
+                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+            end
+            if affix.overTime then
+                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+            else
+                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+            end
+        end
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
+        end
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+        end
+
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+        end
+        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
+        else
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
         end
     end
 end
@@ -286,8 +373,9 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
     -- sync5: prefix:"AstralKeys" text: Character Name-Realm,Class,KeyMapID,KeyLevel,WeekltBest,Week
     -- request: prefix:"AstralKeys" text: request channel:  GUILD sender:  CurrentPlayer-Realm target:  CurrentPlayer-Realm
     -- updateWeekly: prefix:"AstralKeys" text: "updateWeekly" + " " + new weekly best channel: channel sender: sender-realm
+    -- friend update: prefix: "friendWeekly" channel: BNET/WHISPER
     --    C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
-    --    C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
+    --AstralComs:RegisterPrefix(channel, prefix, f)
     if not isGuildMember then
         return
     end
@@ -296,7 +384,7 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
         if text == "request" or strsplit(" ", text) == "updateV8" then
             return
         end
-        if method == "sync5" then --Handle received syncs
+        if method == "sync5" and channel == "GUILD" then --Handle received syncs
             local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
             if NewText2 then
                 local AstralCharacterTable = {strsplit("_",NewText2)}
@@ -342,6 +430,9 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
                 end
             end
         end
+        if method == "sync4" and channel == "BNET" then
+            print("got friend key: ", text)
+        end
         if method == "updateWeekly" and channel == "GUILD" then --Handle new weekly best from characters
             local _,WeeklyBest = strsplit(" ", text)
             local NameRealm = sender
@@ -377,6 +468,7 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
     end
+    --    C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
     if prefix == "KeystoneManager" then
         local request = DecompressAndDecode(text) --table
         if type(request) ~= 'table' then return end
@@ -579,3 +671,4 @@ DoKeysKeyStoneWeeklyBestFrame:SetScript("OnEvent", UpdateWeeklyBest)
 DoKeysKeyStoneTrackingFrame:SetScript("OnEvent", UpdateKeyStone)
 DoKeysDBFrame:SetScript("OnEvent", SetupDB)
 DoKeysGearFrame:SetScript("OnEvent", UpdateGear)
+UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
