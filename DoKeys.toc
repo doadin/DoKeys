@@ -1,18 +1,24 @@
-## Interface: 90005
+## Interface: 90105
 ## Title: DoKeys
-## Version: 1.0
+## Version: @project-version@
+
+## Notes: Keystone Character Info.
+
+## Author: Doadin
+## SavedVariables:
+## X-Curse-Project-ID: 554551
 
 ## SavedVariables: DoCharacters,DoKeysGuild,DoKeysDB,DoKeysUtility
 
-libs\AceAddon-3.0\AceAddon-3.0.xml
-libs\AceConsole-3.0\AceConsole-3.0.xml
-libs\AceDB-3.0\AceDB-3.0.xml
-libs\AceGUI-3.0\AceGUI-3.0.xml
-libs\LibDBIcon-1.0\embeds.xml
-libs\LibDeflate\lib.xml
-libs\AceSerializer-3.0\AceSerializer-3.0.lua
-libs\lib-st\lib-st.xml
-libs\AceGUIWidget-lib-st\AceGUIWidget-lib-st.lua
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\LibDBIcon-1.0\embeds.xml
+Libs\LibDeflate\lib.xml
+Libs\AceSerializer-3.0\AceSerializer-3.0.lua
+Libs\lib-st\lib-st.xml
+Libs\AceGUIWidget-lib-st\AceGUIWidget-lib-st.lua
 
 DoKeys.lua
 characterinfo.lua
