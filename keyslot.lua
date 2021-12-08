@@ -14,7 +14,7 @@ local function OnEvent(_, _) --self, event
         for Bag = 0, NUM_BAG_SLOTS do
             for Slot = 1, GetContainerNumSlots(Bag) do
                 local ID = GetContainerItemID(Bag, Slot)
-                if (ID and ID == 180653) then
+                if (ID and ID == 180653) or (ID and ID == 187786) then
                     --return UseContainerItem(Bag, Slot)
                     location = ItemLocation:CreateFromBagAndSlot(Bag, Slot)
                     canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(location)

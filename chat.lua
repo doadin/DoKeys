@@ -143,8 +143,6 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
         for i=1,#mas do
             if string.match(msg,mas[i]) then
                 if event == "CHAT_MSG_GUILD" then
-                    --SendChatMessage(Report,"CHANNEL",nil,chanNumber)
-                    --print("got guild message")
                     if type(lastrunguildkeys) == "number" then
                         local diff = now - lastrunguildkeys
                         if diff < 10 then
@@ -158,8 +156,6 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     lastrunguildkeys = _G.GetTime()
                 elseif event == "CHAT_MSG_OFFICER" then
-                    --SendChatMessage(Report,"GUILD")
-                    --print("got officer message")
                     if type(lastrunofficerkeys) == "number" then
                         local diff = now - lastrunofficerkeys
                         if diff < 10 then
@@ -173,8 +169,6 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     lastrunofficerkeys = _G.GetTime()
                 elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
-                    --SendChatMessage(Report,"GUILD")
-                    --print("got party message")
                     if type(lastrunpartykeys) == "number" then
                         local diff = now - lastrunpartykeys
                         if diff < 10 then
@@ -187,37 +181,33 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     lastrunpartykeys = _G.GetTime()
-                elseif event == "CHAT_MSG_WHISPER" then
-                    --SendChatMessage(Report,"GUILD")
-                    --print("got party message")
-                    if type(lastrunwhisperkeys) == "number" then
-                        local diff = now - lastrunwhisperkeys
-                        if diff < 10 then
-                            return
-                        end
-                    end
-                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "WHISPER")
-                        end
-                    end
-                    lastrunwhisperkeys = _G.GetTime()
-                elseif event == "CHAT_MSG_BN_WHISPER" then
-                    --SendChatMessage(Report,"GUILD")
-                    --print("got party message")
-                    if type(lastrunbnwhisperkeys) == "number" then
-                        local diff = now - lastrunbnwhisperkeys
-                        if diff < 10 then
-                            return
-                        end
-                    end
-                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
-                        if v.level == DoKeysCurrentMaxLevel then
-                            BNSendWhisper(bnSenderID, message)
-                        end
-                    end
-                    lastrunbnwhisperkeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_WHISPER" then
+                --    if type(lastrunwhisperkeys) == "number" then
+                --        local diff = now - lastrunwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "WHISPER")
+                --        end
+                --    end
+                --    lastrunwhisperkeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_BN_WHISPER" then
+                --    if type(lastrunbnwhisperkeys) == "number" then
+                --        local diff = now - lastrunbnwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            BNSendWhisper(bnSenderID, message)
+                --        end
+                --    end
+                --    lastrunbnwhisperkeys = _G.GetTime()
                 end
             end
         end
@@ -264,36 +254,36 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     lastrunpartyhelp = _G.GetTime()
-                elseif event == "CHAT_MSG_WHISPER" then
-                    if type(lastrunwhisperhelp) == "number" then
-                        local diff = now - lastrunwhisperhelp
-                        if diff < 10 then
-                            return
-                        end
-                    end
-                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, "WHISPER", "Common", sender)
-                        end
-                    end
-                    lastrunwhisperhelp = _G.GetTime()
-                elseif event == "CHAT_MSG_BN_WHISPER" then
-                    if type(lastrunbnwhisperhelp) == "number" then
-                        local diff = now - lastrunbnwhisperhelp
-                        if diff < 10 then
-                            return
-                        end
-                    end
-                    --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, unused, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
-                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
-                        --bnSenderID
-                        --BNSendWhisper(bnetAccountID, message)
-                        if v.level == DoKeysCurrentMaxLevel then
-                            BNSendWhisper(bnSenderID, message)
-                        end
-                    end
-                    lastrunbnwhisperhelp = _G.GetTime()
+                --elseif event == "CHAT_MSG_WHISPER" then
+                --    if type(lastrunwhisperhelp) == "number" then
+                --        local diff = now - lastrunwhisperhelp
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, "WHISPER", "Common", sender)
+                --        end
+                --    end
+                --    lastrunwhisperhelp = _G.GetTime()
+                --elseif event == "CHAT_MSG_BN_WHISPER" then
+                --    if type(lastrunbnwhisperhelp) == "number" then
+                --        local diff = now - lastrunbnwhisperhelp
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, unused, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
+                --        --bnSenderID
+                --        --BNSendWhisper(bnetAccountID, message)
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            BNSendWhisper(bnSenderID, message)
+                --        end
+                --    end
+                --    lastrunbnwhisperhelp = _G.GetTime()
                 end
             end
         end
