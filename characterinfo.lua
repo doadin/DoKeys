@@ -201,9 +201,39 @@ local function SetupDB(_, event, one, _)
                     if type(TWKeyInstance) == "string" and TWKeyInstance ~= "nil" and TWKeyInstance ~= "" then
                         local TWKeyInstanceName = C_ChallengeMode.GetMapUIInfo(TWKeyInstance)
                         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = TWKeyInstanceName
+                    else
+                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = ""
                     end
                     if type(TWKeyLevel) == "string" and TWKeyLevel ~= "nil" and TWKeyLevel ~= "" then
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = TWKeyLevel
+                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = tonumber(TWKeyLevel)
+                    else
+                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = 0
+                    end
+                    if type(TWKeyInstance) == "string" and TWKeyInstance ~= "nil" and TWKeyInstance ~= "" then
+                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyID = tonumber(TWKeyInstance)
+                    else
+                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyID = 0
+                    end
+                    if type(TWKeyAffix1) == "string" and TWKeyAffix1 ~= "nil" and TWKeyAffix1 ~= "" then
+                        _G.DoCharacters.CurrentTWKeyAffix1 = tonumber(TWKeyAffix1)
+                    else
+                        _G.DoCharacters.CurrentTWKeyAffix1 = 0
+                    end
+                    if type(TWKeyAffix2) == "string" and TWKeyAffix2 ~= "nil" and TWKeyAffix2 ~= "" then
+                        _G.DoCharacters.CurrentTWKeyAffix2 = tonumber(TWKeyAffix2)
+                    else
+                        _G.DoCharacters.CurrentTWKeyAffix2 = 0
+                    end
+                    if type(TWKeyAffix3) == "string" and TWKeyAffix3 ~= "nil" and TWKeyAffix3 ~= "" then
+                        _G.DoCharacters.CurrentTWKeyAffix3 = tonumber(TWKeyAffix3)
+                    else
+                        _G.DoCharacters.CurrentTWKeyAffix3 = 0
+                    end
+                    if type(TWKeyAffix4) == "string" and TWKeyAffix4 ~= "nil" and TWKeyAffix4 ~= "" then
+                        TWKeyAffix4 = strsplit("[",TWKeyAffix4)
+                        _G.DoCharacters.CurrentTWKeyAffix4 = tonumber(TWKeyAffix4)
+                    else
+                        _G.DoCharacters.CurrentTWKeyAffix4 = 0
                     end
                 end
             end

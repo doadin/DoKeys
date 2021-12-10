@@ -19,7 +19,12 @@ local function OnEvent(_, _) --self, event
                     location = ItemLocation:CreateFromBagAndSlot(Bag, Slot)
                     canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(location)
                     if canUse then
-                        C_ChallengeMode.SlotKeystone()
+                        if ID == 180653 then
+                            C_ChallengeMode.SlotKeystone()
+                        end
+                        if ID == 187786 then
+                            _G.UseContainerItem(Bag, Slot)
+                        end
                     end
                 end
             end

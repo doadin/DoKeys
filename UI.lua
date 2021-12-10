@@ -16,7 +16,7 @@ local MainFrame = AceGUI:Create("Frame")
 MainFrame:SetTitle("DoKeys")
 MainFrame:SetStatusText("Dokeys" .. " " .. GetAddOnMetadata("DoKeys", "Version") )
 MainFrame:EnableResize(false)
-MainFrame:SetWidth(700)
+MainFrame:SetWidth(780)
 MainFrame:SetHeight(520)
 MainFrame:Hide()
 
@@ -35,7 +35,7 @@ SeasonBestsHeading:SetLayout("Flow")
 SeasonBestsFrame:AddChild(SeasonBestsHeading)
 
 local PlayerHeading = AceGUI:Create("InlineGroup")
-PlayerHeading:SetWidth(670)
+PlayerHeading:SetWidth(750)
 PlayerHeading:SetTitle("Player's Keys")
 MainFrame:AddChild(PlayerHeading)
 
@@ -80,14 +80,14 @@ local columnHeaders = {
         --index = 'WeeklyBest',
     },
     {
-        name = 'CurrentKeyLevel',
-        width = 90,
+        name = 'Key Level',
+        width = 60,
         align = 'RIGHT',
         defaultsort = 'dsc',
         --index = 'WeeklyBest',
     },
     {
-        name = 'CurrentKeyInstance',
+        name = 'Key Instance',
         width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
@@ -101,8 +101,22 @@ local columnHeaders = {
         --index = 'avgItemLevel',
     },
     {
-        name = 'Current Season Score',
-        width = 120,
+        name = 'M+ Score',
+        width = 60,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        --index = 'avgItemLevel',
+    },
+    {
+        name = 'TW Key Level',
+        width = 75,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        --index = 'avgItemLevel',
+    },
+    {
+        name = 'TW Key Instance',
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
         --index = 'avgItemLevel',
@@ -311,96 +325,87 @@ AffixHeading:SetTitle("This Weeks Affix's")
 MainFrame:AddChild(AffixHeading)
 
 local function GetAffixes(_,event, one, two)
+    AffixHeading:ReleaseChildren()
 
     local AffixOne
     local AffixTwo
     local AffixThree
     local AffixFour
-    if event == "PLAYER_ENTERING_WORLD" and one or two then
-        --print("Setting up affix UI Icons....")
-        if type(AffixOne) ~= "table" then
-            AffixOne = AceGUI:Create("Icon")
-            AffixOne:SetImageSize(32,32)
-            AffixHeading:AddChild(AffixOne)
-        end
-        if type(AffixTwo) ~= "table" then
-            AffixTwo = AceGUI:Create("Icon")
-            AffixTwo:SetImageSize(32,32)
-            AffixHeading:AddChild(AffixTwo)
-        end
-        if type(AffixThree) ~= "table" then
-            AffixThree = AceGUI:Create("Icon")
-            AffixThree:SetImageSize(32,32)
-            AffixHeading:AddChild(AffixThree)
-        end
-        if type(AffixFour) ~= "table" then
-            AffixFour = AceGUI:Create("Icon")
-            AffixFour:SetImageSize(32,32)
-            AffixHeading:AddChild(AffixFour)
-        end
-    end
 
-    if type(AffixOne) == "table" then
-        local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
-        if not CurrentAffixes then C_Timer.After(1, GetAffixes) return end
-        local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
-        AffixOne:SetImage(AffixOnefiledataid)
-        AffixOne:SetImageSize(32,32)
-        AffixOne:SetLabel("Level 2+: " .. AffixOnename)
-        AffixOne:SetCallback("OnEnter",function()
-            GameTooltip:SetOwner(AffixOne.frame, "ANCHOR_BOTTOM",0,-5)
-            GameTooltip:SetText(AffixOnedescription,1,1,1,1)
-            GameTooltip:Show()
-        end)
-        AffixOne:SetCallback("OnLeave",function()
-            GameTooltip:Hide()
-        end)
+    AffixOne = AceGUI:Create("Icon")
+    AffixOne:SetImageSize(32,32)
+    AffixHeading:AddChild(AffixOne)
 
-        local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
-        AffixTwo:SetImage(AffixTwofiledataid)
-        AffixTwo:SetImageSize(32,32)
-        AffixTwo:SetLabel("Level 4+: " .. AffixTwoname)
-        AffixTwo:SetCallback("OnEnter",function()
-            GameTooltip:SetOwner(AffixTwo.frame, "ANCHOR_BOTTOM",0,-5)
-            GameTooltip:SetText(AffixTwodescription,1,1,1,1)
-            GameTooltip:Show()
-        end)
-        AffixTwo:SetCallback("OnLeave",function()
-            GameTooltip:Hide()
-        end)
+    AffixTwo = AceGUI:Create("Icon")
+    AffixTwo:SetImageSize(32,32)
+    AffixHeading:AddChild(AffixTwo)
 
-        local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
-        AffixThree:SetImage(AffixThreefiledataid)
-        AffixThree:SetImageSize(32,32)
-        AffixThree:SetLabel("Level 7+: " .. AffixThreename)
-        AffixThree:SetCallback("OnEnter",function()
-            GameTooltip:SetOwner(AffixThree.frame, "ANCHOR_BOTTOM",0,-5)
-            GameTooltip:SetText(AffixThreedescription,1,1,1,1)
-            GameTooltip:Show()
-        end)
-        AffixThree:SetCallback("OnLeave",function()
-            GameTooltip:Hide()
-        end)
+    AffixThree = AceGUI:Create("Icon")
+    AffixThree:SetImageSize(32,32)
+    AffixHeading:AddChild(AffixThree)
 
-        local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
-        AffixFour:SetImage(AffixFourfiledataid)
-        AffixFour:SetImageSize(32,32)
-        AffixFour:SetLabel("Level 10+: " .. AffixFourname)
-        AffixFour.tooltipText = AffixFourdescription
-        AffixFour:SetCallback("OnEnter",function()
-            GameTooltip:SetOwner(AffixFour.frame, "ANCHOR_BOTTOM",0,-5)
-            GameTooltip:SetText(AffixFourdescription,1,1,1,1)
-            GameTooltip:Show()
-        end)
-        AffixFour:SetCallback("OnLeave",function()
-            GameTooltip:Hide()
-        end)
-    end
+    AffixFour = AceGUI:Create("Icon")
+    AffixFour:SetImageSize(32,32)
+    AffixHeading:AddChild(AffixFour)
+
+    local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
+    if not CurrentAffixes then C_Timer.After(1, GetAffixes) return end
+    local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
+    AffixOne:SetImage(AffixOnefiledataid)
+    AffixOne:SetImageSize(32,32)
+    AffixOne:SetLabel("Level 2+: " .. AffixOnename)
+    AffixOne:SetCallback("OnEnter",function()
+        GameTooltip:SetOwner(AffixOne.frame, "ANCHOR_BOTTOM",0,-5)
+        GameTooltip:SetText(AffixOnedescription,1,1,1,1)
+        GameTooltip:Show()
+    end)
+    AffixOne:SetCallback("OnLeave",function()
+        GameTooltip:Hide()
+    end)
+
+    local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
+    AffixTwo:SetImage(AffixTwofiledataid)
+    AffixTwo:SetImageSize(32,32)
+    AffixTwo:SetLabel("Level 4+: " .. AffixTwoname)
+    AffixTwo:SetCallback("OnEnter",function()
+        GameTooltip:SetOwner(AffixTwo.frame, "ANCHOR_BOTTOM",0,-5)
+        GameTooltip:SetText(AffixTwodescription,1,1,1,1)
+        GameTooltip:Show()
+    end)
+    AffixTwo:SetCallback("OnLeave",function()
+        GameTooltip:Hide()
+    end)
+
+    local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
+    AffixThree:SetImage(AffixThreefiledataid)
+    AffixThree:SetImageSize(32,32)
+    AffixThree:SetLabel("Level 7+: " .. AffixThreename)
+    AffixThree:SetCallback("OnEnter",function()
+        GameTooltip:SetOwner(AffixThree.frame, "ANCHOR_BOTTOM",0,-5)
+        GameTooltip:SetText(AffixThreedescription,1,1,1,1)
+        GameTooltip:Show()
+    end)
+    AffixThree:SetCallback("OnLeave",function()
+        GameTooltip:Hide()
+    end)
+
+    local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
+    AffixFour:SetImage(AffixFourfiledataid)
+    AffixFour:SetImageSize(32,32)
+    AffixFour:SetLabel("Level 10+: " .. AffixFourname)
+    AffixFour.tooltipText = AffixFourdescription
+    AffixFour:SetCallback("OnEnter",function()
+        GameTooltip:SetOwner(AffixFour.frame, "ANCHOR_BOTTOM",0,-5)
+        GameTooltip:SetText(AffixFourdescription,1,1,1,1)
+        GameTooltip:Show()
+    end)
+    AffixFour:SetCallback("OnLeave",function()
+        GameTooltip:Hide()
+    end)
 end
 
 local eventframe = CreateFrame("Frame")
 eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
-eventframe:RegisterEvent("PLAYER_ENTERING_WORLD") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 eventframe:SetScript("OnEvent", GetAffixes)
 
 local function GetTable()
@@ -411,11 +416,13 @@ local function GetTable()
         tinsert(data,
             { _G.DoCharacters[realmName][character].name,
              _G.DoCharacters[realmName][character].level,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance,
-            _G.DoCharacters[realmName][character].avgItemLevel,
+            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
+            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
+            _G.DoCharacters[realmName][character].avgItemLevel or 0,
             _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
+            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
+            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
             color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
             }
         )

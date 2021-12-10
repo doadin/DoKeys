@@ -27,6 +27,11 @@ local firsttwohelp = string.lower("!" .. string.sub(UnitName("player"),1,2) .. "
 table.insert(mas,firsttwokeys)
 table.insert(mastwo,firsttwohelp)
 
+local mastw = {"!alltwkeys"}
+
+local firsttwotwkeys = string.lower("!" .. string.sub(UnitName("player"),1,2) .. "twkeys")
+table.insert(mastw,firsttwotwkeys)
+
 local lastrunguildkeys
 local lastrunofficerkeys
 local lastrunpartykeys
@@ -55,7 +60,7 @@ local DoKeysCurrentMaxLevel = GetMaxLevelForExpansionLevel(GetMaximumExpansionLe
 --	["Theater of Pain"] = 1683,
 --}
 
-local function CreateLink(data)
+local function CreateLink(data,keytype)
     --name, description, filedataid = C_ChallengeMode.GetAffixInfo(affixID)
     --C_MythicPlus.GetCurrentAffixes()
     --[1]={
@@ -76,57 +81,114 @@ local function CreateLink(data)
     --}
 	-- '|cffa335ee|Hkeystone:180653:244:2:10:0:0:0|h[Keystone: Atal'dazar (2)]|h|r'
     local AffixTable = C_MythicPlus.GetCurrentAffixes()
-	local link
-	if type(data) == "table" then
-        if data.CurrentKeyLevel <= 3 then
-	        link = string.format(
-	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	        	data.currentkeymapid or 0, --data.mapId
-	        	data.CurrentKeyLevel, --data.level
-                AffixTable[1].id or 0,
-	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	        	data.CurrentKeyLevel --data.level
-	        )
-        end
-        if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
-	        link = string.format(
-	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	        	data.currentkeymapid or 0, --data.mapId
-	        	data.CurrentKeyLevel, --data.level
-                AffixTable[1].id or 0,
-                AffixTable[2].id or 0,
-	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	        	data.CurrentKeyLevel --data.level
-	        )
-        end
-        if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
-	        link = string.format(
-	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	        	data.currentkeymapid or 0, --data.mapId
-	        	data.CurrentKeyLevel, --data.level
-                AffixTable[1].id or 0,
-                AffixTable[2].id or 0,
-                AffixTable[3].id or 0,
-	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	        	data.CurrentKeyLevel --data.level
-	        )
-        end
-        if data.CurrentKeyLevel >= 10 then
-	        link = string.format(
-	        	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	        	data.currentkeymapid or 0, --data.mapId
-	        	data.CurrentKeyLevel, --data.level
-                AffixTable[1].id or 0,
-                AffixTable[2].id or 0,
-                AffixTable[3].id or 0,
-                AffixTable[4].id or 0,
-	        	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	        	data.CurrentKeyLevel --data.level
-	        )
-        end
-	else
-		link = "None"
-	end
+    local link
+    if keytype == "normal" then
+	    if type(data) == "table" then
+            if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and data.CurrentKeyLevel and type(AffixTable) == "table" then
+                if data.CurrentKeyLevel <= 3 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+                        AffixTable[4].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+            end
+	    else
+	    	link = "None"
+	    end
+    end
+    if keytype == "tw" then
+	    if type(data) == "table" then
+            if not data.CurrentTWKeyLevel then return end
+            if tonumber(data.CurrentTWKeyLevel) <= 3 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 10 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix4 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+	    else
+	    	link = "None"
+	    end
+    end
 	return link
 end
 
@@ -151,7 +213,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "GUILD")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), "GUILD")
                         end
                     end
                     lastrunguildkeys = _G.GetTime()
@@ -164,7 +226,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "OFFICER")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), "OFFICER")
                         end
                     end
                     lastrunofficerkeys = _G.GetTime()
@@ -177,7 +239,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "PARTY")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), "PARTY")
                         end
                     end
                     lastrunpartykeys = _G.GetTime()
@@ -190,7 +252,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                 --    end
                 --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                 --        if v.level == DoKeysCurrentMaxLevel then
-                --            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), "WHISPER")
+                --            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), "WHISPER")
                 --        end
                 --    end
                 --    lastrunwhisperkeys = _G.GetTime()
@@ -284,6 +346,79 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                 --        end
                 --    end
                 --    lastrunbnwhisperhelp = _G.GetTime()
+                end
+            end
+        end
+    end
+    if msg ~= nil then -- if message ~= nil then
+        for i=1,#mastw do
+            if string.match(msg,mastw[i]) then
+                if event == "CHAT_MSG_GUILD" then
+                    if type(lastrunguildkeys) == "number" then
+                        local diff = now - lastrunguildkeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                        if v.level == DoKeysCurrentMaxLevel then
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw"), "GUILD")
+                        end
+                    end
+                    lastrunguildkeys = _G.GetTime()
+                elseif event == "CHAT_MSG_OFFICER" then
+                    if type(lastrunofficerkeys) == "number" then
+                        local diff = now - lastrunofficerkeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                        if v.level == DoKeysCurrentMaxLevel then
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw"), "OFFICER")
+                        end
+                    end
+                    lastrunofficerkeys = _G.GetTime()
+                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                    if type(lastrunpartykeys) == "number" then
+                        local diff = now - lastrunpartykeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+                    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                        if v.level == DoKeysCurrentMaxLevel then
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw"), "PARTY")
+                        end
+                    end
+                    lastrunpartykeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_WHISPER" then
+                --    if type(lastrunwhisperkeys) == "number" then
+                --        local diff = now - lastrunwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw"), "WHISPER")
+                --        end
+                --    end
+                --    lastrunwhisperkeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_BN_WHISPER" then
+                --    if type(lastrunbnwhisperkeys) == "number" then
+                --        local diff = now - lastrunbnwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            BNSendWhisper(bnSenderID, message)
+                --        end
+                --    end
+                --    lastrunbnwhisperkeys = _G.GetTime()
                 end
             end
         end
