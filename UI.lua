@@ -430,16 +430,18 @@ local function GetTable()
     st.st:SetData(data,true)
     st.st:Show()
     guilddata = {}
-    for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
-        for character in pairs(NameRealm) do
-            tinsert(guilddata,
-                { _G.DoKeysGuild[GuildName][character].name,
-                _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest,
-                _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel,
-                _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance,
-                color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
-                }
-            )
+    if type(_G.DoKeysGuild) =="table" then
+        for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
+            for character in pairs(NameRealm) do
+                tinsert(guilddata,
+                    { _G.DoKeysGuild[GuildName][character].name,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel,
+                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance,
+                    color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
+                    }
+                )
+            end
         end
     end
     Guildst.st:SetData(guilddata,true)

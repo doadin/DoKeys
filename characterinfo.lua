@@ -256,6 +256,7 @@ local function SetupDB(_, event, one, _)
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+            if type(affixScores) ~="table" then return end
             for mapid,affix in pairs(affixScores) do
                 if affix.name then
                     _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
