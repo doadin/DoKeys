@@ -52,6 +52,7 @@ DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
 
 local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
 DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
+DoKeysTrackGuildKeysFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 
 local DoKeysRequestAKKMGuildKeysFrame = CreateFrame("FRAME")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
@@ -340,6 +341,10 @@ local function UpdateKeyStone(_, _)
             end
         end
     end
+    --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1 
+    --if isAstralKeysRegistered and isGuildMember then
+    --    C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. , 'GUILD')
+    --end
 
     if DokeysRegistered and isGuildMember then
         C_ChatInfo.SendAddonMessage('DoKeys', 'updateKey ' .. name .. ":" .. keylevel, 'GUILD')
@@ -377,11 +382,15 @@ local function UpdateWeeklyBest(_, event, one, _, three)
         if best < three then
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = three
         end
+        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered and isGuildMember then
             C_ChatInfo.SendAddonMessage('AstralKeys', 'updateWeekly ' .. three, 'GUILD')
+            --print("Sending New Weekly To AstralKeys")
         end
+        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if DokeysRegistered and isGuildMember then
             C_ChatInfo.SendAddonMessage('DoKeys', 'updateWeekly ' .. three, 'GUILD')
+            --print("Sending New Weekly To DoKeys")
         end
     end
 end
@@ -458,19 +467,27 @@ local function RequestGuildKeys(_, event)
     --self:SendCommMessage(self.MessagePrefix, 'request', 'GUILD')
     --self:SendCommand('request')
     if event == "LOADING_SCREEN_DISABLED" or event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" or event == "CHALLENGE_MODE_COMPLETED" or event == "GUILD_ROSTER_UPDATE" then
+        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered then
             C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
         end
         if isKeystoneManagerRegistered then
             C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
         end
+        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if DokeysRegistered then
             C_ChatInfo.SendAddonMessage('DoKeys', 'request', 'GUILD')
         end
     end
 end
 
+local lasttimesendkeys
 local function SendGuildKeys()
+    if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
+        --print("SendGuildKeys too soon")
+        --print(_G.GetTime() - lasttimesendkeys)
+        return
+    end
     --print("SendGuildKeys Called")
     --sync5: prefix:"AstralKeys" text: Character Name-Realm,Class,KeyMapID,KeyLevel,WeekltBest,Week
     local testtable = {}
@@ -518,25 +535,34 @@ local function SendGuildKeys()
         for i=1,4 do
             if testtable[i] then
                 if testtable[i].level == 60 then
-                    text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. "_"
+                    text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
                 end
             end
             table.remove(testtable, i)
         end
         --print(text)
+        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered then
-            C_ChatInfo.SendAddonMessage('AstralKeys', text, 'GUILD')
+            --print("isAstralKeysRegistered proceding to send guild keys....")
+            local success = C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
+            if success then
+                --print("Guild Keys Sent to Astral")
+            end
         end
+        local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
         --if isKeystoneManagerRegistered then
         --    C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
         --end
+        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if DokeysRegistered then
             C_ChatInfo.SendAddonMessage('DoKeys', text, 'GUILD')
         end
+        --print(text)
     end
+    lasttimesendkeys = _G.GetTime()
 end
 
-local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _)
+local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
     --self, event, prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
     --local name, rank, rankIndex, level, class, zone, note,  officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, isSoREligible, standingID = GetGuildRosterInfo(index)
     -- CHAT_MSG_ADDON: prefix, text, channel, sender, target, zoneChannelID, localID, name, instanceID
@@ -546,14 +572,39 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
     -- friend update: prefix: "friendWeekly" channel: BNET/WHISPER
     --    C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
     --AstralComs:RegisterPrefix(channel, prefix, f)
+    if prefix ~= "DoKeys" or prefix ~= "AstralKeys" or prefix ~= "KeystoneManager" then
+        return
+    end
+    local Player,PlayerRealm  = UnitName("player"), GetRealmName()
+    if Player and PlayerRealm then
+        if sender == Player .. "-" .. PlayerRealm then
+            --print("ignore self")
+            return
+        end
+    end
+
+    if sender == Player then
+        --print("ignore self")
+        return
+    end
+
     local GuildName = GetGuildInfo("player")
     if not GuildName then return end
-    local method = text:match('%w+')
-    if method == "friendWeekly" then
-        print("got friend weekly from friendWeekly prefix")
+    local method = ""
+    if text then
+        method = text:match('%w+')
+    end
+    if method == "friendWeekly" or prefix == "friendWeekly" then
+        --print("got friend weekly from friendWeekly prefix")
+        --print(text)
+    end
+    if event == "GUILD_ROSTER_UPDATE" then
+        --SendGuildKeys()
     end
     if prefix == "AstralKeys" then
+        --print(text)
         if text == "request" or strsplit(" ", text) == "updateV8" then
+            --print("Got Astral Keys Request")
             SendGuildKeys()
         end
         if method == "sync5" and channel == "GUILD" then --Handle received syncs
@@ -603,7 +654,7 @@ local function TrackGuildKeys(_, _, prefix, text, channel, sender, _, _, _, _, _
             end
         end
         if method == "sync4" and channel == "BNET" then
-            print("got friend key: ", text)
+            --print("got friend key: ", text)
         end
         if method == "updateWeekly" and channel == "GUILD" then --Handle new weekly best from characters
             local _,WeeklyBest = strsplit(" ", text)
