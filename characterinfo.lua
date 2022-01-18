@@ -52,13 +52,11 @@ DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
 
 local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
 DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
-DoKeysTrackGuildKeysFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 
 local DoKeysRequestAKKMGuildKeysFrame = CreateFrame("FRAME")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
-DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
 
 local UpdateSeasonBestsFrame = CreateFrame("FRAME")
 UpdateSeasonBestsFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -342,12 +340,12 @@ local function UpdateKeyStone(_, _)
         end
     end
     --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1 
-    --if isAstralKeysRegistered and isGuildMember then
-    --    C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. , 'GUILD')
-    --end
+    if isAstralKeysRegistered and isGuildMember then
+        C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].Class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. "0" .. ":" .. "_G.DoCharacters.Week" .. ":" .. "1", 'GUILD')
+    end
 
     if DokeysRegistered and isGuildMember then
-        C_ChatInfo.SendAddonMessage('DoKeys', 'updateKey ' .. name .. ":" .. keylevel, 'GUILD')
+        C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].Class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. "0" .. ":" .. "_G.DoCharacters.Week" .. ":" .. "1", 'GUILD')
     end
 end
 
@@ -603,7 +601,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
     if prefix == "AstralKeys" then
         --print(text)
-        if text == "request" or strsplit(" ", text) == "updateV8" then
+        if text == "request" then
             --print("Got Astral Keys Request")
             SendGuildKeys()
         end
@@ -686,6 +684,49 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
 
             -- Add Data
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = WeeklyBest
+            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+        end
+        --C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].Class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. "0" .. ":" .. "_G.DoCharacters.Week" .. ":" .. "1", 'GUILD')
+        if method == "updateV8" and channel == "GUILD" then
+            local _,KeyData = strsplit(" ", text)
+            local uUnitName, UnitRealm, Class, KeyInstance, KeyLevel = strsplit(":",KeyData)
+            if uUnitName and UnitRealm then
+                NameRealm = uUnitName .. "-" .. UnitRealm
+            end
+            local NameRealm = sender
+            if not KeyData then
+                return
+            end
+            for GuildNameList in pairs(_G.DoKeysGuild) do
+                if GuildNameList == GuildName then
+                    if _G.DoKeysGuild then
+                    else
+                        _G.DoKeysGuild = {}
+                    end
+                    if _G.DoKeysGuild[GuildName] then
+                    else
+                        _G.DoKeysGuild[GuildName] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    end
+                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
+                    else
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    end
+                end
+            end
+            -- Add Data
+            if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel > KeyLevel then
+                return
+            end
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = KeyInstance
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
     end
@@ -817,11 +858,15 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = WeeklyBest
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
-        --C_ChatInfo.SendAddonMessage('DoKeys', 'updateKey ' .. name .. ":" .. keylevel, 'GUILD')
+
+        --C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].Class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. "0" .. ":" .. "_G.DoCharacters.Week" .. ":" .. "1", 'GUILD')
         if prefix == "DoKeys" then
-            if method == "updateKey" and channel == "GUILD" then
+            if method == "updateV8" and channel == "GUILD" then
                 local _,KeyData = strsplit(" ", text)
-                local KeyInstance,KeyLevel = strsplit(":",KeyData)
+                local uUnitName, UnitRealm, Class, KeyInstance, KeyLevel = strsplit(":",KeyData)
+                if uUnitName and UnitRealm then
+                    NameRealm = uUnitName .. "-" .. UnitRealm
+                end
                 local NameRealm = sender
                 if not KeyData then
                     return
@@ -851,6 +896,9 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     end
                 end
                 -- Add Data
+                if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel > KeyLevel then
+                    return
+                end
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = KeyInstance
                 _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
