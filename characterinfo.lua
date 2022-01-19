@@ -614,7 +614,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week,ID = strsplit(":",data)
                         local lName , lRealm = strsplit("-",NameRealm)
                         local bName , bRealm = UnitName("player"), GetRealmName()
-                        if _G.DoKeysGuild then
+                        if _G.DoCharacters then
                         else
                             return
                         end
