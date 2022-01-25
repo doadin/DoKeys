@@ -965,6 +965,9 @@ local function DoWeeklyKeyReset()
                         v.WeeklyBest =  0
                         v.CurrentKeyLevel = 0
                         v.CurrentKeyInstance = ""
+                        v.CurrentTWKeyLevel = 0
+                        v.CurrentTWKeyInstanceName = ""
+                        v.CurrentTWKeyID = 0
                     end
                  end
               end
