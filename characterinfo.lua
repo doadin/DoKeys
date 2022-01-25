@@ -749,8 +749,12 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
             end
             -- Add Data
+            local guildkeyname
+            if KeyInstance then
+                guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)
+            end
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = KeyInstance
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = weeklyBest
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
@@ -929,8 +933,12 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     end
                 end
                 -- Add Data
+                local guildkeyname
+                if KeyInstance then
+                    guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)
+                end
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = KeyInstance
+                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = weeklyBest
                 _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
             end
