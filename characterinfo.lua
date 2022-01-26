@@ -845,6 +845,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                             else
                                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                             end
+                        else
+                            return
                         end
                         -- Add Data
                         local guildkeyname
