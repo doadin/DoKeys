@@ -315,11 +315,6 @@ end
 
 local lasttimesendupdatekeys
 local function UpdateKeyStone(_, _)
-    if type(lasttimesendupdatekeys) == "number" and (_G.GetTime() - lasttimesendupdatekeys < 60) then
-        --print("SendGuildKeys too soon")
-        --print(_G.GetTime() - lasttimesendkeys)
-        return
-    end
     local currentkeymapid = GetOwnedKeystoneChallengeMapID()
     local name
     local keylevel
@@ -347,6 +342,12 @@ local function UpdateKeyStone(_, _)
                 end
             end
         end
+    end
+
+    if type(lasttimesendupdatekeys) == "number" and (_G.GetTime() - lasttimesendupdatekeys < 60) then
+        --print("SendGuildKeys too soon")
+        --print(_G.GetTime() - lasttimesendkeys)
+        return
     end
     --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1 
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
@@ -410,9 +411,13 @@ end
 
 local function UpdateSeasonBests(_, event)
     local maps = C_ChallengeMode.GetMapTable()
+    if realmName ~= nil then return end
+    if UnitName("player") ~= nil then return end
     for i = 1, #maps do
         local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
         local name = C_ChallengeMode.GetMapUIInfo(maps[i])
+        if not name then return end
+        if type(affixScores) ~= table then return end
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
@@ -720,8 +725,11 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
         --C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
         if method == "updateV8" and channel == "GUILD" then
             local _,KeyData = strsplit(" ", text)
-            local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest = strsplit(":",KeyData)
+            local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
             if not KeyData then
+                return
+            end
+            if not GuildName then
                 return
             end
             for GuildNameList in pairs(_G.DoKeysGuild) do
@@ -906,8 +914,11 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
         if prefix == "DoKeys" then
             if method == "updateV8" and channel == "GUILD" then
                 local _,KeyData = strsplit(" ", text)
-                local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest = strsplit(":",KeyData)
+                local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
                 if not KeyData then
+                    return
+                end
+                if not GuildName then
                     return
                 end
                 for GuildNameList in pairs(_G.DoKeysGuild) do
