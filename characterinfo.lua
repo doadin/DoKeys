@@ -38,6 +38,7 @@ local DoKeysKeyStoneTrackingFrame = CreateFrame("FRAME")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("BAG_UPDATE")
+DoKeysKeyStoneTrackingFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
 local DoKeysKeyStoneWeeklyBestFrame = CreateFrame("FRAME")
 DoKeysKeyStoneWeeklyBestFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -63,6 +64,10 @@ UpdateSeasonBestsFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
 local UpdateCovenantFrame = CreateFrame("FRAME")
 UpdateCovenantFrame:RegisterEvent("COVENANT_CHOSEN")
+
+local C_MythicPlusEventFrame = CreateFrame("FRAME")
+C_MythicPlusEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+C_MythicPlusEventFrame:RegisterEvent("PLAYER_LOGIN")
 
 local realmName = GetRealmName()
 
@@ -349,7 +354,7 @@ local function UpdateKeyStone(_, _)
         --print(_G.GetTime() - lasttimesendkeys)
         return
     end
-    --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1 
+    --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
     if isAstralKeysRegistered and isGuildMember then
         C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
@@ -1130,6 +1135,18 @@ local function Reset()
 
 end
 
+local function UpdateC_MythicPlusEvent(_, event, covenantID)
+    if event == "PLAYER_ENTERING_WORLD" then
+        C_MythicPlus.RequestMapInfo()
+        C_MythicPlus.RequestRewards()
+    end
+    if event == "PLAYER_LOGIN" then
+        C_MythicPlus.RequestMapInfo()
+        C_MythicPlus.RequestRewards()
+        C_MythicPlus.RequestCurrentAffixes()
+    end
+end
+
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
 DoKeysResetFrame:SetScript("OnEvent", Reset)
@@ -1139,3 +1156,4 @@ DoKeysDBFrame:SetScript("OnEvent", SetupDB)
 DoKeysGearFrame:SetScript("OnEvent", UpdateGear)
 UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
 UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
+C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
