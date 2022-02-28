@@ -717,18 +717,18 @@ function addon:SetupOptions()
       end
     )
 
-    local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsRespondKeysChatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
-    myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
-    myCheckButtonTwo:SetChecked(self.db.profile.chat.respondkeys)
-    DoKeysOptionsRespondKeysChatCheck.Text:SetText("Respond to !keys in chat")
-    myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
-    myCheckButtonTwo:SetScript("OnClick",
-      function()
-        if self.db.profile.chat.respondkeys then
-            self.db.profile.chat.respondkeys = false
-        else
-            self.db.profile.chat.respondkeys = true
-        end
-      end
-    )
+    --local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsRespondKeysChatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    --myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
+    --myCheckButtonTwo:SetChecked(self.db.profile.chat.respondkeys)
+    --DoKeysOptionsRespondKeysChatCheck.Text:SetText("Respond to !keys in chat")
+    --myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
+    --myCheckButtonTwo:SetScript("OnClick",
+    --  function()
+    --    if self.db.profile.chat.respondkeys then
+    --        self.db.profile.chat.respondkeys = false
+    --    else
+    --        self.db.profile.chat.respondkeys = true
+    --    end
+    --  end
+    --)
 end
