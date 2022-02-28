@@ -639,7 +639,17 @@ OnClick = function(clickedframe, button)
 local LibDBIcon = LibStub("LibDBIcon-1.0")
 
 function addon:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("DoKeysDB", { profile = { minimap = { hide = false, }, }, })
+    local defaults = {
+        profile = {
+            minimap = {
+                 hide = false,
+            },
+            chat = {
+                respondkeys = false,
+           },
+        },
+    }
+    self.db = LibStub("AceDB-3.0"):New("DoKeysDB", defaults, true)
     LibDBIcon:Register("DoKeysIcon", DoKeysLDB, self.db.profile.minimap)
     self:RegisterChatCommand("dokeys", "OpenUI")
     if self.db.profile.minimap.hide then
@@ -703,6 +713,23 @@ function addon:SetupOptions()
         else
             LibDBIcon:Hide("DoKeysIcon")
             self.db.profile.minimap.hide = true
+        end
+      end
+    )
+
+    local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsChatCheck_GlobalName", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
+    myCheckButtonTwo:SetChecked(not self.db.profile.chat.respondkeys)
+    DoKeysOptionsChatCheck_GlobalNameText:SetText("Respond to !keys in chat")
+    myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
+    myCheckButtonTwo:SetScript("OnClick",
+      function()
+        if self.db.profile.chat.respondkeys then
+            LibDBIcon:Show("DoKeysIcon")
+            self.db.profile.chat.respondkeys = false
+        else
+            LibDBIcon:Hide("DoKeysIcon")
+            self.db.profile.chat.respondkeys = true
         end
       end
     )

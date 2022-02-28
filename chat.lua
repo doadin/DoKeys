@@ -20,6 +20,7 @@ frame:RegisterEvent("CHAT_MSG_BN_WHISPER")
 local mas = {"!allkeys"}
 local mastwo = {"!allhelp"}
 local masfour = {"!dookies"}
+local masfive = {"!keys"}
 
 
 local firsttwokeys = string.lower("!" .. string.sub(UnitName("player"),1,2) .. "keys")
@@ -274,6 +275,86 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
             end
         end
     end
+
+    local GetRealmName = _G.GetRealmName
+    local realmName = GetRealmName()
+    local db = LibStub("AceDB-3.0"):GetNamespace("DoKeysDB", true)
+    --db.profile.minimap
+    --db.profile.chat.respondkeys
+    if db ~= nil and db.profile.chat.respondkeys and msg ~= nil then -- if message ~= nil then
+        for i=1,#masfive do
+            if string.match(msg,masfive[i]) then
+                if event == "CHAT_MSG_GUILD" then
+                    if type(lastrunguildkeys) == "number" then
+                        local diff = now - lastrunguildkeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+
+                    if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
+                        SendChatMessage(UnitName("player") .. " " .. CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal"), "GUILD")
+                    end
+
+                    lastrunguildkeys = _G.GetTime()
+                elseif event == "CHAT_MSG_OFFICER" then
+                    if type(lastrunofficerkeys) == "number" then
+                        local diff = now - lastrunofficerkeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+
+                    if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
+                        SendChatMessage(UnitName("player") .. " " .. CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal"), "OFFICER")
+                    end
+
+                    lastrunofficerkeys = _G.GetTime()
+                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                    if type(lastrunpartykeys) == "number" then
+                        local diff = now - lastrunpartykeys
+                        if diff < 10 then
+                            return
+                        end
+                    end
+
+                    if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
+                        SendChatMessage(UnitName("player") .. " " .. CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal"), "PARTY")
+                    end
+
+                    lastrunpartykeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_WHISPER" then
+                --    if type(lastrunwhisperkeys) == "number" then
+                --        local diff = now - lastrunwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), "WHISPER")
+                --        end
+                --    end
+                --    lastrunwhisperkeys = _G.GetTime()
+                --elseif event == "CHAT_MSG_BN_WHISPER" then
+                --    if type(lastrunbnwhisperkeys) == "number" then
+                --        local diff = now - lastrunbnwhisperkeys
+                --        if diff < 10 then
+                --            return
+                --        end
+                --    end
+                --    for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                --        local message = k .. " " .. v["mythicplus"]["keystone"].WeeklyBest
+                --        if v.level == DoKeysCurrentMaxLevel then
+                --            BNSendWhisper(bnSenderID, message)
+                --        end
+                --    end
+                --    lastrunbnwhisperkeys = _G.GetTime()
+                end
+            end
+        end
+    end
+
     if msg ~= nil then
         for i=1,#mastwo do
             if string.match(msg,mastwo[i]) then
