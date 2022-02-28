@@ -700,10 +700,10 @@ function addon:SetupOptions()
     ---- Add the child to the Interface Options
     --InterfaceOptions_AddCategory(addon.optionspanel.childpanel)
 
-    local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck_GlobalName", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     myCheckButton:SetPoint("TOPLEFT", 25, -10)
     myCheckButton:SetChecked(not self.db.profile.minimap.hide)
-    DoKeysOptionsMinimapCheck_GlobalNameText:SetText("Show Minimap")
+    DoKeysOptionsMinimapCheck.Text:SetText("Show Minimap")
     myCheckButton.tooltip = "Enable or disable showing minimap button."
     myCheckButton:SetScript("OnClick",
       function()
@@ -717,18 +717,16 @@ function addon:SetupOptions()
       end
     )
 
-    local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsChatCheck_GlobalName", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsRespondKeysChatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
     myCheckButtonTwo:SetChecked(not self.db.profile.chat.respondkeys)
-    DoKeysOptionsChatCheck_GlobalNameText:SetText("Respond to !keys in chat")
+    DoKeysOptionsRespondKeysChatCheck.Text:SetText("Respond to !keys in chat")
     myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
     myCheckButtonTwo:SetScript("OnClick",
       function()
         if self.db.profile.chat.respondkeys then
-            LibDBIcon:Show("DoKeysIcon")
             self.db.profile.chat.respondkeys = false
         else
-            LibDBIcon:Hide("DoKeysIcon")
             self.db.profile.chat.respondkeys = true
         end
       end
