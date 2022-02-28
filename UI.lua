@@ -719,7 +719,7 @@ function addon:SetupOptions()
 
     local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsRespondKeysChatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
-    myCheckButtonTwo:SetChecked(not self.db.profile.chat.respondkeys)
+    myCheckButtonTwo:SetChecked(self.db.profile.chat.respondkeys)
     DoKeysOptionsRespondKeysChatCheck.Text:SetText("Respond to !keys in chat")
     myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
     myCheckButtonTwo:SetScript("OnClick",
