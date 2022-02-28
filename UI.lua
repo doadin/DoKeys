@@ -10,39 +10,26 @@ local tinsert = _G.tinsert
 local RAID_CLASS_COLORS = _G.RAID_CLASS_COLORS
 local realmName = _G.GetRealmName()
 
-local AceGUI = LibStub("AceGUI-3.0")
+local StdUi = LibStub("StdUi")
 
-local MainFrame = AceGUI:Create("Frame")
-MainFrame:SetTitle("DoKeys")
-MainFrame:SetStatusText("Dokeys" .. " " .. GetAddOnMetadata("DoKeys", "Version") )
-MainFrame:EnableResize(false)
-MainFrame:SetWidth(780)
-MainFrame:SetHeight(520)
+local MainFrame = StdUi:Window(UIParent, 800, 550, 'DoKeys')
+MainFrame:SetPoint('CENTER')
 MainFrame:Hide()
 
-local SeasonBestsFrame = AceGUI:Create("Frame")
-SeasonBestsFrame:SetTitle("DoKeys Season Bests")
-SeasonBestsFrame:SetStatusText("Dokeys" .. " " .. GetAddOnMetadata("DoKeys", "Version") )
-SeasonBestsFrame:EnableResize(false)
-SeasonBestsFrame:SetWidth(850)
-SeasonBestsFrame:SetHeight(280)
+local SeasonBestsFrame = StdUi:Window(UIParent, 900, 300, "DoKeys Season Bests")
+SeasonBestsFrame:SetPoint('CENTER')
 SeasonBestsFrame:Hide()
 
-local SeasonBestsHeading = AceGUI:Create("InlineGroup")
-SeasonBestsHeading:SetWidth(820)
-SeasonBestsHeading:SetTitle("Player's Season Bests")
-SeasonBestsHeading:SetLayout("Flow")
-SeasonBestsFrame:AddChild(SeasonBestsHeading)
+local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 900, 250, "Player's Season Bests", 25, 16)
+StdUi:GlueTop(SeasonBestsHeading, SeasonBestsFrame, 0, -40)
 
-local PlayerHeading = AceGUI:Create("InlineGroup")
-PlayerHeading:SetWidth(750)
-PlayerHeading:SetTitle("Player's Keys")
-MainFrame:AddChild(PlayerHeading)
+local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 800, 160, "Player's Keys", 25, 16)
+StdUi:GlueTop(PlayerHeading, MainFrame, 0, -40)
 
 local function UpdateReward()
     local Rewardheading
     if C_MythicPlus.IsWeeklyRewardAvailable() then
-        Rewardheading = AceGUI:Create("Heading")
+        Rewardheading = StdUi:Create("Heading")
         Rewardheading:SetText("Weekly Reward Available, Good Luck On your Loot!")
         MainFrame:AddChild(Rewardheading)
     else
@@ -63,69 +50,76 @@ local columnHeaders = {
         align = 'LEFT',
         defaultsort = 'dsc',
         sortnext = 3,
-        --index = 'name',
+        index = 'name',
+        format = 'string',
     },
     {
         name = 'Level',
         width = 60,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'level',
+        index = 'level',
+        format = 'string',
     },
     {
         name = 'Weekly Best',
-        width = 80,
+        width = 85,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'WeeklyBest',
+        format = 'string',
     },
     {
         name = 'Key Level',
-        width = 60,
+        width = 70,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'CurrentKeyLevel',
     },
     {
         name = 'Key Instance',
         width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'CurrentKeyInstance',
+        format = 'string',
     },
     {
         name = 'Average Item Level',
-        width = 120,
+        width = 130,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'avgItemLevel',
+        format = 'string',
     },
     {
         name = 'M+ Score',
-        width = 60,
+        width = 70,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'currentSeasonScore',
+        format = 'string',
     },
     {
         name = 'TW Key Level',
-        width = 75,
+        width = 90,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'CurrentTWKeyLevel',
+        format = 'string',
     },
     {
         name = 'TW Key Instance',
-        width = 100,
+        width = 110,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'CurrentTWKeyInstanceName',
+        format = 'string',
     },
 }
 
-local st = AceGUI:Create('lib-st')
-st:CreateST(columnHeaders,10,10)
-PlayerHeading:AddChild(st)
+local st = StdUi:ScrollTable(PlayerHeading, columnHeaders, 6)
+StdUi:GlueTop(st, PlayerHeading, 0, -50)
 
 local SeasonBestHeaders = {
     {
@@ -133,131 +127,278 @@ local SeasonBestHeaders = {
         width = 50,
         align = 'LEFT',
         defaultsort = 'dsc',
-        sortnext = 3,
-        --index = 'name',
+        index = 'name',
+        --format = 'string',
     },
     {
         name = 'DoS Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'level',
+        index = 'DoS',
+        --format = 'string',
     },
     {
         name = 'HoA Tyran/Fort',
-        width = 80,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'HoA',
+        --format = 'string',
     },
     {
         name = 'MoTS Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'MoTS',
+        --format = 'string',
     },
     {
         name = 'PF Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'PF',
+        --format = 'string',
     },
     {
         name = 'SD Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'SD',
+        --format = 'string',
     },
     {
         name = 'SoA Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'SoA',
+        --format = 'string',
     },
     {
         name = 'NW Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'NW',
+        --format = 'string',
     },
     {
         name = 'ToP Tyran/Fort',
-        width = 90,
+        width = 100,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'avgItemLevel',
+        index = 'ToP',
+        --format = 'string',
     },
 }
 
-local SeasonBestsst = AceGUI:Create('lib-st')
-SeasonBestsst:CreateST(SeasonBestHeaders,10,10)
-SeasonBestsHeading:AddChild(SeasonBestsst)
+local SeasonBestsst = StdUi:ScrollTable(SeasonBestsHeading, SeasonBestHeaders)
+StdUi:GlueTop(SeasonBestsst, SeasonBestsHeading, 0, -50)
 
-local reportcontainer = AceGUI:Create("SimpleGroup")
-reportcontainer:SetWidth(500)
-reportcontainer:SetLayout("Flow")
-MainFrame:AddChild(reportcontainer)
+local ReportHeading = StdUi:Panel(MainFrame, 800, 65)
+StdUi:GlueTop(ReportHeading, MainFrame, 0, -210)
+
+local ReportToDropDownitems = {
+    {text = "", value = ""}, -- First option
+    {text = "Guild", value = "GUILD"}, -- Second option
+    {text = "Party", value = "PARTY"}, -- Third option
+    {text = "Officer", value = "OFFICER"}, -- Fourth option
+}
+
+local ReportToDropDown = StdUi:Dropdown(ReportHeading, 200, 20, ReportToDropDownitems)
+ReportToDropDown:SetPoint('CENTER')
+
+StdUi:AddLabel(ReportHeading, ReportToDropDown, "Report Weekly Best To:", "LEFT", 155)
+
+local ReportToButton = StdUi:Button(ReportHeading, 35, 20, "Send")
+StdUi:GlueTop(ReportToButton, ReportHeading, -265, -20, 'RIGHT')
 
 local ReportToDropDownValue
-local function GetReportToDropDownValue(this, event, item)
-    ReportToDropDownValue = item
+ReportToDropDown.OnValueChanged = function(self, value)
+    ReportToDropDownValue = value
 end
 
-local ReportToDropDown = AceGUI:Create("Dropdown")
-ReportToDropDown:SetWidth(200)
-ReportToDropDown:SetHeight(25)
-ReportToDropDown:SetList(
-    {
-        [""] = "",
-        ["GUILD"] = "Guild",
-        ["PARTY"] = "Party",
-        ["OFFICER"] = "Officer",
-    }
+ReportToButton:SetScript('OnClick',
+    function()
+        if ReportToDropDownValue == "GUILD" or ReportToDropDownValue == "PARTY" or ReportToDropDownValue == "OFFICER" then
+            for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                if v.level == DoKeysCurrentMaxLevel then
+                    SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, ReportToDropDownValue)
+                end
+            end
+        end
+    end
 )
-ReportToDropDown:SetCallback("OnValueChanged", GetReportToDropDownValue)
-reportcontainer:AddChild(ReportToDropDown)
-ReportToDropDown:SetPoint('LEFT', "$parent", 'LEFT', 0, 0)
 
-local ReportWeeklyBestButton = AceGUI:Create("Button")
-ReportWeeklyBestButton:SetWidth(140)
-ReportWeeklyBestButton:SetHeight(20)
-ReportWeeklyBestButton:SetText("Report Weekly Best")
---ReportWeeklyBestButton:SetCallback(
---    "OnClick",
---    function()
---        for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
---            if v.level == DoKeysCurrentMaxLevel then
---                SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, ReportToDropDownValue)
---            end
---        end
---        --print(ReportToDropDownValue)
---    end
---)
-reportcontainer:AddChild(ReportWeeklyBestButton)
-ReportWeeklyBestButton:SetPoint('RIGHT', "$parent", 'RIGHT', 0, 0)
 
-local ReportKeyButton = AceGUI:Create("Button")
-ReportKeyButton:SetWidth(140)
-ReportKeyButton:SetHeight(20)
-ReportKeyButton:SetText("Report Keys")
---ReportKeyButton:SetCallback(
---    "OnClick",
---    function()
---        for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
---            if v.level == DoKeysCurrentMaxLevel then
---                SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"]), ReportToDropDownValue)
---            end
---        end
---        --print(ReportToDropDownValue)
---    end
---)
-reportcontainer:AddChild(ReportKeyButton)
-ReportKeyButton:SetPoint('RIGHT', "$parent", 'RIGHT', 0, 0)
+local ReportKeysToDropDownitems = {
+    {text = "", value = ""}, -- First option
+    {text = "Guild", value = "GUILD"}, -- Second option
+    {text = "Party", value = "PARTY"}, -- Third option
+    {text = "Officer", value = "OFFICER"}, -- Fourth option
+}
+
+local ReportKeysToDropDown = StdUi:Dropdown(ReportHeading, 200, 20, ReportKeysToDropDownitems)
+--ReportKeysToDropDown:SetPoint('CENTER')
+StdUi:GlueBelow(ReportKeysToDropDown, ReportToDropDown, 0, 2)
+
+StdUi:AddLabel(ReportHeading, ReportKeysToDropDown, "Report Your Keys To:", "LEFT", 155)
+
+local ReportKeysToButton = StdUi:Button(ReportHeading, 35, 20, "Send")
+StdUi:GlueTop(ReportKeysToButton, ReportHeading, -265, -40, 'RIGHT')
+
+local ReportKeysToDropDownValue
+ReportKeysToDropDown.OnValueChanged = function(self, value)
+    ReportKeysToDropDownValue = value
+end
+
+local function CreateLink(data,keytype)
+    --name, description, filedataid = C_ChallengeMode.GetAffixInfo(affixID)
+    --C_MythicPlus.GetCurrentAffixes()
+    --[1]={
+    --  id=9,
+    --  seasonID=0
+    --},
+    --[2]={
+    --  id=7,
+    --  seasonID=0
+    --},
+    --[3]={
+    --  id=13,
+    --  seasonID=0
+    --},
+    --[4]={
+    --  id=128,
+    --  seasonID=6
+    --}
+	-- '|cffa335ee|Hkeystone:180653:244:2:10:0:0:0|h[Keystone: Atal'dazar (2)]|h|r'
+    local AffixTable = C_MythicPlus.GetCurrentAffixes()
+    local link
+    if keytype == "normal" then
+	    if type(data) == "table" then
+            if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and data.CurrentKeyLevel and type(AffixTable) == "table" then
+                if data.CurrentKeyLevel <= 3 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+                        AffixTable[4].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+            end
+	    else
+	    	link = "None"
+	    end
+    end
+    if keytype == "tw" then
+	    if type(data) == "table" then
+            if not data.CurrentTWKeyLevel then return end
+            if tonumber(data.CurrentTWKeyLevel) <= 3 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 10 then
+	            link = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix4 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+	    else
+	    	link = "None"
+	    end
+    end
+	return link
+end
+
+ReportKeysToButton:SetScript('OnClick',
+    function()
+        if ReportKeysToDropDownValue == "GUILD" or ReportKeysToDropDownValue == "PARTY" or ReportKeysToDropDownValue == "OFFICER" then
+            for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+                if v.level == DoKeysCurrentMaxLevel then
+                    SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
+                end
+            end
+        end
+    end
+)
 
 local GuildcolumnHeaders = {
     {
@@ -266,39 +407,40 @@ local GuildcolumnHeaders = {
         align = 'LEFT',
         defaultsort = 'dsc',
         sortnext = 3,
-        --index = 'name',
+        index = 'name',
+        format = 'string',
     },
     {
         name = 'Weekly Best',
         width = 80,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'WeeklyBest',
+        format = 'number',
     },
     {
         name = 'CurrentKeyLevel',
-        width = 90,
+        width = 110,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'CurrentKeyLevel',
+        format = 'number',
     },
     {
         name = 'CurrentKeyInstance',
-        width = 100,
+        width = 130,
         align = 'RIGHT',
         defaultsort = 'dsc',
-        --index = 'WeeklyBest',
+        index = 'CurrentKeyInstance',
+        format = 'string',
     },
 }
 
-local GuildHeading = AceGUI:Create("InlineGroup")
-GuildHeading:SetWidth(420)
-GuildHeading:SetTitle("Guild Member's Keys")
-MainFrame:AddChild(GuildHeading)
+local GuildHeading = StdUi:PanelWithTitle(MainFrame, 800, 160, "Guild Member's Keys", 25, 16)
+StdUi:GlueTop(GuildHeading, MainFrame, 0, -285)
 
-local Guildst = AceGUI:Create('lib-st')
-Guildst:CreateST(GuildcolumnHeaders,10,10)
-GuildHeading:AddChild(Guildst)
+local Guildst = StdUi:ScrollTable(GuildHeading, GuildcolumnHeaders, 6)
+StdUi:GlueTop(Guildst, GuildHeading, 0, -50)
 
 local AffixIcons = {
     ["Fortified"] = "Interface\\Icons\\ability_toughness",
@@ -318,90 +460,66 @@ local AffixIcons = {
     ["Tormented"] = "Interface\\Icons\\spell_animamaw_orb",
 }
 
-local AffixHeading = AceGUI:Create("InlineGroup")
-AffixHeading:SetLayout("Flow")
-AffixHeading:SetWidth(480)
-AffixHeading:SetTitle("This Weeks Affix's")
-MainFrame:AddChild(AffixHeading)
+local AffixHeading = StdUi:PanelWithTitle(MainFrame, 800, 90, "This Weeks Affixs", 25, 16)
+StdUi:GlueTop(AffixHeading, MainFrame, 0, -450)
 
 local function GetAffixes(_,event, one, two)
-    AffixHeading:ReleaseChildren()
-
-    local AffixOne
-    local AffixTwo
-    local AffixThree
-    local AffixFour
-
-    AffixOne = AceGUI:Create("Icon")
-    AffixOne:SetImageSize(32,32)
-    AffixHeading:AddChild(AffixOne)
-
-    AffixTwo = AceGUI:Create("Icon")
-    AffixTwo:SetImageSize(32,32)
-    AffixHeading:AddChild(AffixTwo)
-
-    AffixThree = AceGUI:Create("Icon")
-    AffixThree:SetImageSize(32,32)
-    AffixHeading:AddChild(AffixThree)
-
-    AffixFour = AceGUI:Create("Icon")
-    AffixFour:SetImageSize(32,32)
-    AffixHeading:AddChild(AffixFour)
 
     local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
     if not CurrentAffixes then C_Timer.After(1, GetAffixes) return end
+
     local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
-    AffixOne:SetImage(AffixOnefiledataid)
-    AffixOne:SetImageSize(32,32)
-    AffixOne:SetLabel("Level 2+: " .. AffixOnename)
-    AffixOne:SetCallback("OnEnter",function()
-        GameTooltip:SetOwner(AffixOne.frame, "ANCHOR_BOTTOM",0,-5)
+    local AffixOne = StdUi:SquareButton(AffixHeading, 32, 32, "")
+    AffixOne:SetNormalTexture(AffixOnefiledataid)
+    StdUi:GlueTop(AffixOne, AffixHeading, -70, -30)
+    AffixOne:SetScript("OnEnter",function()
+        GameTooltip:SetOwner(AffixOne, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixOnedescription,1,1,1,1)
         GameTooltip:Show()
     end)
-    AffixOne:SetCallback("OnLeave",function()
+    AffixOne:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
 
     local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
-    AffixTwo:SetImage(AffixTwofiledataid)
-    AffixTwo:SetImageSize(32,32)
-    AffixTwo:SetLabel("Level 4+: " .. AffixTwoname)
-    AffixTwo:SetCallback("OnEnter",function()
-        GameTooltip:SetOwner(AffixTwo.frame, "ANCHOR_BOTTOM",0,-5)
+    local AffixTwo = StdUi:SquareButton(AffixHeading, 32, 32, "")
+    AffixTwo:SetNormalTexture(AffixTwofiledataid)
+    StdUi:GlueTop(AffixTwo, AffixHeading, -35, -30)
+    AffixTwo:SetScript("OnEnter",function()
+        GameTooltip:SetOwner(AffixTwo, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixTwodescription,1,1,1,1)
         GameTooltip:Show()
     end)
-    AffixTwo:SetCallback("OnLeave",function()
+    AffixTwo:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
 
     local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
-    AffixThree:SetImage(AffixThreefiledataid)
-    AffixThree:SetImageSize(32,32)
-    AffixThree:SetLabel("Level 7+: " .. AffixThreename)
-    AffixThree:SetCallback("OnEnter",function()
-        GameTooltip:SetOwner(AffixThree.frame, "ANCHOR_BOTTOM",0,-5)
+    local AffixThree = StdUi:SquareButton(AffixHeading, 32, 32, "")
+    AffixThree:SetNormalTexture(AffixThreefiledataid)
+    StdUi:GlueTop(AffixThree, AffixHeading, 5, -30)
+    AffixThree:SetScript("OnEnter",function()
+        GameTooltip:SetOwner(AffixThree, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixThreedescription,1,1,1,1)
         GameTooltip:Show()
     end)
-    AffixThree:SetCallback("OnLeave",function()
+    AffixThree:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
 
     local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
-    AffixFour:SetImage(AffixFourfiledataid)
-    AffixFour:SetImageSize(32,32)
-    AffixFour:SetLabel("Level 10+: " .. AffixFourname)
-    AffixFour.tooltipText = AffixFourdescription
-    AffixFour:SetCallback("OnEnter",function()
-        GameTooltip:SetOwner(AffixFour.frame, "ANCHOR_BOTTOM",0,-5)
+    local AffixFour = StdUi:SquareButton(AffixHeading, 32, 32, "")
+    AffixFour:SetNormalTexture(AffixFourfiledataid)
+    StdUi:GlueTop(AffixFour, AffixHeading, 40, -30)
+    AffixFour:SetScript("OnEnter",function()
+        GameTooltip:SetOwner(AffixFour, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixFourdescription,1,1,1,1)
         GameTooltip:Show()
     end)
-    AffixFour:SetCallback("OnLeave",function()
+    AffixFour:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
+
 end
 
 local eventframe = CreateFrame("Frame")
@@ -409,70 +527,73 @@ eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
 eventframe:SetScript("OnEvent", GetAffixes)
 
 local function GetTable()
-    local data
-    local guilddata
-    data = {}
+
+    local sttestdata = {}
+    local characteri=0
     for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
-        tinsert(data,
-            { _G.DoCharacters[realmName][character].name,
-             _G.DoCharacters[realmName][character].level,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
-            _G.DoCharacters[realmName][character].avgItemLevel or 0,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
-            _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
-            color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
+        tinsert(sttestdata,characteri+1,
+            { name = _G.DoCharacters[realmName][character].name,
+              level =_G.DoCharacters[realmName][character].level,
+              WeeklyBest = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
+              CurrentKeyLevel = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+              CurrentKeyInstance = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
+              avgItemLevel = _G.DoCharacters[realmName][character].avgItemLevel or 0,
+              currentSeasonScore = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
+              CurrentTWKeyLevel = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
+              CurrentTWKeyInstanceName = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
+              color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
             }
         )
     end
-    st.st:SetData(data,true)
-    st.st:Show()
-    guilddata = {}
+    st:SetData(sttestdata)
+    st:Show()
+
+    local guilddata = {}
+    local guildi=0
     if type(_G.DoKeysGuild) =="table" then
         for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
             for character in pairs(NameRealm) do
-                tinsert(guilddata,
-                    { _G.DoKeysGuild[GuildName][character].name,
-                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest,
-                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel,
-                    _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance,
-                    color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
+                tinsert(guilddata,guildi+1,
+                    { name = _G.DoKeysGuild[GuildName][character].name,
+                      WeeklyBest = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
+                      CurrentKeyLevel = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+                      CurrentKeyInstance = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance  or "",
+                      color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
                     }
                 )
             end
         end
     end
-    Guildst.st:SetData(guilddata,true)
-    Guildst.st:Show()
+
+    Guildst:SetData(guilddata)
+    Guildst:Show()
 end
 
 local function SeasonBestsGetTable()
-        SeasonBestsstdata = {}
-        for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
-            if _G.DoCharacters[realmName][character].level < DoKeysCurrentMaxLevel then
-            else
-                if _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"] then
-                    tinsert(SeasonBestsstdata,
-                        { _G.DoCharacters[realmName][character].name,
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1],
-                        _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] .. "/" .. _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1],
-                        color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
-                        }
-                    )
-                end
-            end
+    local SeasonBestsstdata = {}
+    local SeasonBesti = 0
+    for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
+
+        if _G.DoCharacters[realmName][character].level == DoKeysCurrentMaxLevel and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"] then
+            tinsert(SeasonBestsstdata,SeasonBesti+1,
+                { name = _G.DoCharacters[realmName][character].name,
+                  DoS = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1] or 0) ,
+                  HoA = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1] or 0) ,
+                  MoTS = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1] or 0) ,
+                  PF = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1] or 0) ,
+                  SD = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1] or 0) ,
+                  SoA = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1] or 0) ,
+                  NW = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1] or 0) ,
+                  ToP = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1] or 0) ,
+                  color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
+                }
+            )
         end
-        SeasonBestsst.st:SetData(SeasonBestsstdata,true)
-        SeasonBestsst.st:SetDisplayRows(12, 12)
-        SeasonBestsst.st:Show()
+
+    end
+
+    SeasonBestsst:SetData(SeasonBestsstdata)
+    SeasonBestsst:Show()
 end
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("DoKeys", "AceConsole-3.0")
@@ -521,16 +642,27 @@ function addon:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("DoKeysDB", { profile = { minimap = { hide = false, }, }, })
     LibDBIcon:Register("DoKeysIcon", DoKeysLDB, self.db.profile.minimap)
     self:RegisterChatCommand("dokeys", "OpenUI")
+    if self.db.profile.minimap.hide then
+        LibDBIcon:Hide("DoKeysIcon")
+    else
+        LibDBIcon:Show("DoKeysIcon")
+    end
+    addon:SetupOptions()
 end
 
 function addon:OpenUI(one, two, three, four)
-    if one == "toggle minimap" then
-        self.db.profile.minimap.hide = not self.db.profile.minimap.hide
+    if one == "toggle minimap" or one == "tm" then
         if self.db.profile.minimap.hide then
-            LibDBIcon:Hide("DoKeysIcon")
-        else
             LibDBIcon:Show("DoKeysIcon")
+            self.db.profile.minimap.hide = false
+        else
+            LibDBIcon:Hide("DoKeysIcon")
+            self.db.profile.minimap.hide = true
         end
+    end
+    if one == "options" or one == "o" then
+        InterfaceOptionsFrame_OpenToCategory("DoKeys")
+        InterfaceOptionsFrame_OpenToCategory("DoKeys")
     end
     if one == "" then
         if MainFrame:IsShown() then
@@ -542,37 +674,36 @@ function addon:OpenUI(one, two, three, four)
     end
 end
 
---local function OnTooltipSetUnit(self)
---    --local unitName, unit = self:GetUnit()
---    local mouseoverunitname, mouseoverrealm = UnitName("mouseover")
---    local mouseovernamerealm
---    if mouseoverunitname and mouseoverrealm then
---        mouseovernamerealm = mouseoverunitname .. "-" .. mouseoverrealm
---    end
---    local instancename
---
---    for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
---        if NameRealm.name then
---            if mouseovernamerealm == _G.DoKeysGuild[GuildName][NameRealm].name or mouseoverunitname == _G.DoKeysGuild[GuildName][NameRealm].name then
---                if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance then
---                    instancename = _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance
---                end
---                if instancename and string.len(instancename) > 2 then
---                    GameTooltip:AddLine("Keystone: " .. _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance, 1, 1, 1)
---                end
---            end
---        end
---    end
---    for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
---        if mouseovernamerealm == characterinfo.name or mouseoverunitname == characterinfo.name then
---            if _G.DoCharacters[mouseoverrealm][character]["mythicplus"]["keystone"].CurrentKeyInstance then
---                instancename = _G.DoCharacters[mouseoverrealm][character]["mythicplus"]["keystone"].CurrentKeyInstance
---            end
---            if instancename and string.len(instancename) > 2 then
---                GameTooltip:AddLine("Keystone: " .. _G.DoCharacters[mouseoverrealm][character]["mythicplus"]["keystone"].CurrentKeyInstance, 1, 1, 1)
---            end
---        end
---    end
---end
---
---GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+function addon:SetupOptions()
+    addon.optionspanel = CreateFrame( "Frame", "DoKeysOptionsPanel", UIParent )
+    -- Register in the Interface Addon Options GUI
+    -- Set the name for the Category for the Options Panel
+    addon.optionspanel.name = "DoKeys"
+    -- Add the panel to the Interface Options
+    InterfaceOptions_AddCategory(DoKeysOptionsPanel)
+
+    ---- Make a child panel
+    --addon.optionspanel.childpanel = CreateFrame( "Frame", "MyAddonChild", addon.optionspanel)
+    --addon.optionspanel.childpanel.name = "General"
+    ---- Specify childness of this panel (this puts it under the little red [+], instead of giving it a normal AddOn category)
+    --addon.optionspanel.childpanel.parent = addon.optionspanel.name
+    ---- Add the child to the Interface Options
+    --InterfaceOptions_AddCategory(addon.optionspanel.childpanel)
+
+    local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck_GlobalName", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    myCheckButton:SetPoint("TOPLEFT", 25, -10)
+    myCheckButton:SetChecked(not self.db.profile.minimap.hide)
+    DoKeysOptionsMinimapCheck_GlobalNameText:SetText("Show Minimap")
+    myCheckButton.tooltip = "Enable or disable showing minimap button."
+    myCheckButton:SetScript("OnClick",
+      function()
+        if self.db.profile.minimap.hide then
+            LibDBIcon:Show("DoKeysIcon")
+            self.db.profile.minimap.hide = false
+        else
+            LibDBIcon:Hide("DoKeysIcon")
+            self.db.profile.minimap.hide = true
+        end
+      end
+    )
+end
