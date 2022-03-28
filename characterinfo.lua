@@ -11,7 +11,7 @@ local C_ChallengeMode = _G.C_ChallengeMode
 local C_ChatInfo = _G.C_ChatInfo
 local C_MythicPlus = _G.C_MythicPlus
 local C_PlayerInfo = _G.C_PlayerInfo
-local isGuildMember = _G.IsInGuild()
+local isGuildMember = _G.IsInGuild
 local UnitClass = _G.UnitClass
 local UnitLevel = _G.UnitLevel
 local C_Covenants = _G.C_Covenants
@@ -27,6 +27,8 @@ local difftime = _G.difftime
 local wipe = _G.wipe
 local strsplit = _G.strsplit
 local GetGuildInfo = _G.GetGuildInfo
+
+local DoKeysCurrentMaxLevel = GetMaxLevelForExpansionLevel(GetMaximumExpansionLevel())
 
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -356,12 +358,12 @@ local function UpdateKeyStone(_, _)
     end
     --updateV8 Bigchill-Malorne:DEATHKNIGHT:382:16:0:234:1
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
-    if isAstralKeysRegistered and isGuildMember then
+    if isAstralKeysRegistered and isGuildMember() then
         C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
     end
 
     local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
-    if DokeysRegistered and isGuildMember then
+    if DokeysRegistered and isGuildMember() then
         C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. currentkeymapid .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
     end
     lasttimesendupdatekeys = _G.GetTime()
@@ -402,12 +404,12 @@ local function UpdateWeeklyBest(_, event, one, _, three)
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = three
         end
         local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
-        if isAstralKeysRegistered and isGuildMember then
+        if isAstralKeysRegistered and isGuildMember() then
             C_ChatInfo.SendAddonMessage('AstralKeys', 'updateWeekly ' .. three, 'GUILD')
             --print("Sending New Weekly To AstralKeys")
         end
         local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
-        if DokeysRegistered and isGuildMember then
+        if DokeysRegistered and isGuildMember() then
             C_ChatInfo.SendAddonMessage('DoKeys', 'updateWeekly ' .. three, 'GUILD')
             --print("Sending New Weekly To DoKeys")
         end
