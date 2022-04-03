@@ -1007,23 +1007,19 @@ local function DoWeeklyKeyReset()
 end
 
 local function DoSeasonReset()
-    --for _, v in pairs(_G.DoCharacters["Malorne"]) do -- luacheck: ignore 423
-    --    if type(v == "table") then
-    --       for k, v in pairs(v) do
-    --          if k == "mythicplus" then
-    --             for k, v in pairs(v) do
-    --                if k == "keystone" then
-    --                   for k, v in pairs(v) do
-    --                      if k == "seasonbests" then
-    --                         k = {}
-    --                      end
-    --                   end
-    --                end
-    --             end
-    --          end
-    --       end
-    --    end
-    --end
+    for _, v in pairs(_G.DoCharacters[realmName]) do -- luacheck: ignore 423
+        if type(v == "table") then
+           for k, v in pairs(v) do
+              if k == "mythicplus" then
+                 for k, v in pairs(v) do
+                    if k == "keystone" then
+                       wipe(v["seasonbests"])
+                    end
+                 end
+              end
+           end
+        end
+     end
 end
 
 local function DataResetTime()
@@ -1134,6 +1130,7 @@ local function Reset()
 
     if _G.DoCharacters.init_season and C_MythicPlus.GetCurrentSeason() ~= _G.DoCharacters.init_season then
         DoSeasonReset()
+        _G.DoCharacters.init_season = C_MythicPlus.GetCurrentSeason()
     end
 
 end
