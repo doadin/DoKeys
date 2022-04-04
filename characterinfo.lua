@@ -367,6 +367,7 @@ local function UpdateKeyStone(_, _)
     if DokeysRegistered and isGuildMember() then
         C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
     end
+    UpdateSeasonBests()
     lasttimesendupdatekeys = _G.GetTime()
 end
 
@@ -417,7 +418,7 @@ local function UpdateWeeklyBest(_, event, one, _, three)
     end
 end
 
-local function UpdateSeasonBests(_, event)
+function UpdateSeasonBests(_, event)
     local maps = C_ChallengeMode.GetMapTable()
     if realmName ~= nil then return end
     if UnitName("player") ~= nil then return end
@@ -1009,17 +1010,18 @@ end
 local function DoSeasonReset()
     for _, v in pairs(_G.DoCharacters[realmName]) do -- luacheck: ignore 423
         if type(v == "table") then
-           for k, v in pairs(v) do
-              if k == "mythicplus" then
-                 for k, v in pairs(v) do
-                    if k == "keystone" then
-                       wipe(v["seasonbests"])
+            for k, v in pairs(v) do
+                if k == "mythicplus" then
+                    for k, v in pairs(v) do
+                        if k == "keystone" then
+                            wipe(v["seasonbests"])
+                        end
                     end
-                 end
-              end
-           end
+                end
+            end
         end
-     end
+    end
+    UpdateSeasonBests()
 end
 
 local function DataResetTime()
