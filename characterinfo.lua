@@ -419,25 +419,25 @@ local function UpdateWeeklyBest(_, event, one, _, three)
 end
 
 local function UpdateSeasonBests(_, event)
-    print("UpdateSeasonBests Running")
+    --print("UpdateSeasonBests Running")
     local maps = C_ChallengeMode.GetMapTable()
     if realmName == nil then
-        print("not name")
+        --print("not name")
         return
     end
     if UnitName("player") == nil then
-        print("not name")
+        --print("not name")
         return
     end
-    print(realmName)
-    print(UnitName("player"))
+    --print(realmName)
+    --print(UnitName("player"))
     for i = 1, #maps do
         local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
         local name = C_ChallengeMode.GetMapUIInfo(maps[i])
-        print(name)
+        --print(name)
         --if not name then print("not name") return end
         if type(affixScores) ~= "table" then
-            print(realmName, UnitName("player"), name)
+            --print(realmName, UnitName("player"), name)
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
             _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
