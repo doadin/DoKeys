@@ -63,6 +63,7 @@ DoKeysRequestAKKMGuildKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
 local UpdateSeasonBestsFrame = CreateFrame("FRAME")
 UpdateSeasonBestsFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+UpdateSeasonBestsFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
 
 local UpdateCovenantFrame = CreateFrame("FRAME")
 UpdateCovenantFrame:RegisterEvent("COVENANT_CHOSEN")
@@ -367,7 +368,6 @@ local function UpdateKeyStone(_, _)
     if DokeysRegistered and isGuildMember() then
         C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
     end
-    UpdateSeasonBests()
     lasttimesendupdatekeys = _G.GetTime()
 end
 
@@ -418,27 +418,49 @@ local function UpdateWeeklyBest(_, event, one, _, three)
     end
 end
 
-function UpdateSeasonBests(_, event)
+local function UpdateSeasonBests(_, event)
+    print("UpdateSeasonBests Running")
     local maps = C_ChallengeMode.GetMapTable()
-    if realmName ~= nil then return end
-    if UnitName("player") ~= nil then return end
+    if realmName == nil then
+        print("not name")
+        return
+    end
+    if UnitName("player") == nil then
+        print("not name")
+        return
+    end
+    print(realmName)
+    print(UnitName("player"))
     for i = 1, #maps do
         local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
         local name = C_ChallengeMode.GetMapUIInfo(maps[i])
-        if not name then return end
-        if type(affixScores) ~= table then return end
+        print(name)
+        --if not name then print("not name") return end
+        if type(affixScores) ~= "table" then
+            print(realmName, UnitName("player"), name)
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
+        end
+
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
         _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
-        for mapid,affix in pairs(affixScores) do
-            if affix.name then
-                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
-                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
-            end
-            if affix.overTime then
-                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
-            else
-                tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+        if type(affixScores) == "table" then
+            for mapid,affix in pairs(affixScores) do
+                if affix.name then
+                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+                end
+                if affix.overTime then
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+                else
+                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+                end
             end
         end
         if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
