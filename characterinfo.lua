@@ -28,7 +28,7 @@ local wipe = _G.wipe
 local strsplit = _G.strsplit
 local GetGuildInfo = _G.GetGuildInfo
 
-local DoKeysCurrentMaxLevel = GetMaxLevelForExpansionLevel(GetMaximumExpansionLevel())
+local DoKeysCurrentMaxLevel = _G.GetMaxLevelForExpansionLevel(_G.GetMaximumExpansionLevel())
 
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -1152,6 +1152,7 @@ local function Reset()
         end)
     end
 
+    print(C_MythicPlus.GetCurrentSeason())
     if _G.DoCharacters.init_season and C_MythicPlus.GetCurrentSeason() ~= _G.DoCharacters.init_season then
         DoSeasonReset()
         _G.DoCharacters.init_season = C_MythicPlus.GetCurrentSeason()
