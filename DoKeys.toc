@@ -5,10 +5,8 @@
 ## Notes: Keystone Character Info.
 
 ## Author: Doadin
-## SavedVariables:
-## X-Curse-Project-ID: 554554
-
 ## SavedVariables: DoCharacters,DoKeysGuild,DoKeysDB,DoKeysUtility
+## X-Curse-Project-ID: 554554
 
 Libs\LibStub\LibStub.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
