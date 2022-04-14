@@ -323,7 +323,7 @@ end
 
 local lasttimesendupdatekeys
 local function UpdateKeyStone(_, _)
-    if UnitLevel("player") <= DoKeysCurrentMaxLevel then return end
+    if not type(UnitLevel("player") == "number") or (UnitLevel("player") < DoKeysCurrentMaxLevel) then return end
     local currentkeymapid = GetOwnedKeystoneChallengeMapID()
     local name
     local keylevel
@@ -1152,8 +1152,7 @@ local function Reset()
         end)
     end
 
-    print(C_MythicPlus.GetCurrentSeason())
-    if _G.DoCharacters.init_season and C_MythicPlus.GetCurrentSeason() ~= _G.DoCharacters.init_season then
+    if _G.DoCharacters.init_season and C_MythicPlus.GetCurrentSeason() >= 1 and (C_MythicPlus.GetCurrentSeason() ~= _G.DoCharacters.init_season) then
         DoSeasonReset()
         _G.DoCharacters.init_season = C_MythicPlus.GetCurrentSeason()
     end
