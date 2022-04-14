@@ -389,7 +389,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, "GUILD")
+                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "GUILD")
                         end
                     end
                     lastrunguildhelp = _G.GetTime()
@@ -402,7 +402,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, "OFFICER")
+                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "OFFICER")
                         end
                     end
                     lastrunofficerhelp = _G.GetTime()
@@ -415,7 +415,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, "PARTY")
+                            SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "PARTY")
                         end
                     end
                     lastrunpartyhelp = _G.GetTime()
