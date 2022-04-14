@@ -23,3 +23,5 @@ externals:
       url: https://github.com/kaminaris/StdUi.git
    Libs/LibStub: 
       url: https://repos.curseforge.com/wow/libstub/trunk
+   Libs/LibDataBroker-1.1: 
+      url: https://repos.curseforge.com/wow/libdatabroker-1-1
