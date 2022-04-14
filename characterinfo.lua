@@ -1015,6 +1015,9 @@ local function DoWeeklyKeyReset()
                  for k, v in pairs(v) do
                     if k == "keystone" then
                         v.WeeklyBest =  0
+                        v.WeeklyBestInstanceName =  ""
+                        v.WeeklyBestLevel =  0
+                        v.WeeklyBestLevelTimed =  0
                         v.CurrentKeyLevel = 0
                         v.CurrentKeyInstance = ""
                         v.CurrentTWKeyLevel = 0
