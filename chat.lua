@@ -202,12 +202,18 @@ local function CreateLink(data,keytype)
     end
 end
 
-local function FindCovenant()
+local function FindCovenant(data)
+    local character
     local GetRealmName = _G.GetRealmName
     local realmName = GetRealmName()
+    if type(data) =="table" then
+        character = data
+    else
+        character = _G.DoCharacters[realmName][UnitName("player")]
+    end
     local covenant
-    if _G.DoCharacters[realmName][UnitName("player")].covenant and type(_G.DoCharacters[realmName][UnitName("player")].covenant) == "string" then
-        covenant = tostring(_G.DoCharacters[realmName][UnitName("player")].covenant)
+    if data.covenant and type(data.covenant) == "string" then
+        covenant = character.covenant
     else
         covenant = ""
     end
@@ -216,6 +222,8 @@ end
 
 local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, _, bnSenderID, _, _, _, _)
     local now = _G.GetTime()
+    local GetRealmName = _G.GetRealmName
+    local realmName = GetRealmName()
     --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, unused, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
     --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, unused, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
     --print(msg)
@@ -235,7 +243,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(), "GUILD")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "GUILD")
                         end
                     end
                     lastrunguildkeys = _G.GetTime()
@@ -248,7 +256,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(), "OFFICER")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "OFFICER")
                         end
                     end
                     lastrunofficerkeys = _G.GetTime()
@@ -261,7 +269,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(), "PARTY")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "PARTY")
                         end
                     end
                     lastrunpartykeys = _G.GetTime()
@@ -297,8 +305,6 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
         end
     end
 
-    local GetRealmName = _G.GetRealmName
-    local realmName = GetRealmName()
     --local db = LibStub("AceDB-3.0"):GetNamespace("DoKeysDB", true)
     --db.profile.minimap
     --db.profile.chat.respondkeys
@@ -315,7 +321,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(), "GUILD")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "GUILD")
                     end
 
                     lastrunguildkeys = _G.GetTime()
@@ -328,7 +334,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(), "OFFICER")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "OFFICER")
                     end
 
                     lastrunofficerkeys = _G.GetTime()
@@ -341,7 +347,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(), "PARTY")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "PARTY")
                     end
 
                     lastrunpartykeys = _G.GetTime()
@@ -465,7 +471,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(), "GUILD")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "GUILD")
                         end
                     end
                     lastrunguildkeys = _G.GetTime()
@@ -478,7 +484,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(), "OFFICER")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "OFFICER")
                         end
                     end
                     lastrunofficerkeys = _G.GetTime()
@@ -491,7 +497,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
-                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(), "PARTY")
+                            SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "PARTY")
                         end
                     end
                     lastrunpartykeys = _G.GetTime()
