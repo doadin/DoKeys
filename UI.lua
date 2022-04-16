@@ -259,39 +259,16 @@ local ReportKeysToDropDownitems = {
 }
 
 local ReportKeysToDropDown = StdUi:Dropdown(ReportHeading, 200, 20, ReportKeysToDropDownitems)
---ReportKeysToDropDown:SetPoint('CENTER')
 StdUi:GlueBelow(ReportKeysToDropDown, ReportToDropDown, 0, 2)
-
 StdUi:AddLabel(ReportHeading, ReportKeysToDropDown, "Report Your Keys To:", "LEFT", 155)
-
 local ReportKeysToButton = StdUi:Button(ReportHeading, 35, 20, "Send")
 StdUi:GlueTop(ReportKeysToButton, ReportHeading, -265, -40, 'RIGHT')
-
 local ReportKeysToDropDownValue
 ReportKeysToDropDown.OnValueChanged = function(self, value)
     ReportKeysToDropDownValue = value
 end
 
 local function CreateLink(data,keytype)
-    --name, description, filedataid = C_ChallengeMode.GetAffixInfo(affixID)
-    --C_MythicPlus.GetCurrentAffixes()
-    --[1]={
-    --  id=9,
-    --  seasonID=0
-    --},
-    --[2]={
-    --  id=7,
-    --  seasonID=0
-    --},
-    --[3]={
-    --  id=13,
-    --  seasonID=0
-    --},
-    --[4]={
-    --  id=128,
-    --  seasonID=6
-    --}
-	-- '|cffa335ee|Hkeystone:180653:244:2:10:0:0:0|h[Keystone: Atal'dazar (2)]|h|r'
     local AffixTable = C_MythicPlus.GetCurrentAffixes()
     local link
     if keytype == "normal" then
@@ -480,10 +457,8 @@ local AffixHeading = StdUi:PanelWithTitle(MainFrame, 800, 90, "This Weeks Affixs
 StdUi:GlueTop(AffixHeading, MainFrame, 0, -450)
 
 local function GetAffixes(_,event, one, two)
-
     local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
     if not CurrentAffixes then C_Timer.After(1, GetAffixes) return end
-
     local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
     local AffixOne = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixOne:SetNormalTexture(AffixOnefiledataid)
@@ -496,7 +471,6 @@ local function GetAffixes(_,event, one, two)
     AffixOne:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
-
     local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
     local AffixTwo = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixTwo:SetNormalTexture(AffixTwofiledataid)
@@ -509,7 +483,6 @@ local function GetAffixes(_,event, one, two)
     AffixTwo:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
-
     local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
     local AffixThree = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixThree:SetNormalTexture(AffixThreefiledataid)
@@ -522,7 +495,6 @@ local function GetAffixes(_,event, one, two)
     AffixThree:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
-
     local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
     local AffixFour = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixFour:SetNormalTexture(AffixFourfiledataid)
@@ -535,7 +507,6 @@ local function GetAffixes(_,event, one, two)
     AffixFour:SetScript("OnLeave",function()
         GameTooltip:Hide()
     end)
-
 end
 
 local eventframe = CreateFrame("Frame")
@@ -543,7 +514,6 @@ eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
 eventframe:SetScript("OnEvent", GetAffixes)
 
 local function GetTable()
-
     local sttestdata = {}
     local characteri=0
     for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
@@ -563,7 +533,6 @@ local function GetTable()
     end
     st:SetData(sttestdata)
     st:Show()
-
     local guilddata = {}
     local guildi=0
     if type(_G.DoKeysGuild) =="table" then
@@ -580,7 +549,6 @@ local function GetTable()
             end
         end
     end
-
     Guildst:SetData(guilddata)
     Guildst:Show()
 end
@@ -716,20 +684,8 @@ end
 
 function addon:SetupOptions()
     addon.optionspanel = CreateFrame( "Frame", "DoKeysOptionsPanel", UIParent )
-    -- Register in the Interface Addon Options GUI
-    -- Set the name for the Category for the Options Panel
     addon.optionspanel.name = "DoKeys"
-    -- Add the panel to the Interface Options
     InterfaceOptions_AddCategory(DoKeysOptionsPanel)
-
-    ---- Make a child panel
-    --addon.optionspanel.childpanel = CreateFrame( "Frame", "MyAddonChild", addon.optionspanel)
-    --addon.optionspanel.childpanel.name = "General"
-    ---- Specify childness of this panel (this puts it under the little red [+], instead of giving it a normal AddOn category)
-    --addon.optionspanel.childpanel.parent = addon.optionspanel.name
-    ---- Add the child to the Interface Options
-    --InterfaceOptions_AddCategory(addon.optionspanel.childpanel)
-
     local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     myCheckButton:SetPoint("TOPLEFT", 25, -10)
     myCheckButton:SetChecked(not self.db.profile.minimap.hide)
@@ -746,19 +702,4 @@ function addon:SetupOptions()
         end
       end
     )
-
-    --local myCheckButtonTwo = CreateFrame("CheckButton", "DoKeysOptionsRespondKeysChatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
-    --myCheckButtonTwo:SetPoint("TOPLEFT", 25, -30)
-    --myCheckButtonTwo:SetChecked(self.db.profile.chat.respondkeys)
-    --DoKeysOptionsRespondKeysChatCheck.Text:SetText("Respond to !keys in chat")
-    --myCheckButtonTwo.tooltip = "Enable or disable showing minimap button."
-    --myCheckButtonTwo:SetScript("OnClick",
-    --  function()
-    --    if self.db.profile.chat.respondkeys then
-    --        self.db.profile.chat.respondkeys = false
-    --    else
-    --        self.db.profile.chat.respondkeys = true
-    --    end
-    --  end
-    --)
 end
