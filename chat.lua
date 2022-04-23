@@ -278,7 +278,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "GUILD")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "GUILD")
                     end
 
                     lastrunguildkeys = _G.GetTime()
@@ -291,7 +291,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "OFFICER")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "OFFICER")
                     end
 
                     lastrunofficerkeys = _G.GetTime()
@@ -304,7 +304,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     if _G.DoCharacters[realmName][UnitName("player")].level == DoKeysCurrentMaxLevel then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"both") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "PARTY")
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(_G.DoCharacters[realmName][UnitName("player")]), "PARTY")
                     end
 
                     lastrunpartykeys = _G.GetTime()
