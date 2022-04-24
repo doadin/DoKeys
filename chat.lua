@@ -192,19 +192,13 @@ end
 
 local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, _, bnSenderID, _, _, _, _)
 
-    if type(mas) == "table" then
-        wipe(mas)
-    else
+    if type(mas) ~= "table" then
         mas = {}
     end
-    if type(mastwo) == "table" then
-        wipe(mastwo)
-    else
+    if type(mastwo) ~= "table" then
         mastwo = {}
     end
-    if type(mastw) == "table" then
-        wipe(mastw)
-    else
+    if type(mastw) ~= "table" then
         mastw = {}
     end
     firsttwokeys = string.lower("!" .. string.sub(UnitName("player"),1,2) .. "keys")
