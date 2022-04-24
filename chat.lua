@@ -227,7 +227,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
-                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" then
+                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "GUILD")
                             else
                                 print("type CreateLink is: ", type(CreateLink(v["mythicplus"]["keystone"],"normal")), "Please report this to DoKeys Author")
@@ -245,7 +245,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
-                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" then
+                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "OFFICER")
                             else
                                 print("type CreateLink is: ", type(CreateLink(v["mythicplus"]["keystone"],"normal")), "Please report this to DoKeys Author")
@@ -263,7 +263,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
-                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" then
+                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "PARTY")
                             else
                                 print("type CreateLink is: ", type(CreateLink(v["mythicplus"]["keystone"],"normal")), "Please report this to DoKeys Author")
@@ -281,7 +281,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
-                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" then
+                            if type(CreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(FindCovenant(v)) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal") .. " " .. FindCovenant(v), "WHISPER", nil, sender)
                             else
                                 print("type CreateLink is: ", type(CreateLink(v["mythicplus"]["keystone"],"normal")), "Please report this to DoKeys Author")
@@ -392,7 +392,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "GUILD")
                         end
                     end
@@ -405,7 +405,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "OFFICER")
                         end
                     end
@@ -418,7 +418,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest .. " " .. v["mythicplus"]["keystone"].WeeklyBestLevelTimed, "PARTY")
                         end
                     end
@@ -465,7 +465,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "GUILD")
                         end
                     end
@@ -478,7 +478,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "OFFICER")
                         end
                     end
@@ -491,7 +491,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"tw") .. " " .. FindCovenant(v), "PARTY")
                         end
                     end
