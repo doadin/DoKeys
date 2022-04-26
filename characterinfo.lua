@@ -555,24 +555,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                             if lName == bName and lRealm == bRealm then
                             else
                                 if NameRealm and Class and KeyMapID and KeyLevel and WeeklyBest and Week and ID then
-                                    if _G.DoKeysGuild then
-                                    else
+                                    if type(_G.DoKeysGuild) ~= "table" then
                                         _G.DoKeysGuild = {}
                                     end
-                                    if _G.DoKeysGuild[GuildName] then
-                                    else
+                                    if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                                         _G.DoKeysGuild[GuildName] = {}
                                     end
-                                    if _G.DoKeysGuild[GuildName][NameRealm] then
-                                    else
+                                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                                         _G.DoKeysGuild[GuildName][NameRealm] = {}
                                     end
-                                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-                                    else
+                                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
                                     end
-                                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-                                    else
+                                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                                     end
                                     -- Add Data
@@ -601,24 +596,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if not WeeklyBest then
                 return
             end
-            if _G.DoKeysGuild then
-            else
+            if type(_G.DoKeysGuild) ~= "table" then
                 _G.DoKeysGuild = {}
             end
-            if _G.DoKeysGuild[GuildName] then
-            else
+            if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                 _G.DoKeysGuild[GuildName] = {}
             end
-            if _G.DoKeysGuild[GuildName][NameRealm] then
-            else
+            if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                 _G.DoKeysGuild[GuildName][NameRealm] = {}
             end
-            if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-            else
+            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
             end
-            if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-            else
+            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
             end
             if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
@@ -637,24 +627,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             end
             for GuildNameList in pairs(_G.DoKeysGuild) do
                 if GuildNameList == GuildName then
-                    if _G.DoKeysGuild then
-                    else
+                    if type(_G.DoKeysGuild) ~= "table" then
                         _G.DoKeysGuild = {}
                     end
-                    if _G.DoKeysGuild[GuildName] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                         _G.DoKeysGuild[GuildName] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
                 end
@@ -719,24 +704,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if data then
                         local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week = strsplit(":",data)
                         if NameRealm and Class and KeyMapID and KeyLevel and WeeklyBest and Week then
-                            if _G.DoKeysGuild then
-                            else
+                            if type(_G.DoKeysGuild) ~= "table" then
                                 _G.DoKeysGuild = {}
                             end
-                            if _G.DoKeysGuild[GuildName] then
-                            else
+                            if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                                 _G.DoKeysGuild[GuildName] = {}
                             end
-                            if _G.DoKeysGuild[GuildName][NameRealm] then
-                            else
+                            if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                                 _G.DoKeysGuild[GuildName][NameRealm] = {}
                             end
-                            if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-                            else
+                            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
                             end
-                            if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-                            else
+                            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                             end
                         else
@@ -766,24 +746,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             end
             for GuildNameList in pairs(_G.DoKeysGuild) do
                 if GuildNameList == GuildName then
-                    if _G.DoKeysGuild then
-                    else
+                    if type(_G.DoKeysGuild) ~= "table" then
                         _G.DoKeysGuild = {}
                     end
-                    if _G.DoKeysGuild[GuildName] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                         _G.DoKeysGuild[GuildName] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
                     end
-                    if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-                    else
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
                 end
@@ -805,24 +780,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
                 for GuildNameList in pairs(_G.DoKeysGuild) do
                     if GuildNameList == GuildName then
-                        if _G.DoKeysGuild then
-                        else
+                        if type(_G.DoKeysGuild) ~= "table" then
                             _G.DoKeysGuild = {}
                         end
-                        if _G.DoKeysGuild[GuildName] then
-                        else
+                        if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                             _G.DoKeysGuild[GuildName] = {}
                         end
-                        if _G.DoKeysGuild[GuildName][NameRealm] then
-                        else
+                        if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
                             _G.DoKeysGuild[GuildName][NameRealm] = {}
                         end
-                        if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] then
-                        else
+                        if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
                             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
                         end
-                        if _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] then
-                        else
+                        if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                         end
                     end
