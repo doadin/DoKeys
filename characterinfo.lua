@@ -619,10 +619,13 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
         if method == "updateV8" and channel == "GUILD" then
             local _,KeyData = strsplit(" ", text)
             local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
-            if not KeyData then
+            if type(KeyData) ~= "string" then
                 return
             end
-            if not GuildName then
+            if type(GuildName) ~= "string" then
+                return
+            end
+            if type(NameRealm) ~= "string" then
                 return
             end
             for GuildNameList in pairs(_G.DoKeysGuild) do
@@ -772,10 +775,13 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if method == "updateV8" and channel == "GUILD" then
                 local _,KeyData = strsplit(" ", text)
                 local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
-                if not KeyData then
+                if type(KeyData) ~= "string" then
                     return
                 end
-                if not GuildName then
+                if type(GuildName) ~= "string" then
+                    return
+                end
+                if type(NameRealm) ~= "string" then
                     return
                 end
                 for GuildNameList in pairs(_G.DoKeysGuild) do
