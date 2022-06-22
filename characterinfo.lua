@@ -573,7 +573,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                                     -- Add Data
                                     local guildkeyname
                                     if KeyMapID then
-                                        guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)
+                                        guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)  or ""
                                     end
                                     _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
                                     _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
@@ -649,7 +649,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             end
             local guildkeyname
             if KeyInstance then
-                guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)
+                guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance) or ""
             end
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
@@ -685,7 +685,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
                 local guildkeyname
                 if keyInfo.mapId then
-                    guildkeyname = C_ChallengeMode.GetMapUIInfo(keyInfo.mapId)
+                    guildkeyname = C_ChallengeMode.GetMapUIInfo(keyInfo.mapId)  or ""
                 end
                 _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyLevel = keyInfo.level
                 _G.DoKeysGuild[GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
@@ -727,7 +727,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         end
                         local guildkeyname
                         if KeyMapID then
-                            guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)
+                            guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)  or ""
                         end
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
@@ -805,7 +805,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
                 local guildkeyname
                 if KeyInstance then
-                    guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)
+                    guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
                 end
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
