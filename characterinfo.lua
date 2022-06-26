@@ -653,7 +653,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             end
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = weeklyBest
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
     end
@@ -809,7 +809,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = weeklyBest
+                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
                 _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
             end
         end
