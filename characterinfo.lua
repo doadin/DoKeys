@@ -428,6 +428,11 @@ local function UpdateSeasonBests(_, event)
     end
 end
 
+local function CompressAndEncode(input)
+	local compressed = LibDeflate:CompressDeflate(AceSerializer:Serialize(input))
+	return LibDeflate:EncodeForWoWAddonChannel(compressed)
+end
+
 local function DecompressAndDecode(input)
     local decoded = LibDeflate:DecodeForWoWAddonChannel(input)
     local success, deserialized = AceSerializer:Deserialize(LibDeflate:DecompressDeflate(decoded))
@@ -439,14 +444,12 @@ end
 
 local function RequestGuildKeys(_, event)
     if event == "LOADING_SCREEN_DISABLED" or event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" or event == "CHALLENGE_MODE_COMPLETED" or event == "GUILD_ROSTER_UPDATE" then
-        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered then
             C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
         end
         if isKeystoneManagerRegistered then
             C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
         end
-        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if DokeysRegistered then
             C_ChatInfo.SendAddonMessage('DoKeys', 'request', 'GUILD')
         end
@@ -454,60 +457,87 @@ local function RequestGuildKeys(_, event)
 end
 
 local lasttimesendkeys
-local function SendGuildKeys()
+local function SendGuildKeys(style)
     if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
         return
     end
-    local testtable = {}
-    for key, value in pairs(_G.DoCharacters[realmName]) do
-        local i = 1
-        tinsert(testtable,i,value)
-    end
-    for i=1,#testtable do
-        local needtoremove = false
-        if not testtable[i].level then
-            needtoremove = true
+    if style == "AstralKeys" then
+        local testtable = {}
+        local AstralKeysi = 0
+        for key, value in pairs(_G.DoCharacters[realmName]) do
+            AstralKeysi = AstralKeysi+1
+            tinsert(testtable,AstralKeysi,value)
         end
-        if not testtable[i].name  then
-            needtoremove = true
-        end
-        if not testtable[i].realm  then
-            needtoremove = true
-        end
-        if not testtable[i].class then
-            needtoremove = true
-        end
-        if not testtable[i]["mythicplus"]["keystone"].currentkeymapid then
-            needtoremove = true
-        end
-        if not testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel then
-            needtoremove = true
-        end
-        if not testtable[i]["mythicplus"]["keystone"].WeeklyBest then
-            needtoremove = true
-        end
-        if needtoremove then
-            table.remove(testtable,i)
-        end
-    end
-    local text = ""
-    while testtable[1] do
-        text = "sync5 "
-        for i=1,4 do
-            if testtable[i] then
-                if testtable[i].level == 60 then
-                    text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
-                end
+        for i=1,#testtable do
+            local needtoremove = false
+            if not testtable[i].level then
+                needtoremove = true
             end
-            table.remove(testtable, i)
+            if not testtable[i].name  then
+                needtoremove = true
+            end
+            if not testtable[i].realm  then
+                needtoremove = true
+            end
+            if not testtable[i].class then
+                needtoremove = true
+            end
+            if not testtable[i]["mythicplus"]["keystone"].currentkeymapid then
+                needtoremove = true
+            end
+            if not testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel then
+                needtoremove = true
+            end
+            if not testtable[i]["mythicplus"]["keystone"].WeeklyBest then
+                needtoremove = true
+            end
+            if needtoremove then
+                table.remove(testtable,i)
+            end
         end
-        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
-        if isAstralKeysRegistered then
-            C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
+        local text = ""
+        while testtable[1] do
+            text = "sync5 "
+            for i=1,4 do
+                if testtable[i] then
+                    if testtable[i].level == 60 then
+                        text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
+                    end
+                end
+                table.remove(testtable, i)
+            end
+            if isAstralKeysRegistered then
+                C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
+            end
+            if DokeysRegistered then
+                C_ChatInfo.SendAddonMessage('DoKeys', text, 'GUILD')
+            end
         end
-        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
-        if DokeysRegistered then
-            C_ChatInfo.SendAddonMessage('DoKeys', text, 'GUILD')
+    end
+    if style == "KeystoneManager" then
+        local KeystoneManagerSendTable
+        local GuildName = GetGuildInfo()
+        if GuildName == nil then return end
+        for CharacterName, Data in pairs(_G.DoCharacters[realmName]) do
+            local NameRealm = CharacterName  .. "-" .. _G.DoCharacters[realmName]
+            KeystoneManagerSendTable[NameRealm] = {
+                ["mapId"] = Data.mythicplus.keystone.currentkeymapid,
+                ["class"] = Data.class,
+                ["mapName"] = Data.mythicplus.keystone.CurrentKeyInstance,
+                ["weeklyBest"] = Data.mythicplus.keystone.WeeklyBestLevel,
+                ["week"] = _G.DoCharacters.Week,
+                ["name"] = NameRealm,
+                ["shortName"] = Data.name,
+                ["level"] = Data.level,
+                ["guild"] = GuildName,
+                ["timestamp"] = 1,
+            }
+
+        end
+        if isKeystoneManagerRegistered then
+            print("Should Send Keys to KeystoneManager")
+            local KeystoneManagerDataToSend = CompressAndEncode(KeystoneManagerSendTable)
+            C_ChatInfo.SendAddonMessage('KeystoneManager', KeystoneManagerDataToSend, 'GUILD')
         end
     end
     lasttimesendkeys = _G.GetTime()
@@ -531,7 +561,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
     if prefix == "AstralKeys" then
         if text == "request" then
-            SendGuildKeys()
+            SendGuildKeys("AstralKeys")
         end
         if method == "sync5" and channel == "GUILD" then --Handle received syncs
             local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
@@ -699,8 +729,14 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 _G.DoKeysGuild[GuildName][keyInfo.name].name = keyInfo.name
             end
         end
+        if request.command == 'request' then
+            SendGuildKeys("KeystoneManager")
+        end
     end
     if prefix == "DoKeys" then
+        if text == "request" then
+            SendGuildKeys("AstralKeys")
+        end
         if method == "sync5" and channel == "GUILD" then --Handle received syncs
             local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
             if NewText2 then
