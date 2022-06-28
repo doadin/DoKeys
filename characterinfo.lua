@@ -658,8 +658,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if type(NameRealm) ~= "string" then
                 return
             end
-            for GuildNameList in pairs(_G.DoKeysGuild) do
-                if GuildNameList == GuildName then
+            --for GuildNameList in pairs(_G.DoKeysGuild) do
+                --if GuildNameList == GuildName then
                     if type(_G.DoKeysGuild) ~= "table" then
                         _G.DoKeysGuild = {}
                     end
@@ -675,8 +675,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
-                end
-            end
+                --end
+            --end
             local guildkeyname
             if KeyInstance then
                 guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance) or ""
@@ -785,8 +785,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if not WeeklyBest then
                 return
             end
-            for GuildNameList in pairs(_G.DoKeysGuild) do
-                if GuildNameList == GuildName then
+            --for GuildNameList in pairs(_G.DoKeysGuild) do
+                --if GuildNameList == GuildName then
                     if type(_G.DoKeysGuild) ~= "table" then
                         _G.DoKeysGuild = {}
                     end
@@ -802,8 +802,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                         _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
-                end
-            end
+                --end
+            --end
             if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
             end
@@ -822,8 +822,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 if type(NameRealm) ~= "string" then
                     return
                 end
-                for GuildNameList in pairs(_G.DoKeysGuild) do
-                    if GuildNameList == GuildName then
+                --for GuildNameList in pairs(_G.DoKeysGuild) do
+                    --if GuildNameList == GuildName then
                         if type(_G.DoKeysGuild) ~= "table" then
                             _G.DoKeysGuild = {}
                         end
@@ -839,8 +839,8 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
                             _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                         end
-                    end
-                end
+                    --end
+                --end
                 local guildkeyname
                 if KeyInstance then
                     guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
