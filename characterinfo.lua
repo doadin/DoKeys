@@ -570,7 +570,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 for i,data in pairs(AstralCharacterTable) do
                     if data then
                         local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week,ID = strsplit(":",data)
-                        if Week ~= _G.DoCharacters.Week then return end
+                        if tonumber(Week) ~= tonumber(_G.DoCharacters.Week) then return end
                         local lName , lRealm = strsplit("-",NameRealm)
                         local bName , bRealm = UnitName("player"), GetRealmName()
                         if _G.DoCharacters then
@@ -650,7 +650,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
         if method == "updateV8" and channel == "GUILD" then
             local _,KeyData = strsplit(" ", text)
             local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
-            if week ~= _G.DoCharacters.Week then return end
+            if tonumber(week) ~= tonumber(_G.DoCharacters.Week) then return end
             if type(KeyData) ~= "string" then
                 return
             end
@@ -697,7 +697,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
         if request.command == 'updateKeys' then
             if type(request.data) ~= 'table' then return end
             for name, keyInfo in pairs(request.data) do
-                if keyInfo.week ~= _G.DoCharacters.Week then return end
+                if tonumber(keyInfo.week) ~= tonumber(_G.DoCharacters.Week) then return end
                 if _G.DoKeysGuild then
                 else
                     _G.DoKeysGuild = {}
@@ -747,7 +747,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 for i,data in pairs(AstralCharacterTable) do
                     if data then
                         local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week = strsplit(":",data)
-                        if Week ~= _G.DoCharacters.Week then return end
+                        if tonumber(Week) ~= tonumber(_G.DoCharacters.Week) then return end
                         if NameRealm and Class and KeyMapID and KeyLevel and WeeklyBest and Week then
                             if type(_G.DoKeysGuild) ~= "table" then
                                 _G.DoKeysGuild = {}
@@ -817,7 +817,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if method == "updateV8" and channel == "GUILD" then
                 local _,KeyData = strsplit(" ", text)
                 local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
-                if week ~= _G.DoCharacters.Week then return end
+                if tonumber(week) ~= tonumber(_G.DoCharacters.Week) then return end
                 if type(KeyData) ~= "string" then
                     return
                 end
