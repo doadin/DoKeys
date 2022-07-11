@@ -71,6 +71,9 @@ C_MythicPlusEventFrame:RegisterEvent("PLAYER_LOGIN")
 local RequestPartyKeysFrame = CreateFrame("FRAME")
 RequestPartyKeysFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
 
+local TrackPartyKeysFrame = CreateFrame("FRAME")
+TrackPartyKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
+
 local realmName = GetRealmName()
 
 local playerName = UnitName("player")
@@ -84,6 +87,7 @@ local Covenantstable = {
     [3] = "NightFae",
     [4] = "Necrolord"
 }
+local DoKeysPartyKeys = {}
 
 local function SetupDB(_, event, one, _)
     C_MythicPlus.RequestRewards()
@@ -816,59 +820,66 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             end
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
-        if prefix == "DoKeys" then
-            if method == "updateV8" and channel == "GUILD" then
-                local _,KeyData = strsplit(" ", text)
-                local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
-                if tonumber(week) ~= tonumber(_G.DoCharacters.Week) then return end
-                if type(KeyData) ~= "string" then
-                    return
-                end
-                if type(GuildName) ~= "string" then
-                    return
-                end
-                if type(NameRealm) ~= "string" then
-                    return
-                end
-                --for GuildNameList in pairs(_G.DoKeysGuild) do
-                    --if GuildNameList == GuildName then
-                        if type(_G.DoKeysGuild) ~= "table" then
-                            _G.DoKeysGuild = {}
-                        end
-                        if type(_G.DoKeysGuild[GuildName]) ~= "table" then
-                            _G.DoKeysGuild[GuildName] = {}
-                        end
-                        if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                            _G.DoKeysGuild[GuildName][NameRealm] = {}
-                        end
-                        if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
-                        end
-                        if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
-                        end
-                    --end
+        if method == "updateV8" and channel == "GUILD" then
+            local _,KeyData = strsplit(" ", text)
+            local NameRealm, Class, KeyInstance, KeyLevel, weeklyBest, week, random = strsplit(":",KeyData)
+            if tonumber(week) ~= tonumber(_G.DoCharacters.Week) then return end
+            if type(KeyData) ~= "string" then
+                return
+            end
+            if type(GuildName) ~= "string" then
+                return
+            end
+            if type(NameRealm) ~= "string" then
+                return
+            end
+            --for GuildNameList in pairs(_G.DoKeysGuild) do
+                --if GuildNameList == GuildName then
+                    if type(_G.DoKeysGuild) ~= "table" then
+                        _G.DoKeysGuild = {}
+                    end
+                    if type(_G.DoKeysGuild[GuildName]) ~= "table" then
+                        _G.DoKeysGuild[GuildName] = {}
+                    end
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
+                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    end
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    end
+                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    end
                 --end
-                local guildkeyname
-                if KeyInstance then
-                    guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
-                end
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-                if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
-                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
-                end
-                _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+            --end
+            local guildkeyname
+            if KeyInstance then
+                guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
             end
-            if text == "PartyRequest" then
-                local bName , bRealm = UnitName("player"), GetRealmName()
-                C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(_G.DoCharacters[bName]) .. "-" .. tostring(_G.DoCharacters[bRealm]) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyInstance) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+            if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
+                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             end
-            if method == "PARTYKEY" then
-                local _,KeyData = strsplit(" ", text)
-                local NameRealm, KeyInstance, KeyLevel, weeklyBest = strsplit(":",KeyData)
-                table.insert(DoKeysPartyKeys, {NameRealm = NameRealm{KeyInstance = KeyInstance, KeyLevel = KeyLevel, weeklyBest = weeklyBest}})
-            end
+            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+        end
+    end
+end
+
+local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
+    local method = ""
+    if text then
+        method = text:match('%w+')
+    end
+    if prefix == "DoKeys" then
+        if text == "PartyRequest" then
+            local bName , bRealm = UnitName("player"), GetRealmName()
+            C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(UnitName("player")) .. "-" .. tostring(GetRealmName()) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].currentkeymapid) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
+        end
+        if method == "PARTYKEY" then
+            local _,KeyData = strsplit(" ", text)
+            local NameRealm, KeyInstanceID, KeyLevel, weeklyBest = strsplit(":",KeyData)
+            _G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
     end
 end
@@ -1044,22 +1055,21 @@ end
 
 local function OnTooltipSetUnit(self)
     local _, unit = self:GetUnit()
+    if not unit then return end
     local isPlayer = _G.UnitIsPlayer(unit)
     local unitName, unitRealm = UnitName(unit)
     local nameRealm
     local found = false
     if not isPlayer then return end
+    if not unitRealm then
+        unitRealm = GetRealmName()
+    end
     if not (unitName and unitRealm) then return end
     if unitName and unitRealm then
-       --print(unitName .. "-" .. unitRealm)
        nameRealm = unitName .. "-" .. unitRealm
     end
-    --print("namerealm: ", nameRealm)
     for guildnametable,playernametable in pairs(_G.DoKeysGuild) do
-       --print(guildname)
-       --print(playername)
         for playername in pairs(playernametable) do
-            --print(playername)
             if playername == nameRealm then
                 found = true
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
@@ -1069,11 +1079,13 @@ local function OnTooltipSetUnit(self)
         end
     end
     if found then return end
-    for playername,keydata in pairs(DoKeysPartyKeys) do
-        if playername == nameRealm then
-            _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
-            _G.GameTooltip:AddLine("Current Key: " .. tostring(keydata.KeyInstance) .. " " .. tostring(keydata.KeyLevel), 1, 1, 1)
-            _G.GameTooltip:Show()
+    if type(DoKeysPartyKeys) == "table" then
+        for playername,keydata in pairs(DoKeysPartyKeys) do
+            if (playername .. "-" .. "Malorne") == nameRealm then
+                _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
+                _G.GameTooltip:AddLine("Current Key: " .. tostring(C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID)) .. " " .. tostring(keydata.KeyLevel), 1, 1, 1)
+                _G.GameTooltip:Show()
+            end
         end
     end
 end
@@ -1084,7 +1096,9 @@ local function RequestPartyKeys(_, event)
     C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
     local nummembers = _G.GetNumGroupMembers()
     if nummembers == 0 then
-        wipe(DoKeysPartyKeys)
+        if type(DoKeysPartyKeys) == "table" then
+            wipe(DoKeysPartyKeys)
+        end
     end
 end
 
@@ -1099,3 +1113,4 @@ UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
 UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
 C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
 RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
+TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
