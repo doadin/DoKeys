@@ -1030,6 +1030,34 @@ local function UpdateC_MythicPlusEvent(_, event, covenantID)
     end
 end
 
+local function OnTooltipSetUnit(self)
+    local _, unit = self:GetUnit()
+    local isPlayer = _G.UnitIsPlayer(unit)
+    local unitName, unitRealm = UnitName(unit)
+    local nameRealm
+    if not isPlayer then return end
+    if not (unitName and unitRealm) then return end
+    if unitName and unitRealm then
+       --print(unitName .. "-" .. unitRealm)
+       nameRealm = unitName .. "-" .. unitRealm
+    end
+    --print("namerealm: ", nameRealm)
+    for guildnametable,playernametable in pairs(_G.DoKeysGuild) do
+       --print(guildname)
+       --print(playername)
+        for playername in pairs(playernametable) do
+            --print(playername)
+            if playername == nameRealm then
+                _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
+                _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance) .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel), 1, 1, 1)
+                _G.GameTooltip:Show()
+            end
+        end
+    end
+end
+
+_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
 DoKeysResetFrame:SetScript("OnEvent", Reset)
