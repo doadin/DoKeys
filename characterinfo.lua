@@ -70,6 +70,7 @@ C_MythicPlusEventFrame:RegisterEvent("PLAYER_LOGIN")
 
 local RequestPartyKeysFrame = CreateFrame("FRAME")
 RequestPartyKeysFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+RequestPartyKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
 local TrackPartyKeysFrame = CreateFrame("FRAME")
 TrackPartyKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
