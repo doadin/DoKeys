@@ -68,6 +68,9 @@ local C_MythicPlusEventFrame = CreateFrame("FRAME")
 C_MythicPlusEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 C_MythicPlusEventFrame:RegisterEvent("PLAYER_LOGIN")
 
+local RequestPartyKeysFrame = CreateFrame("FRAME")
+RequestPartyKeysFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+
 local realmName = GetRealmName()
 
 local playerName = UnitName("player")
@@ -857,6 +860,15 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 end
                 _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
             end
+            if text == "PartyRequest" then
+                local bName , bRealm = UnitName("player"), GetRealmName()
+                C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(_G.DoCharacters[bName]) .. "-" .. tostring(_G.DoCharacters[bRealm]) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyInstance) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
+            end
+            if method == "PARTYKEY" then
+                local _,KeyData = strsplit(" ", text)
+                local NameRealm, KeyInstance, KeyLevel, weeklyBest = strsplit(":",KeyData)
+                table.insert(DoKeysPartyKeys, {NameRealm = NameRealm{KeyInstance = KeyInstance, KeyLevel = KeyLevel, weeklyBest = weeklyBest}})
+            end
         end
     end
 end
@@ -1035,6 +1047,7 @@ local function OnTooltipSetUnit(self)
     local isPlayer = _G.UnitIsPlayer(unit)
     local unitName, unitRealm = UnitName(unit)
     local nameRealm
+    local found = false
     if not isPlayer then return end
     if not (unitName and unitRealm) then return end
     if unitName and unitRealm then
@@ -1048,15 +1061,32 @@ local function OnTooltipSetUnit(self)
         for playername in pairs(playernametable) do
             --print(playername)
             if playername == nameRealm then
+                found = true
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
                 _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance) .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel), 1, 1, 1)
                 _G.GameTooltip:Show()
             end
         end
     end
+    if found then return end
+    for playername,keydata in pairs(DoKeysPartyKeys) do
+        if playername == nameRealm then
+            _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
+            _G.GameTooltip:AddLine("Current Key: " .. tostring(keydata.KeyInstance) .. " " .. tostring(keydata.KeyLevel), 1, 1, 1)
+            _G.GameTooltip:Show()
+        end
+    end
 end
 
 _G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+
+local function RequestPartyKeys(_, event)
+    C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
+    local nummembers = _G.GetNumGroupMembers()
+    if nummembers == 0 then
+        wipe(DoKeysPartyKeys)
+    end
+end
 
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
@@ -1068,3 +1098,4 @@ DoKeysGearFrame:SetScript("OnEvent", UpdateGear)
 UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
 UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
 C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
+RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
