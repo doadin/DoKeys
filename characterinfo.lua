@@ -696,6 +696,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             end
+            _G.DoKeysGuild[GuildName][NameRealm].Class = Class
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
     end
@@ -862,6 +863,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
                 _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             end
+            _G.DoKeysGuild[GuildName][NameRealm].Class = Class
             _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
         end
     end
