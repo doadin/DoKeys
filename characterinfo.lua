@@ -75,6 +75,15 @@ RequestPartyKeysFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 local TrackPartyKeysFrame = CreateFrame("FRAME")
 TrackPartyKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
 
+local TrackBNETKeysFrame = CreateFrame("FRAME")
+TrackBNETKeysFrame:RegisterEvent("BN_CHAT_MSG_ADDON")
+
+local FindAddonUsersFrame = CreateFrame("FRAME")
+FindAddonUsersFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
+FindAddonUsersFrame:RegisterEvent("BN_FRIEND_INFO_CHANGED")
+FindAddonUsersFrame:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE")
+FindAddonUsersFrame:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
+
 local realmName = GetRealmName()
 
 local playerName = UnitName("player")
@@ -870,6 +879,55 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
 end
 
+local function FindAddonUsers(_, event, one)
+    if not one then
+        for i=1,_G.BNGetNumFriends() do
+            local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+            if accountInfo.gameAccountInfo.wowProjectID == 1 then
+                _G.BNSendGameData(accountInfo.bnetAccountID, "AstralKeys", "BNet_query ping")
+                _G.BNSendGameData(accountInfo.bnetAccountID, "DoKeys", "BNet_query ping")
+            end
+        end
+    else
+        local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+        if accountInfo.gameAccountInfo.wowProjectID == 1 then
+            _G.BNSendGameData(accountInfo.bnetAccountID, "AstralKeys", "BNet_query ping")
+            _G.BNSendGameData(accountInfo.bnetAccountID, "DoKeys", "BNet_query ping")
+        end
+    end
+end
+
+local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
+    ----BN_CHAT_MSG_ADDON, AstralKeys, BNet_query response, WHISPER, 44 
+    ----BN_CHAT_MSG_ADDON, AstralKeys, sync4 Cobracry-Malorne:HUNTER:380:17:260:0:1:0_Crysis-Malorne:WARRIOR:375:19:260:0:1:0_, WHISPER, 44 
+    ----BN_CHAT_MSG_ADDON, AstralKeys, sync4 Certaddboi-Sen'jin:MONK:382:18:260:0:1:0_Healteamsix-Sen'jin:SHAMAN:376:16:260:0:1:0_, WHISPER, 61 
+    ----BN_CHAT_MSG_ADDON, AstralKeys, BNet_query response, WHISPER, 61
+    if type(_G.DoKeysBNETFriendsKeys) ~= "table" then
+        _G.DoKeysBNETFriendsKeys = {}
+    end
+    local method,KeyData = strsplit(" ", text)
+    if prefix == "AstralKeys" or prefix == "DoKeys" then
+        if method == "BNet_query" and KeyData == "ping" then
+            --send AK a responce so it thinks we have AK
+            _G.BNSendGameData(senderID, prefix, "BNet_query response")
+            local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
+            local btag = accountInfo.isBattleTagFriend and accountInfo.battleTag
+            if accountInfo.isFriend or accountInfo.isBattleTagFriend then
+                _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
+            end
+        end
+        if method == "sync4" then
+            local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
+            local btag = accountInfo.isBattleTagFriend and accountInfo.battleTag
+            local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",KeyData)
+            if accountInfo.isFriend or accountInfo.isBattleTagFriend then
+                _G.DoKeysBNETFriendsKeys[btag] = {NameRealm = NameRealm{KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, Week = Week, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class} }
+            end
+        end
+    end
+    --print(event, prefix, text, channel, senderID)
+end
+
 local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
     local method = ""
     if text then
@@ -1121,3 +1179,5 @@ UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
 C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
 RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
 TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
+TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
+FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
