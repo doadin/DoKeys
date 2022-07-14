@@ -883,6 +883,9 @@ local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, 
         if method == "PARTYKEY" then
             local _,KeyData = strsplit(" ", text)
             local NameRealm, KeyInstanceID, KeyLevel, weeklyBest = strsplit(":",KeyData)
+            if type(_G.DoKeysPartyKeys) ~= "table" then
+                _G.DoKeysPartyKeys = {}
+            end
             _G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
     end
