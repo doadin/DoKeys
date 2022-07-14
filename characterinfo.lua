@@ -552,6 +552,7 @@ local function SendGuildKeys(style)
 end
 
 local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
+    if not (prefix == 'AstralKeys') or not (prefix == 'KeystoneManager') or not (prefix == 'DoKeys') then return end
     local Player,PlayerRealm  = UnitName("player"), GetRealmName()
     if Player and PlayerRealm then
         if sender == Player .. "-" .. PlayerRealm then
