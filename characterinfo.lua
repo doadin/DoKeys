@@ -462,6 +462,7 @@ end
 local function RequestGuildKeys(_, event)
     if event == "LOADING_SCREEN_DISABLED" or event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" or event == "CHALLENGE_MODE_COMPLETED" or event == "GUILD_ROSTER_UPDATE" then
         if isAstralKeysRegistered then
+            print("test")
             C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
         end
         if isKeystoneManagerRegistered then
@@ -537,6 +538,18 @@ local function SendGuildKeys(style)
         if GuildName == nil then return end
         for CharacterName, Data in pairs(_G.DoCharacters[realmName]) do
             local NameRealm = CharacterName  .. "-" .. _G.DoCharacters[realmName]
+            --["Mickdonalds-Malorne"] = {
+            --    ["mapId"] = 376,
+            --    ["class"] = "WARRIOR",
+            --    ["mapName"] = "The Necrotic Wake",
+            --    ["weeklyBest"] = 0,
+            --    ["week"] = 257,
+            --    ["name"] = "Mickdonalds-Malorne",
+            --    ["shortName"] = "Mickdonalds",
+            --    ["level"] = 0,
+            --    ["guild"] = "The Bad and the Ugly",
+            --    ["timestamp"] = 1,
+            --},
             KeystoneManagerSendTable[NameRealm] = {
                 ["mapId"] = Data.mythicplus.keystone.currentkeymapid,
                 ["class"] = Data.class,
@@ -570,6 +583,17 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
     if sender == Player then
         return
+    end
+    _G.C_GuildInfo.GuildRoster()
+    local numberofguildMembers = _G.GetNumGuildMembers()
+    if numberofguildMembers <=0 then return end
+    for i=1,_G.GetNumGuildMembers() do
+        local name, rank = _G.GetGuildRosterInfo(i)
+        SendersGuildSame = false
+        if name == sender then
+            SendersGuildSame = true
+            --return
+        end
     end
     local GuildName = GetGuildInfo("player")
     if not GuildName then return end
@@ -884,15 +908,15 @@ local function FindAddonUsers(_, event, one)
         for i=1,_G.BNGetNumFriends() do
             local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
             if accountInfo.gameAccountInfo.wowProjectID == 1 then
-                _G.BNSendGameData(accountInfo.bnetAccountID, "AstralKeys", "BNet_query ping")
-                _G.BNSendGameData(accountInfo.bnetAccountID, "DoKeys", "BNet_query ping")
+                _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "AstralKeys", "BNet_query ping")
+                _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "DoKeys", "BNet_query ping")
             end
         end
     else
         local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
         if accountInfo.gameAccountInfo.wowProjectID == 1 then
-            _G.BNSendGameData(accountInfo.bnetAccountID, "AstralKeys", "BNet_query ping")
-            _G.BNSendGameData(accountInfo.bnetAccountID, "DoKeys", "BNet_query ping")
+            _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "AstralKeys", "BNet_query ping")
+            _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "DoKeys", "BNet_query ping")
         end
     end
 end
@@ -1157,7 +1181,23 @@ end
 
 _G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 
+local lastrunpartyrequest
+local lastrunpartyrequesttimer
 local function RequestPartyKeys(_, event)
+    if event == "GROUP_ROSTER_UPDATE" then
+        lastrunpartyrequest = _G.GetTime()
+    end
+    if _G.GetTime() - lastrunpartyrequest < 1 then
+        --if type(lastrunpartyrequesttimer) == "table" and lastrunpartyrequesttimer._remainingIterations >= 1 then
+        --    return
+        --elseif type(lastrunpartyrequesttimer) == "table" and lastrunpartyrequesttimer._remainingIterations == 0 then
+        --    lastrunpartyrequesttimer = _G.C_Timer.NewTimer(2.5, function() RequestPartyKeys() end)
+        --else
+        --    lastrunpartyrequesttimer:Cancel()
+        --    lastrunpartyrequesttimer = _G.C_Timer.NewTimer(2.5, function() RequestPartyKeys() end)
+        --end
+        return
+    end
     C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
     local nummembers = _G.GetNumGroupMembers()
     if nummembers == 0 then
