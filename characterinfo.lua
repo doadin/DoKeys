@@ -913,7 +913,7 @@ local function FindAddonUsers(_, event, one)
             end
         end
     else
-        local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+        local accountInfo = C_BattleNet.GetFriendAccountInfo(one)
         if accountInfo.gameAccountInfo.wowProjectID == 1 then
             _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "AstralKeys", "BNet_query ping")
             _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "DoKeys", "BNet_query ping")
