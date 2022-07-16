@@ -1192,7 +1192,7 @@ local function OnTooltipSetUnit(self)
     if found then return end
     if type(DoKeysPartyKeys) == "table" then
         for playername,keydata in pairs(DoKeysPartyKeys) do
-            if (playername .. "-" .. "Malorne") == nameRealm then
+            if (playername) == nameRealm then
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
                 _G.GameTooltip:AddLine("Current Key: " .. tostring(C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID)) .. " " .. tostring(keydata.KeyLevel), 1, 1, 1)
                 _G.GameTooltip:Show()
