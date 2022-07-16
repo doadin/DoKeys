@@ -475,7 +475,7 @@ local function RequestGuildKeys(_, event)
 end
 
 local lasttimesendkeys
-local function SendGuildKeys(style)
+local function SendGuildKeys(style, prefix)
     if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
         return
     end
@@ -524,11 +524,11 @@ local function SendGuildKeys(style)
                 end
                 table.remove(testtable, i)
             end
-            if isAstralKeysRegistered then
+            if isAstralKeysRegistered and prefix == "AstralKeys" then
                 C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
             end
-            if DokeysRegistered then
-                C_ChatInfo.SendAddonMessage('DoKeys', text, 'GUILD')
+            if DokeysRegistered and prefix == "DoKeys" then
+                C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
             end
         end
     end
@@ -565,9 +565,8 @@ local function SendGuildKeys(style)
 
         end
         if isKeystoneManagerRegistered then
-            print("Should Send Keys to KeystoneManager")
             local KeystoneManagerDataToSend = CompressAndEncode(KeystoneManagerSendTable)
-            C_ChatInfo.SendAddonMessage('KeystoneManager', KeystoneManagerDataToSend, 'GUILD')
+            C_ChatInfo.SendAddonMessage("KeystoneManager", KeystoneManagerDataToSend, 'GUILD')
         end
     end
     lasttimesendkeys = _G.GetTime()
@@ -603,7 +602,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
     if prefix == "AstralKeys" then
         if text == "request" then
-            SendGuildKeys("AstralKeys")
+            SendGuildKeys("AstralKeys", "AstralKeys")
         end
         if method == "sync5" and channel == "GUILD" then --Handle received syncs
             local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
@@ -781,7 +780,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
     end
     if prefix == "DoKeys" then
         if text == "request" then
-            SendGuildKeys("AstralKeys")
+            SendGuildKeys("AstralKeys", "DoKeys")
         end
         if method == "sync5" and channel == "GUILD" then --Handle received syncs
             local _, NewText2 = strsplit(" ",text) -- NewText = type Newtext2 = 6 Player Units
@@ -931,9 +930,8 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
     end
     local method,KeyData = strsplit(" ", text)
     if prefix == "AstralKeys" or prefix == "DoKeys" then
-        if method == "BNet_query" and KeyData == "ping" then
+        if method == "BNet_query" and KeyData == "response" then
             --send AK a responce so it thinks we have AK
-            _G.BNSendGameData(senderID, prefix, "BNet_query response")
             local accountInfo
             for i=1,_G.BNGetNumFriends() do
                 accountInfo = C_BattleNet.GetAccountInfoByID(i)
@@ -946,6 +944,10 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
                 _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
             end
         end
+        if method == "BNet_query" and KeyData == "ping" then
+            --send AK a responce so it thinks we have AK
+            _G.BNSendGameData(senderID, prefix, "BNet_query response")
+        end
         if method == "sync4" then
             local accountInfo
             for i=1,_G.BNGetNumFriends() do
@@ -955,12 +957,17 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
                 end
             end
             local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
-            local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",KeyData)
-            if accountInfo.isFriend or accountInfo.isBattleTagFriend then
-                if type(_G.DoKeysBNETFriendsKeys[btag]) ~= "table" then
-                    _G.DoKeysBNETFriendsKeys[btag] = {}
+            local _, NewText2 = strsplit(" ",text)
+            local AstralCharacterTable = {strsplit("_",NewText2)}
+            for i,data in pairs(AstralCharacterTable) do
+                local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",data)
+                if not NameRealm or NameRealm == "" then return end
+                if accountInfo.isFriend or accountInfo.isBattleTagFriend then
+                    if type(_G.DoKeysBNETFriendsKeys[btag]) ~= "table" then
+                        _G.DoKeysBNETFriendsKeys[btag] = {}
+                    end
+                    _G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID and KeyInstanceID, KeyLevel = KeyLevel and KeyLevel, Week = Week and Week, KeyInstance = KeyInstanceID and C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class and class}
                 end
-                _G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, Week = Week, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class}
             end
         end
     end
