@@ -1449,7 +1449,7 @@ do
                         --_G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID and KeyInstanceID, KeyLevel = KeyLevel and KeyLevel, Week = Week and Week, KeyInstance = KeyInstanceID and C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class and class}
 						--local id = addon.UnitID(fullName)
                         local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
-						if _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
+						if _G.DoKeysBNETFriendsKeys and _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
 							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance
 							doKeyString:SetWordWrap(false)
 							doKeyString:SetFormattedText("|cffffd200Current Keystone|r\n%d - %s", keyLevel, dungeonID)
