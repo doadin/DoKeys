@@ -934,18 +934,33 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
         if method == "BNet_query" and KeyData == "ping" then
             --send AK a responce so it thinks we have AK
             _G.BNSendGameData(senderID, prefix, "BNet_query response")
-            local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
+            local accountInfo
+            for i=1,_G.BNGetNumFriends() do
+                accountInfo = C_BattleNet.GetAccountInfoByID(i)
+                if accountInfo and accountInfo.gameAccountInfo.gameAccountID == senderID then
+                    break
+                end
+            end
             local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
             if accountInfo.isFriend or accountInfo.isBattleTagFriend then
                 _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
             end
         end
         if method == "sync4" then
-            local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
+            local accountInfo
+            for i=1,_G.BNGetNumFriends() do
+                accountInfo = C_BattleNet.GetAccountInfoByID(i)
+                if accountInfo and accountInfo.gameAccountInfo.gameAccountID == senderID then
+                    break
+                end
+            end
             local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
             local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",KeyData)
             if accountInfo.isFriend or accountInfo.isBattleTagFriend then
-                _G.DoKeysBNETFriendsKeys[btag] = {NameRealm = NameRealm{KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, Week = Week, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class} }
+                if type(_G.DoKeysBNETFriendsKeys[btag]) ~= "table" then
+                    _G.DoKeysBNETFriendsKeys[btag] = {}
+                end
+                _G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, Week = Week, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class}
             end
         end
     end
