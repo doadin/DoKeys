@@ -1204,7 +1204,7 @@ end
 _G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 
 local lastrunpartyrequest
-local lastrunpartyrequesttimer
+--local lastrunpartyrequesttimer
 local function RequestPartyKeys(_, event)
     if event == "GROUP_ROSTER_UPDATE" then
         lastrunpartyrequest = _G.GetTime()
