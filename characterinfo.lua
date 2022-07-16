@@ -1406,6 +1406,101 @@ local function TrackKeyChange(_, event)
     end
 end
 
+-- Friend's list Hooking
+do
+	for i = 1, 5 do
+		local textString = FriendsTooltip:CreateFontString('FriendsTooltipDoKeysInfo' .. i, 'ARTWORK', 'FriendsFont_Small')
+		textString:SetJustifyH('LEFT')
+		textString:SetSize(168, 0)
+		textString:SetTextColor(0.486, 0.518, 0.541)
+	end
+
+	local OnEnter, OnHide
+	function OnEnter(self)
+		if not self.id then return end -- Friend Groups adds fake units with no ide for group heeaders
+		if not FriendsTooltip.maxWidth then return end -- Why? Who knows
+
+		local left = FRIENDS_TOOLTIP_MAX_WIDTH - FRIENDS_TOOLTIP_MARGIN_WIDTH - FriendsTooltipDoKeysInfo1:GetWidth()
+		local stringShown = false
+
+		for gameIndex = 1, C_BattleNet.GetFriendNumGameAccounts(self.id) do
+			if gameIndex > FRIENDS_TOOLTIP_MAX_GAME_ACCOUNTS then break end -- Blizzard only wrote lines for 5 game indices
+			local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(self.id, gameIndex)
+            local accountInfo = C_BattleNet.GetAccountInfoByID(self.id)
+			local characterNameString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Name']
+			local gameInfoString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Info']
+			local doKeyString = _G['FriendsTooltipDoKeysInfo' .. gameIndex]
+
+			if (gameAccountInfo) and (gameAccountInfo.clientProgram == BNET_CLIENT_WOW) and (gameAccountInfo.wowProjectID == 1) then -- They are playing retail WoW
+
+				if gameAccountInfo.gameAccountID then
+					local realmName
+					if gameAccountInfo.realmName then
+						realmName = gameAccountInfo.realmName
+					elseif gameAccountInfo.realmDisplayName then
+						realmName = gameAccountInfo.realmDisplayName:gsub('%s+', '')
+					elseif gameAccountInfo.richPresence and gameAccountInfo.richPresence:find('-') then
+						realmName = gameAccountInfo.richPresence:sub(gameAccountInfo.richPresence:find('-') + 1, -1):gsub('%s+', '') -- Character - Realm Name stripped down to RealmName
+					else
+						-- I really don't know what is going on with their API....
+					end
+					if realmName then
+						local fullName = gameAccountInfo.characterName .. '-' .. realmName
+                        --_G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID and KeyInstanceID, KeyLevel = KeyLevel and KeyLevel, Week = Week and Week, KeyInstance = KeyInstanceID and C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class and class}
+						--local id = addon.UnitID(fullName)
+                        local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
+						if _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
+							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance
+							doKeyString:SetWordWrap(false)
+							doKeyString:SetFormattedText("|cffffd200Current Keystone|r\n%d - %s", keyLevel, dungeonID)
+							doKeyString:SetWordWrap(true)
+							doKeyString:SetPoint('TOP', characterNameString, 'BOTTOM', 3, -4)
+							gameInfoString:SetPoint('TOP', doKeyString, 'BOTTOM', 0, 0)
+							doKeyString:Show()
+							stringShown = true
+							FriendsTooltip.height = FriendsTooltip:GetHeight() + doKeyString:GetStringHeight() + 8
+							FriendsTooltip.maxWidth = max(FriendsTooltip.maxWidth, doKeyString:GetStringWidth() + left)
+						else
+							doKeyString:SetText('')
+							doKeyString:Hide()
+							gameInfoString:SetPoint('TOP', characterNameString, 'BOTTOM', 0, -4)
+						end
+					end
+				end
+			else
+                if doKeyString and doKeyString:IsShown() then
+				    doKeyString:SetText('')
+				    doKeyString:Hide()
+                end
+			end
+		end
+
+		FriendsTooltip:SetWidth(min(FRIENDS_TOOLTIP_MAX_WIDTH, FriendsTooltip.maxWidth + FRIENDS_TOOLTIP_MARGIN_WIDTH));
+		FriendsTooltip:SetHeight(FriendsTooltip.height + (stringShown and 0 or (FRIENDS_TOOLTIP_MARGIN_WIDTH + 8)))
+	end
+
+	function OnHide()
+		FriendsTooltipDoKeysInfo1:SetText('')
+		FriendsTooltipDoKeysInfo1:Hide()
+	end
+
+	local buttons = FriendsListFrameScrollFrame.buttons
+	for i = 1, #buttons do
+		local button = buttons[i]
+		local oldOnEnter = button.OnEnter
+		function button:OnEnter()
+			oldOnEnter(self)
+			OnEnter(self)
+		end
+		button:HookScript("OnEnter", OnEnter)
+	end
+
+	FriendsTooltip:HookScript('OnHide', OnHide)
+	FriendsTooltip:HookScript('OnEnter', OnEnter)
+	--hooksecurefunc('FriendsFrameTooltip_Show', OnEnter)
+end
+
+
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
 DoKeysResetFrame:SetScript("OnEvent", Reset)
