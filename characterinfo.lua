@@ -907,14 +907,14 @@ local function FindAddonUsers(_, event, one)
     if not one then
         for i=1,_G.BNGetNumFriends() do
             local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
-            if accountInfo.gameAccountInfo.wowProjectID == 1 then
+            if accountInfo and accountInfo.gameAccountInfo.wowProjectID == 1 then
                 _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "AstralKeys", "BNet_query ping")
                 _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "DoKeys", "BNet_query ping")
             end
         end
     else
         local accountInfo = C_BattleNet.GetFriendAccountInfo(one)
-        if accountInfo.gameAccountInfo.wowProjectID == 1 then
+        if accountInfo and accountInfo.gameAccountInfo.wowProjectID == 1 then
             _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "AstralKeys", "BNet_query ping")
             _G.BNSendGameData(accountInfo.gameAccountInfo.gameAccountID, "DoKeys", "BNet_query ping")
         end
@@ -935,14 +935,14 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
             --send AK a responce so it thinks we have AK
             _G.BNSendGameData(senderID, prefix, "BNet_query response")
             local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
-            local btag = accountInfo.isBattleTagFriend and accountInfo.battleTag
+            local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
             if accountInfo.isFriend or accountInfo.isBattleTagFriend then
                 _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
             end
         end
         if method == "sync4" then
             local accountInfo = _G.C_BattleNet.GetAccountInfoByID(senderID)
-            local btag = accountInfo.isBattleTagFriend and accountInfo.battleTag
+            local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
             local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",KeyData)
             if accountInfo.isFriend or accountInfo.isBattleTagFriend then
                 _G.DoKeysBNETFriendsKeys[btag] = {NameRealm = NameRealm{KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, Week = Week, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class} }
