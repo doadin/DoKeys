@@ -84,6 +84,10 @@ FindAddonUsersFrame:RegisterEvent("BN_FRIEND_INFO_CHANGED")
 FindAddonUsersFrame:RegisterEvent("BN_FRIEND_ACCOUNT_ONLINE")
 FindAddonUsersFrame:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
 
+local TrackKeyChangeFrame = CreateFrame("FRAME")
+TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_START")
+TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+
 local realmName = GetRealmName()
 
 local playerName = UnitName("player")
@@ -1229,6 +1233,179 @@ local function RequestPartyKeys(_, event)
     end
 end
 
+local function CreateLink(data,keytype)
+    local AffixTable = C_MythicPlus.GetCurrentAffixes()
+    local link
+    if keytype == "normal" or "both" then
+	    if type(data) == "table" then
+            if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and data.CurrentKeyLevel and type(AffixTable) == "table" then
+                if data.CurrentKeyLevel <= 3 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+                if data.CurrentKeyLevel >= 10 then
+	                link = string.format(
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	data.currentkeymapid or 0, --data.mapId
+	                	data.CurrentKeyLevel, --data.level
+                        AffixTable[1].id or 0,
+                        AffixTable[2].id or 0,
+                        AffixTable[3].id or 0,
+                        AffixTable[4].id or 0,
+	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	                	data.CurrentKeyLevel --data.level
+	                )
+                end
+            end
+	    else
+	    	link = "None"
+	    end
+    end
+    local twlink
+    if keytype == "tw" or "both" then
+	    if type(data) == "table" then
+            if not data.CurrentTWKeyLevel then return end
+            if tonumber(data.CurrentTWKeyLevel) <= 3 then
+	            twlink = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
+	            twlink = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
+	            twlink = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+            if tonumber(data.CurrentTWKeyLevel) >= 10 then
+	            twlink = string.format(
+	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            	data.CurrentTWKeyID or 0, --data.mapId
+	            	data.CurrentTWKeyLevel, --data.level
+                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+                    _G.DoCharacters.CurrentTWKeyAffix4 or 0,
+	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
+	            	data.CurrentTWKeyLevel --data.level
+	            )
+            end
+	    else
+	    	twlink = "None"
+	    end
+    end
+    if keytype == "normal" and type(link) == "string" then
+        return link
+    end
+    if keytype == "tw" and type(link) == "string" then
+        return twlink
+    end
+    if keytype == "both" and type(link) == "string" and type(twlink) == "string" then
+	    return link .. " & " ..  twlink
+    elseif type(link) == "string" then
+        return link
+    elseif type(twlink) == "string" then
+        return twlink
+    else
+        return "Error In Key Link"
+    end
+    return "Error In Key Link"
+end
+
+local function TrackKeyChange(_, event)
+    local OldKeyMapid
+    local OldKeyLevel
+    local OldTWKeyMapid
+    local OldTWKeyLevel
+    local _
+    if event == "CHALLENGE_MODE_START" then
+        OldKeyMapid = GetOwnedKeystoneChallengeMapID()
+        OldKeyLevel = GetOwnedKeystoneLevel()
+        for Bag = 0, NUM_BAG_SLOTS do
+            for Slot = 1, GetContainerNumSlots(Bag) do
+                local ID = GetContainerItemID(Bag, Slot)
+                if (ID and ID == 187786) then
+                    local ItemLink = GetContainerItemLink(Bag, Slot)
+                    local _,_,three = strsplit("|",ItemLink)
+                    _,OldTWKeyMapid,_,OldTWKeyLevel = strsplit(":",ItemLink)
+                    break
+                end
+            end
+        end
+    end
+    if event == "CHALLENGE_MODE_COMPLETED" then
+        if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+            SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal"), "PARTY")
+        end
+        for Bag = 0, NUM_BAG_SLOTS do
+            for Slot = 1, GetContainerNumSlots(Bag) do
+                local ID = GetContainerItemID(Bag, Slot)
+                if (ID and ID == 187786) then
+                    local ItemLink = GetContainerItemLink(Bag, Slot)
+                    local _,_,three = strsplit("|",ItemLink)
+                    local NewTWKeyMapid
+                    local NewTWKeyLevel
+                    _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
+                    if tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
+                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"tw"), "PARTY")
+                    end
+                    break
+                end
+            end
+        end
+    end
+end
+
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
 DoKeysResetFrame:SetScript("OnEvent", Reset)
@@ -1243,3 +1420,4 @@ RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
 TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
 TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
 FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
+TrackKeyChangeFrame:SetScript("OnEvent", TrackKeyChange)
