@@ -43,80 +43,153 @@ local UpdateRewardFrame = CreateFrame("Frame")
 UpdateRewardFrame:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 UpdateRewardFrame:SetScript("OnEvent", UpdateReward)
 
-local columnHeaders = {
-    {
-        name = 'Name',
-        width = 50,
-        align = 'LEFT',
-        defaultsort = 'dsc',
-        sortnext = 3,
-        index = 'name',
-        format = 'string',
-    },
-    {
-        name = 'Level',
-        width = 60,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'level',
-        format = 'string',
-    },
-    {
-        name = 'Weekly Best',
-        width = 85,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'WeeklyBest',
-        format = 'string',
-    },
-    {
-        name = 'Key Level',
-        width = 70,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'CurrentKeyLevel',
-    },
-    {
-        name = 'Key Instance',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'CurrentKeyInstance',
-        format = 'string',
-    },
-    {
-        name = 'Average Item Level',
-        width = 130,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'avgItemLevel',
-        format = 'string',
-    },
-    {
-        name = 'M+ Score',
-        width = 70,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'currentSeasonScore',
-        format = 'string',
-    },
-    {
-        name = 'TW Key Level',
-        width = 90,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'CurrentTWKeyLevel',
-        format = 'string',
-    },
-    {
-        name = 'TW Key Instance',
-        width = 110,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'CurrentTWKeyInstanceName',
-        format = 'string',
-    },
-}
+local columnHeaders
+do
+    local numDayEvents = C_Calendar.GetNumDayEvents(0, C_DateAndTime.GetCurrentCalendarTime().monthDay)
+    local found = false
+    for i=1,numDayEvents do
+        local info = C_Calendar.GetHolidayInfo(0,C_DateAndTime.GetCurrentCalendarTime().monthDay,i)
+        if info.name == "Timewalking Dungeon Event" then
+            found = true
+            break
+        end
+    end
+    if found == true then
+        columnHeaders = {
+            {
+                name = 'Name',
+                width = 50,
+                align = 'LEFT',
+                defaultsort = 'dsc',
+                sortnext = 3,
+                index = 'name',
+                format = 'string',
+            },
+            {
+                name = 'Level',
+                width = 60,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'level',
+                format = 'string',
+            },
+            {
+                name = 'Weekly Best',
+                width = 85,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'WeeklyBest',
+                format = 'string',
+            },
+            {
+                name = 'Key Level',
+                width = 70,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentKeyLevel',
+            },
+            {
+                name = 'Key Instance',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentKeyInstance',
+                format = 'string',
+            },
+            {
+                name = 'Average Item Level',
+                width = 130,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'avgItemLevel',
+                format = 'string',
+            },
+            {
+                name = 'M+ Score',
+                width = 70,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'currentSeasonScore',
+                format = 'string',
+            },
+            {
+                name = 'TW Key Level',
+                width = 90,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentTWKeyLevel',
+                format = 'string',
+            },
+            {
+                name = 'TW Key Instance',
+                width = 110,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentTWKeyInstanceName',
+                format = 'string',
+            },
+        }
+    else
+        columnHeaders = {
+            {
+                name = 'Name',
+                width = 50,
+                align = 'LEFT',
+                defaultsort = 'dsc',
+                sortnext = 3,
+                index = 'name',
+                format = 'string',
+            },
+            {
+                name = 'Level',
+                width = 60,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'level',
+                format = 'string',
+            },
+            {
+                name = 'Weekly Best',
+                width = 85,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'WeeklyBest',
+                format = 'string',
+            },
+            {
+                name = 'Key Level',
+                width = 70,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentKeyLevel',
+            },
+            {
+                name = 'Key Instance',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'CurrentKeyInstance',
+                format = 'string',
+            },
+            {
+                name = 'Average Item Level',
+                width = 130,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'avgItemLevel',
+                format = 'string',
+            },
+            {
+                name = 'M+ Score',
+                width = 70,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'currentSeasonScore',
+                format = 'string',
+            },
+        }
+    end
+end
 
 local st = StdUi:ScrollTable(PlayerHeading, columnHeaders, 6)
 StdUi:GlueTop(st, PlayerHeading, 0, -50)
