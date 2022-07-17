@@ -520,7 +520,7 @@ local function GetTable()
         tinsert(sttestdata,characteri+1,
             { name = _G.DoCharacters[realmName][character].name,
               level =_G.DoCharacters[realmName][character].level,
-              WeeklyBest = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
+              WeeklyBest = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
               CurrentKeyLevel = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
               CurrentKeyInstance = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
               avgItemLevel = _G.DoCharacters[realmName][character].avgItemLevel or 0,
