@@ -24,14 +24,13 @@ local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 1100, 250, "Pl
 StdUi:GlueTop(SeasonBestsHeading, SeasonBestsFrame, 0, -40)
 
 local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 800, 160, "Player's Keys", 25, 16)
-StdUi:GlueTop(PlayerHeading, MainFrame, 0, -40)
+StdUi:GlueTop(PlayerHeading, MainFrame, 0, -45)
 
 local function UpdateReward()
     local Rewardheading
     if C_MythicPlus.IsWeeklyRewardAvailable() then
-        Rewardheading = StdUi:Create("Heading")
-        Rewardheading:SetText("Weekly Reward Available, Good Luck On your Loot!")
-        MainFrame:AddChild(Rewardheading)
+        Rewardheading = StdUi:Label(MainFrame,(_G.UnitName("player") .. " " .. "Has a Weekly M+ Reward Available, Good Luck On Your Loot!"))
+        StdUi:GlueTop(Rewardheading, MainFrame, 0, -30)
     else
         if Rewardheading then
             Rewardheading:Hide()
@@ -39,8 +38,24 @@ local function UpdateReward()
     end
 end
 
+local function UpdateNextRewardLevel()
+    local NextRewardLevel
+    local WB = _G.DoCharacters[realmName][_G.UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 1
+    local hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlusIncrease(WB)
+    if not C_MythicPlus.IsWeeklyRewardAvailable() then
+        if nextMythicPlusLevel and itemLevel then
+            NextRewardLevel = StdUi:Label(MainFrame,(_G.UnitName("player") .. "'s " .. "weekly reward from M+ increases at level " .. tostring(nextMythicPlusLevel) .. " to item level " .. tostring(itemLevel)))
+            StdUi:GlueTop(NextRewardLevel, MainFrame, 0, -30)
+        else
+            NextRewardLevel = StdUi:Label(MainFrame,(_G.UnitName("player") .. "'s " .. "weekly reward from M+ is at max!"))
+            StdUi:GlueTop(NextRewardLevel, MainFrame, 0, -30)
+        end
+    end
+end
+
 local UpdateRewardFrame = CreateFrame("Frame")
 UpdateRewardFrame:RegisterEvent("WEEKLY_REWARDS_UPDATE")
+UpdateRewardFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
 UpdateRewardFrame:SetScript("OnEvent", UpdateReward)
 
 local columnHeaders
@@ -691,6 +706,7 @@ OnClick = function(clickedframe, button)
                             MainFrame:Hide()
                         else
                             GetTable()
+                            UpdateNextRewardLevel()
                             GetAffixes()
                             MainFrame:Show()
                         end
@@ -750,6 +766,8 @@ function addon:OpenUI(one, two, three, four)
             MainFrame:Hide()
         else
             GetTable()
+            UpdateNextRewardLevel()
+            GetAffixes()
             MainFrame:Show()
         end
     end
