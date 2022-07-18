@@ -31,6 +31,7 @@ local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLog
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 DoKeysDBFrame:RegisterEvent("ADDON_LOADED")
 DoKeysDBFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
+DoKeysDBFrame:RegisterEvent("PLAYER_GUILD_UPDATE")
 
 local DoKeysKeyStoneTrackingFrame = CreateFrame("FRAME")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -102,6 +103,18 @@ local Covenantstable = {
     [4] = "Necrolord"
 }
 local DoKeysPartyKeys = {}
+local realmgroupid
+do
+    for i = 1, #connectionData do
+        local lookforrealm = string.find(connectionData[i], tostring(GetRealmID()))
+        if lookforrealm ~= nil then
+            realmgroupid = strsplit(",", connectionData[i])
+            break
+        else
+            realmgroupid = 0
+        end
+    end
+end
 
 local function SetupDB(_, event, one, _)
     C_MythicPlus.RequestRewards()
@@ -110,25 +123,25 @@ local function SetupDB(_, event, one, _)
         else
             _G.DoCharacters = {}
         end
-        if _G.DoCharacters[realmName] then
+        if _G.DoCharacters[realmgroupid] then
         else
-            _G.DoCharacters[realmName] = {}
+            _G.DoCharacters[realmgroupid] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] then
         else
-            _G.DoCharacters[realmName][UnitName("player")] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"]  = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"]  = {}
         end
     end
     if event == "PLAYER_ENTERING_WORLD" then
@@ -136,48 +149,48 @@ local function SetupDB(_, event, one, _)
         else
             _G.DoCharacters = {}
         end
-        if _G.DoCharacters[realmName] then
+        if _G.DoCharacters[realmgroupid] then
         else
-            _G.DoCharacters[realmName] = {}
+            _G.DoCharacters[realmgroupid] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] then
         else
-            _G.DoCharacters[realmName][UnitName("player")] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] = {}
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"]  = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"]  = {}
         end
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel() --avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp
-        _G.DoCharacters[realmName][UnitName("player")].avgItemLevel = avgItemLevel or 0
-        _G.DoCharacters[realmName][UnitName("player")].avgItemLevelEquipped = avgItemLevelEquipped or 0
-        _G.DoCharacters[realmName][UnitName("player")].avgItemLevelPvp = avgItemLevelPvp or 0
-        _G.DoCharacters[realmName][UnitName("player")].name = UnitName("player")
-        _G.DoCharacters[realmName][UnitName("player")].realm = GetRealmName()
-        _G.DoCharacters[realmName][UnitName("player")].level = UnitLevel("player")
-        _G.DoCharacters[realmName][UnitName("player")].class = select(2,UnitClass("player"))
-        _G.DoCharacters[realmName][UnitName("player")].covenant = Covenantstable[C_Covenants.GetActiveCovenantID()]
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevel = avgItemLevel or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevelEquipped = avgItemLevelEquipped or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevelPvp = avgItemLevelPvp or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].name = UnitName("player")
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].realm = GetRealmName()
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level = UnitLevel("player")
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].class = select(2,UnitClass("player"))
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].covenant = Covenantstable[C_Covenants.GetActiveCovenantID()]
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
         local currentkeymapid = GetOwnedKeystoneChallengeMapID()
         local name = ""
         if type(currentkeymapid) == "number" then
             name = C_ChallengeMode.GetMapUIInfo(currentkeymapid)
         end
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyChestRewardLevel = C_MythicPlus.GetWeeklyChestRewardLevel() or 0
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyChestRewardLevel = C_MythicPlus.GetWeeklyChestRewardLevel() or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
         local data = C_PlayerInfo.GetPlayerMythicPlusRatingSummary("player")
         local seasonScore = data and data.currentSeasonScore
         if seasonScore and seasonScore > 0 then
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].currentSeasonScore = seasonScore
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentSeasonScore = seasonScore
         end
         for Bag = 0, NUM_BAG_SLOTS do
             for Slot = 1, GetContainerNumSlots(Bag) do
@@ -188,19 +201,19 @@ local function SetupDB(_, event, one, _)
                     local TWKeyName,TWKeyID,TWKeyInstance,TWKeyLevel,TWKeyAffix1,TWKeyAffix2,TWKeyAffix3,TWKeyAffix4 = strsplit(":",ItemLink)
                     if type(TWKeyInstance) == "string" and TWKeyInstance ~= "nil" and TWKeyInstance ~= "" then
                         local TWKeyInstanceName = C_ChallengeMode.GetMapUIInfo(TWKeyInstance)
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = TWKeyInstanceName
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = TWKeyInstanceName
                     else
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = ""
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = ""
                     end
                     if type(TWKeyLevel) == "string" and TWKeyLevel ~= "nil" and TWKeyLevel ~= "" then
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = tonumber(TWKeyLevel)
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyLevel = tonumber(TWKeyLevel)
                     else
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = 0
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyLevel = 0
                     end
                     if type(TWKeyInstance) == "string" and TWKeyInstance ~= "nil" and TWKeyInstance ~= "" then
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyID = tonumber(TWKeyInstance)
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyID = tonumber(TWKeyInstance)
                     else
-                        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyID = 0
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyID = 0
                     end
                     if type(TWKeyAffix1) == "string" and TWKeyAffix1 ~= "nil" and TWKeyAffix1 ~= "" then
                         _G.DoCharacters.CurrentTWKeyAffix1 = tonumber(TWKeyAffix1)
@@ -229,7 +242,7 @@ local function SetupDB(_, event, one, _)
     end
     if event == "LOADING_SCREEN_DISABLED" then
         local maps = C_ChallengeMode.GetMapTable()
-        local best = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
+        local best = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0
         for i = 1, #maps do
             local durationSec, weeklyLevel, completionDate, affixIDs, members = C_MythicPlus.GetWeeklyBestForMap(maps[i])
             if (not weeklyLevel) then
@@ -244,45 +257,60 @@ local function SetupDB(_, event, one, _)
             if maps[i] then
                 name = C_ChallengeMode.GetMapUIInfo(maps[i])
             end
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
-            if type(affixScores) ~="table" then return end
-            for mapid,affix in pairs(affixScores) do
-                if affix.name then
-                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+            if type(affixScores) == "table" then
+                for mapid,affix in pairs(affixScores) do
+                    if affix.name then
+                        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
+                        tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+                    end
+                    if affix.overTime then
+                        tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+                    else
+                        tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+                    end
                 end
-                if affix.overTime then
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+                if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
                 else
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
                 end
-            end
-            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
-            else
-                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
-            end
-            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
-            else
-                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
-            end
-
-            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
-            else
-                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
-            end
-            if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
-            else
-                _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
+                if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
+                else
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+                end
+                if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
+                else
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+                end
+                if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
+                else
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
+                end
             end
         end
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = best
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest = best
+    end
+    if (event == "PLAYER_ENTERING_WORLD" or event == "LOADING_SCREEN_DISABLED" or event == "PLAYER_GUILD_UPDATE") then
+        if _G.DoCharacters then
+        else
+            _G.DoCharacters = {}
+        end
+        if _G.DoCharacters[realmgroupid] then
+        else
+            _G.DoCharacters[realmgroupid] = {}
+        end
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] then
+        else
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] = {}
+        end
+        print("update guild")
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].GuildName = isGuildMember() and GetGuildInfo("player") or "false"
     end
     if isAstralKeysRegistered then
     else
         C_ChatInfo.RegisterAddonMessagePrefix("AstralKeys")
-        C_ChatInfo.RegisterAddonMessagePrefix("friendWeekly")
     end
     if isKeystoneManagerRegistered then
     else
@@ -296,9 +324,9 @@ end
 
 local function UpdateCovenant(_, event, covenantID)
     if not covenantID then
-        _G.DoCharacters[realmName][UnitName("player")].covenant = Covenantstable[C_Covenants.GetActiveCovenantID()]
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].covenant = Covenantstable[C_Covenants.GetActiveCovenantID()]
     else
-        _G.DoCharacters[realmName][UnitName("player")].covenant = Covenantstable[covenantID]
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].covenant = Covenantstable[covenantID]
     end
 end
 
@@ -312,9 +340,9 @@ local function UpdateKeyStone(_, _)
         name = C_ChallengeMode.GetMapUIInfo(currentkeymapid)
         keylevel = GetOwnedKeystoneLevel()
     end
-    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
-    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
-    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyLevel = GetOwnedKeystoneLevel() or 0
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
     for Bag = 0, NUM_BAG_SLOTS do
         for Slot = 1, GetContainerNumSlots(Bag) do
             local ID = GetContainerItemID(Bag, Slot)
@@ -324,10 +352,10 @@ local function UpdateKeyStone(_, _)
                 local TWKeyName,TWKeyID,TWKeyInstance,TWKeyLevel,TWKeyAffix1,TWKeyAffix2,TWKeyAffix3,TWKeyAffix4 = strsplit(":",ItemLink)
                 if type(TWKeyInstance) == "string" and TWKeyInstance ~= "nil" and TWKeyInstance ~= "" then
                     local TWKeyInstanceName = C_ChallengeMode.GetMapUIInfo(TWKeyInstance)
-                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = TWKeyInstanceName
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyInstanceName = TWKeyInstanceName
                 end
                 if type(TWKeyLevel) == "string" and TWKeyLevel ~= "nil" and TWKeyLevel ~= "" then
-                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].CurrentTWKeyLevel = TWKeyLevel
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentTWKeyLevel = TWKeyLevel
                 end
             end
         end
@@ -337,21 +365,25 @@ local function UpdateKeyStone(_, _)
     end
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
     if isAstralKeysRegistered and isGuildMember() then
-        C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+        if _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class and _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].WeeklyBest and _G.DoCharacters.Week then
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+        end
     end
 
     local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
     if DokeysRegistered and isGuildMember() then
-        C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. realmName .. ":" .. _G.DoCharacters[realmName][UnitName("player")].class .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+        if _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class and _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].WeeklyBest and _G.DoCharacters.Week then
+            C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+        end
     end
     lasttimesendupdatekeys = _G.GetTime()
 end
 
 local function UpdateGear()
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel() --avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp
-    _G.DoCharacters[realmName][UnitName("player")].avgItemLevel = avgItemLevel or 0
-    _G.DoCharacters[realmName][UnitName("player")].avgItemLevelEquipped = avgItemLevelEquipped or 0
-    _G.DoCharacters[realmName][UnitName("player")].avgItemLevelPvp = avgItemLevelPvp or 0
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevel = avgItemLevel or 0
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevelEquipped = avgItemLevelEquipped or 0
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].avgItemLevelPvp = avgItemLevelPvp or 0
 end
 
 local function UpdateWeeklyBest(_, event, one, _, three)
@@ -362,7 +394,7 @@ local function UpdateWeeklyBest(_, event, one, _, three)
             name = C_ChallengeMode.GetMapUIInfo(one)
         end
         local _, _, _, _, keystoneUpgradeLevels, _ = C_ChallengeMode.GetCompletionInfo()
-        local weeklybest = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
+        local weeklybest = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0
         if weeklybest <= three then
             if keystoneUpgradeLevels == 3 then
                 timed = "+++"
@@ -373,13 +405,13 @@ local function UpdateWeeklyBest(_, event, one, _, three)
             elseif keystoneUpgradeLevels == 0 then -- or onTime = false
                 timed = "Not In Time"
             end
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestInstanceName = name
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestLevel = three
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBestLevelTimed = timed
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBestInstanceName = name
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBestLevel = three
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBestLevelTimed = timed
         end
-        local best = _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 0
+        local best = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0
         if best < three then
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"].WeeklyBest = three
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest = three
         end
         local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered and isGuildMember() then
@@ -394,7 +426,7 @@ end
 
 local function UpdateSeasonBests(_, event)
     local maps = C_ChallengeMode.GetMapTable()
-    if realmName == nil then
+    if realmgroupid == nil then
         return
     end
     if UnitName("player") == nil then
@@ -404,47 +436,47 @@ local function UpdateSeasonBests(_, event)
         local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(maps[i])
         local name = C_ChallengeMode.GetMapUIInfo(maps[i])
         if type(affixScores) ~= "table" then
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
         end
 
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name] = {}
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
-        _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name] = {}
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"] = {}
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"] = {}
         if type(affixScores) == "table" then
             for mapid,affix in pairs(affixScores) do
                 if affix.name then
-                    _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
+                    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name] = {}
+                    tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 1, affix.level)
                 end
                 if affix.overTime then
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
+                    tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "")
                 else
-                    tinsert(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
+                    tinsert(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name][affix.name], 2, "+")
                 end
             end
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][1] = 0
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][1] = 0
         end
 
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Tyrannical"][2] = ""
         end
-        if _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
+        if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] then
         else
-            _G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
+            _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"]["seasonbests"][name]["Fortified"][2] = ""
         end
     end
 end
@@ -465,8 +497,10 @@ end
 
 local function RequestGuildKeys(_, event)
     if event == "LOADING_SCREEN_DISABLED" or event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" or event == "CHALLENGE_MODE_COMPLETED" or event == "GUILD_ROSTER_UPDATE" then
+        local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
+        local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
+        local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if isAstralKeysRegistered then
-            print("test")
             C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
         end
         if isKeystoneManagerRegistered then
@@ -486,7 +520,7 @@ local function SendGuildKeys(style, prefix)
     if style == "AstralKeys" then
         local testtable = {}
         local AstralKeysi = 0
-        for key, value in pairs(_G.DoCharacters[realmName]) do
+        for key, value in pairs(_G.DoCharacters[realmgroupid]) do
             AstralKeysi = AstralKeysi+1
             tinsert(testtable,AstralKeysi,value)
         end
@@ -540,8 +574,8 @@ local function SendGuildKeys(style, prefix)
         local KeystoneManagerSendTable
         local GuildName = GetGuildInfo()
         if GuildName == nil then return end
-        for CharacterName, Data in pairs(_G.DoCharacters[realmName]) do
-            local NameRealm = CharacterName  .. "-" .. _G.DoCharacters[realmName]
+        for CharacterName, Data in pairs(_G.DoCharacters[realmgroupid]) do
+            local NameRealm = CharacterName  .. "-" .. _G.DoCharacters[realmgroupid]
             --["Mickdonalds-Malorne"] = {
             --    ["mapId"] = 376,
             --    ["class"] = "WARRIOR",
@@ -577,27 +611,29 @@ local function SendGuildKeys(style, prefix)
 end
 
 local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
-    if not (prefix == 'AstralKeys') or not (prefix == 'KeystoneManager') or not (prefix == 'DoKeys') then return end
+    --if (prefix ~= "AstralKeys" or prefix ~= "KeystoneManager" or prefix ~= "DoKeys") then print(prefix, " not our prefix") return end
     local Player,PlayerRealm  = UnitName("player"), GetRealmName()
     if Player and PlayerRealm then
         if sender == Player .. "-" .. PlayerRealm then
+            --print("got message from us?")
             return
         end
     end
     if sender == Player then
+        --print("got message from us?")
         return
     end
-    _G.C_GuildInfo.GuildRoster()
-    local numberofguildMembers = _G.GetNumGuildMembers()
-    if numberofguildMembers <=0 then return end
-    for i=1,_G.GetNumGuildMembers() do
-        local name, rank = _G.GetGuildRosterInfo(i)
-        SendersGuildSame = false
-        if name == sender then
-            SendersGuildSame = true
-            --return
-        end
-    end
+    --_G.C_GuildInfo.GuildRoster()
+    --local numberofguildMembers = _G.GetNumGuildMembers()
+    --if numberofguildMembers <=0 then return end
+    --for i=1,_G.GetNumGuildMembers() do
+    --    local name, rank = _G.GetGuildRosterInfo(i)
+    --    SendersGuildSame = false
+    --    if name == sender then
+    --        SendersGuildSame = true
+    --        --return
+    --    end
+    --end
     local GuildName = GetGuildInfo("player")
     if not GuildName then return end
     local method = ""
@@ -622,11 +658,11 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         else
                             return
                         end
-                        if _G.DoCharacters[lRealm] then
+                        if _G.DoCharacters[realmgroupid] then
                         else
                             return
                         end
-                        if _G.DoCharacters[lRealm][lName] then
+                        if _G.DoCharacters[realmgroupid][lName .. "-" .. lRealm] then
                         else
                             if lName == bName and lRealm == bRealm then
                             else
@@ -634,31 +670,34 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                                     if type(_G.DoKeysGuild) ~= "table" then
                                         _G.DoKeysGuild = {}
                                     end
-                                    if type(_G.DoKeysGuild[GuildName]) ~= "table" then
-                                        _G.DoKeysGuild[GuildName] = {}
+                                    if type(_G.DoKeysGuild[realmgroupid]) ~= "table" then
+                                        _G.DoKeysGuild[realmgroupid] = {}
                                     end
-                                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                                    if type(_G.DoKeysGuild[realmgroupid][GuildName]) ~= "table" then
+                                        _G.DoKeysGuild[realmgroupid][GuildName] = {}
                                     end
-                                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
                                     end
-                                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
+                                    end
+                                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                                     end
                                     -- Add Data
                                     local guildkeyname
                                     if KeyMapID then
                                         guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)  or ""
                                     end
-                                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-                                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-                                    if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
-                                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
+                                    _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+                                    _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+                                    if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
+                                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
                                     end
-                                    _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
-                                    _G.DoKeysGuild[GuildName][NameRealm].Class = Class
-                                    _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+                                    _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
+                                    _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
+                                    _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
                                 end
                             end
                         end
@@ -678,19 +717,19 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                 _G.DoKeysGuild[GuildName] = {}
             end
-            if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                _G.DoKeysGuild[GuildName][NameRealm] = {}
+            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
             end
-            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
             end
-            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
             end
-            if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
+            if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
             end
-            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
         end
         if method == "updateV8" and channel == "GUILD" then
             local _,KeyData = strsplit(" ", text)
@@ -713,14 +752,14 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                         _G.DoKeysGuild[GuildName] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
                 --end
             --end
@@ -728,13 +767,13 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if KeyInstance then
                 guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance) or ""
             end
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-            if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+            if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             end
-            _G.DoKeysGuild[GuildName][NameRealm].Class = Class
-            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
         end
     end
     if prefix == "KeystoneManager" then
@@ -801,14 +840,14 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                             if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                                 _G.DoKeysGuild[GuildName] = {}
                             end
-                            if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                                _G.DoKeysGuild[GuildName][NameRealm] = {}
+                            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
                             end
-                            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
                             end
-                            if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                            if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                             end
                         else
                             return
@@ -817,14 +856,14 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         if KeyMapID then
                             guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)  or ""
                         end
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-                        if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
-                            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+                        if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
+                            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
                         end
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
-                        _G.DoKeysGuild[GuildName][NameRealm].Class = Class
-                        _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
                     end
                 end
             end
@@ -843,21 +882,21 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                         _G.DoKeysGuild[GuildName] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
                 --end
             --end
-            if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
+            if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(WeeklyBest)
             end
-            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
         end
         if method == "updateV8" and channel == "GUILD" then
             local _,KeyData = strsplit(" ", text)
@@ -880,14 +919,14 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                     if type(_G.DoKeysGuild[GuildName]) ~= "table" then
                         _G.DoKeysGuild[GuildName] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"] = {}
                     end
-                    if type(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
-                        _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"] = {}
+                    if type(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"]) ~= "table" then
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"] = {}
                     end
                 --end
             --end
@@ -895,13 +934,13 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if KeyInstance then
                 guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
             end
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
-            _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
-            if (tonumber(_G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
-                _G.DoKeysGuild[GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = KeyLevel
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
+            if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
+                _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest = tonumber(weeklyBest)
             end
-            _G.DoKeysGuild[GuildName][NameRealm].Class = Class
-            _G.DoKeysGuild[GuildName][NameRealm].name = NameRealm
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
+            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
         end
     end
 end
@@ -925,10 +964,6 @@ local function FindAddonUsers(_, event, one)
 end
 
 local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
-    ----BN_CHAT_MSG_ADDON, AstralKeys, BNet_query response, WHISPER, 44 
-    ----BN_CHAT_MSG_ADDON, AstralKeys, sync4 Cobracry-Malorne:HUNTER:380:17:260:0:1:0_Crysis-Malorne:WARRIOR:375:19:260:0:1:0_, WHISPER, 44 
-    ----BN_CHAT_MSG_ADDON, AstralKeys, sync4 Certaddboi-Sen'jin:MONK:382:18:260:0:1:0_Healteamsix-Sen'jin:SHAMAN:376:16:260:0:1:0_, WHISPER, 61 
-    ----BN_CHAT_MSG_ADDON, AstralKeys, BNet_query response, WHISPER, 61
     if type(_G.DoKeysBNETFriendsKeys) ~= "table" then
         _G.DoKeysBNETFriendsKeys = {}
     end
@@ -1009,10 +1044,10 @@ local function DoWeeklyKeyReset()
     if not type(_G.DoCharacters == "table") then
         return
     end
-    if not type(_G.DoCharacters[realmName] == "table") then
+    if not type(_G.DoCharacters[realmgroupid] == "table") then
         return
     end
-    for _, v in pairs(_G.DoCharacters[realmName]) do -- luacheck: ignore 423
+    for _, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
         if type(v == "table") then
            for k, v in pairs(v) do
               if k == "mythicplus" then
@@ -1033,11 +1068,13 @@ local function DoWeeklyKeyReset()
            end
         end
     end
-    wipe(_G.DoKeysGuild)
+    if type(_G.DoKeysGuild) == "table" then
+        wipe(_G.DoKeysGuild)
+    end
 end
 
 local function DoSeasonReset()
-    for _, v in pairs(_G.DoCharacters[realmName]) do -- luacheck: ignore 423
+    for _, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
         if type(v == "table") then
             for k, v in pairs(v) do
                 if k == "mythicplus" then
@@ -1183,13 +1220,15 @@ local function OnTooltipSetUnit(self)
     if unitName and unitRealm then
        nameRealm = unitName .. "-" .. unitRealm
     end
-    for guildnametable,playernametable in pairs(_G.DoKeysGuild) do
-        for playername in pairs(playernametable) do
-            if playername == nameRealm then
-                found = true
-                _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
-                _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance) .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel), 1, 1, 1)
-                _G.GameTooltip:Show()
+    if type(_G.DoKeysGuild) == "table" then
+        for guildnametable,playernametable in pairs(_G.DoKeysGuild) do
+            for playername in pairs(playernametable) do
+                if playername == nameRealm then
+                    found = true
+                    _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
+                    _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance) .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel), 1, 1, 1)
+                    _G.GameTooltip:Show()
+                end
             end
         end
     end
@@ -1233,135 +1272,6 @@ local function RequestPartyKeys(_, event)
     end
 end
 
-local function CreateLink(data,keytype)
-    local AffixTable = C_MythicPlus.GetCurrentAffixes()
-    local link
-    if keytype == "normal" or "both" then
-	    if type(data) == "table" then
-            if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and data.CurrentKeyLevel and type(AffixTable) == "table" then
-                if data.CurrentKeyLevel <= 3 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-                        AffixTable[3].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 10 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-                        AffixTable[3].id or 0,
-                        AffixTable[4].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-            end
-	    else
-	    	link = "None"
-	    end
-    end
-    local twlink
-    if keytype == "tw" or "both" then
-	    if type(data) == "table" then
-            if not data.CurrentTWKeyLevel then return end
-            if tonumber(data.CurrentTWKeyLevel) <= 3 then
-	            twlink = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
-	            twlink = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
-	            twlink = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel) >= 10 then
-	            twlink = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix4 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-	    else
-	    	twlink = "None"
-	    end
-    end
-    if keytype == "normal" and type(link) == "string" then
-        return link
-    end
-    if keytype == "tw" and type(link) == "string" then
-        return twlink
-    end
-    if keytype == "both" and type(link) == "string" and type(twlink) == "string" then
-	    return link .. " & " ..  twlink
-    elseif type(link) == "string" then
-        return link
-    elseif type(twlink) == "string" then
-        return twlink
-    else
-        return "Error In Key Link"
-    end
-    return "Error In Key Link"
-end
-
 local function TrackKeyChange(_, event)
     local OldKeyMapid
     local OldKeyLevel
@@ -1385,7 +1295,7 @@ local function TrackKeyChange(_, event)
     end
     if event == "CHALLENGE_MODE_COMPLETED" then
         if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
-            SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"normal"), "PARTY")
+            SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
         end
         for Bag = 0, NUM_BAG_SLOTS do
             for Slot = 1, GetContainerNumSlots(Bag) do
@@ -1397,7 +1307,7 @@ local function TrackKeyChange(_, event)
                     local NewTWKeyLevel
                     _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
                     if tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
-                        SendChatMessage(CreateLink(_G.DoCharacters[realmName][UnitName("player")]["mythicplus"]["keystone"],"tw"), "PARTY")
+                        SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
                     end
                     break
                 end
@@ -1408,15 +1318,19 @@ end
 
 -- Friend's list Hooking
 do
-	for i = 1, 5 do
+    for i = 1, 5 do
 		local textString = FriendsTooltip:CreateFontString('FriendsTooltipDoKeysInfo' .. i, 'ARTWORK', 'FriendsFont_Small')
 		textString:SetJustifyH('LEFT')
 		textString:SetSize(168, 0)
 		textString:SetTextColor(0.486, 0.518, 0.541)
 	end
-
 	local OnEnter, OnHide
+    local lastrunonenter
 	function OnEnter(self)
+        if type(lastrunonenter) == "number" then
+            local diff = _G.GetTime() - lastrunonenter
+            if diff < 1 then return end
+        end
 		if not self.id then return end -- Friend Groups adds fake units with no ide for group heeaders
 		if not FriendsTooltip.maxWidth then return end -- Why? Who knows
 
@@ -1426,13 +1340,12 @@ do
 		for gameIndex = 1, C_BattleNet.GetFriendNumGameAccounts(self.id) do
 			if gameIndex > FRIENDS_TOOLTIP_MAX_GAME_ACCOUNTS then break end -- Blizzard only wrote lines for 5 game indices
 			local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(self.id, gameIndex)
-            local accountInfo = C_BattleNet.GetAccountInfoByID(self.id)
+            local accountInfo = C_BattleNet.GetFriendAccountInfo(self.id)
 			local characterNameString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Name']
 			local gameInfoString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Info']
 			local doKeyString = _G['FriendsTooltipDoKeysInfo' .. gameIndex]
 
 			if (gameAccountInfo) and (gameAccountInfo.clientProgram == BNET_CLIENT_WOW) and (gameAccountInfo.wowProjectID == 1) then -- They are playing retail WoW
-
 				if gameAccountInfo.gameAccountID then
 					local realmName
 					if gameAccountInfo.realmName then
@@ -1446,8 +1359,6 @@ do
 					end
 					if realmName then
 						local fullName = gameAccountInfo.characterName .. '-' .. realmName
-                        --_G.DoKeysBNETFriendsKeys[btag][NameRealm] = {KeyInstanceID = KeyInstanceID and KeyInstanceID, KeyLevel = KeyLevel and KeyLevel, Week = Week and Week, KeyInstance = KeyInstanceID and C_ChallengeMode.GetMapUIInfo(KeyInstanceID), class = class and class}
-						--local id = addon.UnitID(fullName)
                         local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
 						if _G.DoKeysBNETFriendsKeys and _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
 							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance
@@ -1468,20 +1379,17 @@ do
 					end
 				end
 			else
-                if doKeyString and doKeyString:IsShown() then
-				    doKeyString:SetText('')
-				    doKeyString:Hide()
-                end
+				doKeyString:SetText('')
+				doKeyString:Hide()
 			end
 		end
-
 		FriendsTooltip:SetWidth(min(FRIENDS_TOOLTIP_MAX_WIDTH, FriendsTooltip.maxWidth + FRIENDS_TOOLTIP_MARGIN_WIDTH));
 		FriendsTooltip:SetHeight(FriendsTooltip.height + (stringShown and 0 or (FRIENDS_TOOLTIP_MARGIN_WIDTH + 8)))
+        lastrunonenter = _G.GetTime()
 	end
 
 	function OnHide()
-		FriendsTooltipDoKeysInfo1:SetText('')
-		FriendsTooltipDoKeysInfo1:Hide()
+
 	end
 
 	local buttons = FriendsListFrameScrollFrame.buttons
@@ -1496,8 +1404,7 @@ do
 	end
 
 	FriendsTooltip:HookScript('OnHide', OnHide)
-	FriendsTooltip:HookScript('OnEnter', OnEnter)
-	--hooksecurefunc('FriendsFrameTooltip_Show', OnEnter)
+	--FriendsTooltip:HookScript('OnShow', OnEnter)
 end
 
 

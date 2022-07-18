@@ -19,6 +19,7 @@ Libs\LibDBIcon-1.0\lib.xml
 Libs\LibDeflate\lib.xml
 Libs\StdUi\StdUi.xml
 
+data.lua
 DoKeys.lua
 characterinfo.lua
 chat.lua

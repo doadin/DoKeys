@@ -10,6 +10,17 @@ local tinsert = _G.tinsert
 local RAID_CLASS_COLORS = _G.RAID_CLASS_COLORS
 local realmName = _G.GetRealmName()
 
+local realmgroupid
+for i = 1, #connectionData do
+   local lookforrealm = string.find(connectionData[i], tostring(GetRealmID()))
+    if lookforrealm ~= nil then
+        realmgroupid = strsplit(",", connectionData[i])
+        break
+    else
+        realmgroupid = 0
+    end
+end
+
 local StdUi = LibStub("StdUi")
 
 local MainFrame = StdUi:Window(UIParent, 800, 550, 'DoKeys')
@@ -40,7 +51,7 @@ end
 
 local function UpdateNextRewardLevel()
     local NextRewardLevel
-    local WB = _G.DoCharacters[realmName][_G.UnitName("player")]["mythicplus"]["keystone"].WeeklyBest or 1
+    local WB = _G.DoCharacters[realmgroupid][_G.UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 1
     local hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlusIncrease(WB)
     if not C_MythicPlus.IsWeeklyRewardAvailable() then
         if nextMythicPlusLevel and itemLevel then
@@ -73,7 +84,7 @@ do
         columnHeaders = {
             {
                 name = 'Name',
-                width = 50,
+                width = 120,
                 align = 'LEFT',
                 defaultsort = 'dsc',
                 sortnext = 3,
@@ -148,7 +159,7 @@ do
         columnHeaders = {
             {
                 name = 'Name',
-                width = 50,
+                width = 120,
                 align = 'LEFT',
                 defaultsort = 'dsc',
                 sortnext = 3,
@@ -209,96 +220,177 @@ end
 local st = StdUi:ScrollTable(PlayerHeading, columnHeaders, 6)
 StdUi:GlueTop(st, PlayerHeading, 0, -50)
 
-local SeasonBestHeaders = {
-    {
-        name = 'Name',
-        width = 50,
-        align = 'LEFT',
-        defaultsort = 'dsc',
-        index = 'name',
-        --format = 'string',
-    },
-    {
-        name = 'DoS',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'DoS',
-        --format = 'string',
-    },
-    {
-        name = 'HoA',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'HoA',
-        --format = 'string',
-    },
-    {
-        name = 'MoTS',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'MoTS',
-        --format = 'string',
-    },
-    {
-        name = 'PF',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'PF',
-        --format = 'string',
-    },
-    {
-        name = 'SD',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'SD',
-        --format = 'string',
-    },
-    {
-        name = 'SoA',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'SoA',
-        --format = 'string',
-    },
-    {
-        name = 'NW',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'NW',
-        --format = 'string',
-    },
-    {
-        name = 'ToP',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'ToP',
-        --format = 'string',
-    },
-    {
-        name = 'TazSoW',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'TSoW',
-        --format = 'string',
-    },
-    {
-        name = 'TazSG',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'TSG',
-        --format = 'string',
-    },
-}
+local SeasonBestHeaders
+do
+    local version, build, date, tocversion = GetBuildInfo()
+    if tocversion <= 90207 then
+        SeasonBestHeaders = {
+            {
+                name = 'Name',
+                width = 50,
+                align = 'LEFT',
+                defaultsort = 'dsc',
+                index = 'name',
+                --format = 'string',
+            },
+            {
+                name = 'DoS',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'DoS',
+                --format = 'string',
+            },
+            {
+                name = 'HoA',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'HoA',
+                --format = 'string',
+            },
+            {
+                name = 'MoTS',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'MoTS',
+                --format = 'string',
+            },
+            {
+                name = 'PF',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'PF',
+                --format = 'string',
+            },
+            {
+                name = 'SD',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'SD',
+                --format = 'string',
+            },
+            {
+                name = 'SoA',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'SoA',
+                --format = 'string',
+            },
+            {
+                name = 'NW',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'NW',
+                --format = 'string',
+            },
+            {
+                name = 'ToP',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'ToP',
+                --format = 'string',
+            },
+            {
+                name = 'TazSoW',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'TSoW',
+                --format = 'string',
+            },
+            {
+                name = 'TazSG',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'TSG',
+                --format = 'string',
+            },
+        }
+    else
+        SeasonBestHeaders = {
+            {
+                name = 'Name',
+                width = 50,
+                align = 'LEFT',
+                defaultsort = 'dsc',
+                index = 'name',
+                --format = 'string',
+            },
+            {
+                name = 'ID',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'ID',
+                --format = 'string',
+            },
+            {
+                name = 'RtKU',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'RtKU',
+                --format = 'string',
+            },
+            {
+                name = 'RtKL',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'RtKL',
+                --format = 'string',
+            },
+            {
+                name = 'OMW',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'OMW',
+                --format = 'string',
+            },
+            {
+                name = 'OMJ',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'OMJ',
+                --format = 'string',
+            },
+            {
+                name = 'GD',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'GD',
+                --format = 'string',
+            },
+            {
+                name = 'TazSoW',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'TSoW',
+                --format = 'string',
+            },
+            {
+                name = 'TazSG',
+                width = 100,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'TSG',
+                --format = 'string',
+            },
+        }
+    end
+end
 
 local SeasonBestsst = StdUi:ScrollTable(SeasonBestsHeading, SeasonBestHeaders)
 StdUi:GlueTop(SeasonBestsst, SeasonBestsHeading, 0, -50)
@@ -329,9 +421,9 @@ end
 ReportToButton:SetScript('OnClick',
     function()
         if ReportToDropDownValue == "GUILD" or ReportToDropDownValue == "PARTY" or ReportToDropDownValue == "OFFICER" then
-            for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+            for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                 if v.level == DoKeysCurrentMaxLevel then
-                    SendChatMessage(k .. " Weekly Best: " .. v["mythicplus"]["keystone"].WeeklyBest, ReportToDropDownValue)
+                    SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0), ReportToDropDownValue)
                 end
             end
         end
@@ -356,125 +448,12 @@ ReportKeysToDropDown.OnValueChanged = function(self, value)
     ReportKeysToDropDownValue = value
 end
 
-local function CreateLink(data,keytype)
-    local AffixTable = C_MythicPlus.GetCurrentAffixes()
-    local link
-    if keytype == "normal" then
-	    if type(data) == "table" then
-            if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and data.CurrentKeyLevel and type(AffixTable) == "table" then
-                if data.CurrentKeyLevel <= 3 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-                        AffixTable[3].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-                if data.CurrentKeyLevel >= 10 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-                        AffixTable[3].id or 0,
-                        AffixTable[4].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
-            end
-	    else
-	    	link = "None"
-	    end
-    end
-    if keytype == "tw" then
-	    if type(data) == "table" then
-            if not data.CurrentTWKeyLevel then return end
-            if tonumber(data.CurrentTWKeyLevel) <= 3 then
-	            link = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
-	            link = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
-	            link = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-            if tonumber(data.CurrentTWKeyLevel) >= 10 then
-	            link = string.format(
-	            	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	            	data.CurrentTWKeyID or 0, --data.mapId
-	            	data.CurrentTWKeyLevel, --data.level
-                    _G.DoCharacters.CurrentTWKeyAffix1 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix2 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix3 or 0,
-                    _G.DoCharacters.CurrentTWKeyAffix4 or 0,
-	            	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
-	            	data.CurrentTWKeyLevel --data.level
-	            )
-            end
-	    else
-	    	link = "None"
-	    end
-    end
-	return link
-end
-
 ReportKeysToButton:SetScript('OnClick',
     function()
         if ReportKeysToDropDownValue == "GUILD" or ReportKeysToDropDownValue == "PARTY" or ReportKeysToDropDownValue == "OFFICER" then
-            for k, v in pairs(_G.DoCharacters[realm]) do -- luacheck: ignore 423
+            for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                 if v.level == DoKeysCurrentMaxLevel then
-                    SendChatMessage(k .. " " .. CreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
+                    SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
                 end
             end
         end
@@ -604,18 +583,18 @@ eventframe:SetScript("OnEvent", GetAffixes)
 local function GetTable()
     local sttestdata = {}
     local characteri=0
-    for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
+    for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
         tinsert(sttestdata,characteri+1,
-            { name = _G.DoCharacters[realmName][character].name,
-              level =_G.DoCharacters[realmName][character].level,
-              WeeklyBest = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
-              CurrentKeyLevel = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
-              CurrentKeyInstance = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
-              avgItemLevel = _G.DoCharacters[realmName][character].avgItemLevel or 0,
-              currentSeasonScore = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
-              CurrentTWKeyLevel = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
-              CurrentTWKeyInstanceName = _G.DoCharacters[realmName][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
-              color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
+            { name = _G.DoCharacters[realmgroupid][character].name .. "-" .. _G.DoCharacters[realmgroupid][character].realm,
+              level =_G.DoCharacters[realmgroupid][character].level,
+              WeeklyBest = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
+              CurrentKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+              CurrentKeyInstance = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
+              avgItemLevel = _G.DoCharacters[realmgroupid][character].avgItemLevel or 0,
+              currentSeasonScore = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
+              CurrentTWKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
+              CurrentTWKeyInstanceName = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
+              color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
             }
         )
     end
@@ -624,58 +603,91 @@ local function GetTable()
     local guilddata = {}
     local guildi=0
     if type(_G.DoKeysGuild) =="table" then
-        for GuildName,NameRealm in pairs(_G.DoKeysGuild) do
-            for character in pairs(NameRealm) do
-                tinsert(guilddata,guildi+1,
-                    { name = _G.DoKeysGuild[GuildName][character].name,
-                      WeeklyBest = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].WeeklyBest or 0,
-                      CurrentKeyLevel = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
-                      CurrentKeyInstance = _G.DoKeysGuild[GuildName][character]["mythicplus"]["keystone"].CurrentKeyInstance  or "",
-                      color = RAID_CLASS_COLORS[_G.DoKeysGuild[GuildName][character].Class]
-                    }
-                )
+        for RealmID,GuildName in pairs(_G.DoKeysGuild) do
+            for GuildName,characterTable in pairs(GuildName) do
+                for characterInfo,character in pairs(characterTable) do
+                    --if type(character.name) == "string" then
+                        tinsert(guilddata,guildi+1,
+                            {name = character.name,
+                             WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
+                             CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+                             CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
+                             color = RAID_CLASS_COLORS[character.Class]
+                            }
+                        )
+                    --end
+                end
             end
         end
-    end
+     end
     Guildst:SetData(guilddata)
     Guildst:Show()
 end
 
 local function SeasonBestsGetTable()
+    local version, build, date, tocversion = GetBuildInfo()
     local SeasonBestsstdata = {}
     local SeasonBesti = 0
-    for character,characterinfo in pairs(_G.DoCharacters[realmName]) do
-
-        if _G.DoCharacters[realmName][character].level == DoKeysCurrentMaxLevel
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
-        and _G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
-        then
-            tinsert(SeasonBestsstdata,SeasonBesti+1,
-                { name = _G.DoCharacters[realmName][character].name,
-                  DoS = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1] or 0) ,
-                  HoA = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1] or 0) ,
-                  MoTS = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1] or 0) ,
-                  PF = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1] or 0) ,
-                  SD = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1] or 0) ,
-                  SoA = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1] or 0) ,
-                  NW = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1] or 0) ,
-                  ToP = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1] or 0) ,
-                  TSoW = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
-                  TSG = (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmName][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
-                  color = RAID_CLASS_COLORS[_G.DoCharacters[realmName][character].class]
-                }
-            )
+    if tocversion <= 90207 then
+        for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
+            if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
+            then
+                tinsert(SeasonBestsstdata,SeasonBesti+1,
+                    { name = _G.DoCharacters[realmgroupid][character].name,
+                      DoS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1] or 0) ,
+                      HoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1] or 0) ,
+                      MoTS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1] or 0) ,
+                      PF = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1] or 0) ,
+                      SD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1] or 0) ,
+                      SoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1] or 0) ,
+                      NW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1] or 0) ,
+                      ToP = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1] or 0) ,
+                      TSoW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
+                      TSG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
+                      color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
+                    }
+                )
+            end
         end
-
+    else
+        for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
+            if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
+            then
+                tinsert(SeasonBestsstdata,SeasonBesti+1,
+                    { name = _G.DoCharacters[realmgroupid][character].name,
+                      ID = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]["Fortified"][1] or 0) ,
+                      RtKU = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]["Fortified"][1] or 0) ,
+                      RtKL = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]["Fortified"][1] or 0) ,
+                      OMW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]["Fortified"][1] or 0) ,
+                      OMJ = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]["Fortified"][1] or 0) ,
+                      GD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]["Fortified"][1] or 0) ,
+                      TSoW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
+                      TSG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
+                      color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
+                    }
+                )
+            end
+        end
     end
 
     SeasonBestsst:SetData(SeasonBestsstdata)
@@ -733,8 +745,11 @@ function addon:OnInitialize()
             },
             chat = {
                 respondkeys = false,
-           },
+            },
         },
+        global = {
+            dorework = true
+        }
     }
     self.db = LibStub("AceDB-3.0"):New("DoKeysDB", defaults, true)
     LibDBIcon:Register("DoKeysIcon", DoKeysLDB, self.db.profile.minimap)
@@ -743,6 +758,18 @@ function addon:OnInitialize()
         LibDBIcon:Hide("DoKeysIcon")
     else
         LibDBIcon:Show("DoKeysIcon")
+    end
+    if self.db.global.dorework then
+        if type(_G.DoCharacters) == "table" then
+            wipe(_G.DoCharacters)
+        end
+        if type(_G.DoKeysGuild) == "table" then
+            wipe(_G.DoKeysGuild)
+        end
+        if type(_G.DoKeysBNETFriendsKeys) == "table" then
+            wipe(_G.DoKeysBNETFriendsKeys)
+        end
+        self.db.global.dorework = false
     end
     addon:SetupOptions()
 end
@@ -783,14 +810,14 @@ function addon:SetupOptions()
     DoKeysOptionsMinimapCheck.Text:SetText("Show Minimap")
     myCheckButton.tooltip = "Enable or disable showing minimap button."
     myCheckButton:SetScript("OnClick",
-      function()
-        if self.db.profile.minimap.hide then
-            LibDBIcon:Show("DoKeysIcon")
-            self.db.profile.minimap.hide = false
-        else
-            LibDBIcon:Hide("DoKeysIcon")
-            self.db.profile.minimap.hide = true
+        function()
+            if self.db.profile.minimap.hide then
+                LibDBIcon:Show("DoKeysIcon")
+                self.db.profile.minimap.hide = false
+            else
+                LibDBIcon:Hide("DoKeysIcon")
+                self.db.profile.minimap.hide = true
+            end
         end
-      end
     )
 end
