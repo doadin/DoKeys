@@ -305,7 +305,6 @@ local function SetupDB(_, event, one, _)
         else
             _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] = {}
         end
-        print("update guild")
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].GuildName = isGuildMember() and GetGuildInfo("player") or "false"
     end
     if isAstralKeysRegistered then
