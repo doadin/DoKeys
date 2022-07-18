@@ -1020,7 +1020,7 @@ local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, 
     if prefix == "DoKeys" then
         if text == "PartyRequest" then
             local bName , bRealm = UnitName("player"), GetRealmName()
-            C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(UnitName("player")) .. "-" .. tostring(GetRealmName()) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].currentkeymapid) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[bRealm][bName]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
+            C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(UnitName("player")) .. "-" .. tostring(GetRealmName()) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
         end
         if method == "PARTYKEY" then
             local _,KeyData = strsplit(" ", text)
