@@ -1284,12 +1284,11 @@ local function RequestPartyKeys(_, event)
     end
 end
 
+local OldKeyMapid
+local OldKeyLevel
+local OldTWKeyMapid
+local OldTWKeyLevel
 local function TrackKeyChange(_, event)
-    local OldKeyMapid
-    local OldKeyLevel
-    local OldTWKeyMapid
-    local OldTWKeyLevel
-    local _
     if event == "CHALLENGE_MODE_START" then
         OldKeyMapid = GetOwnedKeystoneChallengeMapID()
         OldKeyLevel = GetOwnedKeystoneLevel()
