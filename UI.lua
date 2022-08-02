@@ -23,7 +23,7 @@ end
 
 local StdUi = LibStub("StdUi")
 
-local MainFrame = StdUi:Window(UIParent, 800, 550, 'DoKeys')
+local MainFrame = StdUi:Window(UIParent, 820, 550, 'DoKeys')
 MainFrame:SetPoint('CENTER')
 MainFrame:Hide()
 
@@ -116,7 +116,7 @@ do
             },
             {
                 name = 'Key Instance',
-                width = 100,
+                width = 110,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',
@@ -191,7 +191,7 @@ do
             },
             {
                 name = 'Key Instance',
-                width = 100,
+                width = 110,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',
@@ -223,98 +223,98 @@ StdUi:GlueTop(st, PlayerHeading, 0, -50)
 local SeasonBestHeaders
 do
     local version, build, date, tocversion = GetBuildInfo()
-    if tocversion <= 90207 then
-        SeasonBestHeaders = {
-            {
-                name = 'Name',
-                width = 50,
-                align = 'LEFT',
-                defaultsort = 'dsc',
-                index = 'name',
-                --format = 'string',
-            },
-            {
-                name = 'DoS',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'DoS',
-                --format = 'string',
-            },
-            {
-                name = 'HoA',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'HoA',
-                --format = 'string',
-            },
-            {
-                name = 'MoTS',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'MoTS',
-                --format = 'string',
-            },
-            {
-                name = 'PF',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'PF',
-                --format = 'string',
-            },
-            {
-                name = 'SD',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'SD',
-                --format = 'string',
-            },
-            {
-                name = 'SoA',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'SoA',
-                --format = 'string',
-            },
-            {
-                name = 'NW',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'NW',
-                --format = 'string',
-            },
-            {
-                name = 'ToP',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'ToP',
-                --format = 'string',
-            },
-            {
-                name = 'TazSoW',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'TSoW',
-                --format = 'string',
-            },
-            {
-                name = 'TazSG',
-                width = 100,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'TSG',
-                --format = 'string',
-            },
-        }
-    else
+    --if tocversion <= 90207 then
+    --    SeasonBestHeaders = {
+    --        {
+    --            name = 'Name',
+    --            width = 50,
+    --            align = 'LEFT',
+    --            defaultsort = 'dsc',
+    --            index = 'name',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'DoS',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'DoS',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'HoA',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'HoA',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'MoTS',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'MoTS',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'PF',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'PF',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'SD',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'SD',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'SoA',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'SoA',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'NW',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'NW',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'ToP',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'ToP',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'TazSoW',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'TSoW',
+    --            --format = 'string',
+    --        },
+    --        {
+    --            name = 'TazSG',
+    --            width = 100,
+    --            align = 'RIGHT',
+    --            defaultsort = 'dsc',
+    --            index = 'TSG',
+    --            --format = 'string',
+    --        },
+    --    }
+    --else
         SeasonBestHeaders = {
             {
                 name = 'Name',
@@ -389,7 +389,7 @@ do
                 --format = 'string',
             },
         }
-    end
+    --end
 end
 
 local SeasonBestsst = StdUi:ScrollTable(SeasonBestsHeading, SeasonBestHeaders)
@@ -628,39 +628,39 @@ local function SeasonBestsGetTable()
     local version, build, date, tocversion = GetBuildInfo()
     local SeasonBestsstdata = {}
     local SeasonBesti = 0
-    if tocversion <= 90207 then
-        for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
-            if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
-            then
-                tinsert(SeasonBestsstdata,SeasonBesti+1,
-                    { name = _G.DoCharacters[realmgroupid][character].name,
-                      DoS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1] or 0) ,
-                      HoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1] or 0) ,
-                      MoTS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1] or 0) ,
-                      PF = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1] or 0) ,
-                      SD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1] or 0) ,
-                      SoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1] or 0) ,
-                      NW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1] or 0) ,
-                      ToP = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1] or 0) ,
-                      TSoW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
-                      TSG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
-                      color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
-                    }
-                )
-            end
-        end
-    else
+    --if tocversion <= 90207 then
+    --    for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
+    --        if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
+    --        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
+    --        then
+    --            tinsert(SeasonBestsstdata,SeasonBesti+1,
+    --                { name = _G.DoCharacters[realmgroupid][character].name,
+    --                  DoS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["De Other Side"]["Fortified"][1] or 0) ,
+    --                  HoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Atonement"]["Fortified"][1] or 0) ,
+    --                  MoTS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]["Fortified"][1] or 0) ,
+    --                  PF = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Plaguefall"]["Fortified"][1] or 0) ,
+    --                  SD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Sanguine Depths"]["Fortified"][1] or 0) ,
+    --                  SoA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Spires of Ascension"]["Fortified"][1] or 0) ,
+    --                  NW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]["Fortified"][1] or 0) ,
+    --                  ToP = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Theater of Pain"]["Fortified"][1] or 0) ,
+    --                  TSoW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
+    --                  TSG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
+    --                  color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
+    --                }
+    --            )
+    --        end
+    --    end
+    --else
         for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
             if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
             and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
@@ -688,7 +688,7 @@ local function SeasonBestsGetTable()
                 )
             end
         end
-    end
+    --end
 
     SeasonBestsst:SetData(SeasonBestsstdata)
     SeasonBestsst:Show()
