@@ -189,7 +189,7 @@ local function SetupDB(_, event, one, _)
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
         local data = C_PlayerInfo.GetPlayerMythicPlusRatingSummary("player")
         local seasonScore = data and data.currentSeasonScore
-        if seasonScore and seasonScore > 0 then
+        if seasonScore and seasonScore >= 0 then
             _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentSeasonScore = seasonScore
         end
         for Bag = 0, NUM_BAG_SLOTS do
