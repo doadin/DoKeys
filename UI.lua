@@ -34,7 +34,7 @@ SeasonBestsFrame:Hide()
 local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 1100, 250, "Player's Season Bests Tyrannical/Fortified", 25, 16)
 StdUi:GlueTop(SeasonBestsHeading, SeasonBestsFrame, 0, -40)
 
-local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 800, 160, "Player's Keys", 25, 16)
+local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 820, 160, "Player's Keys", 25, 16)
 StdUi:GlueTop(PlayerHeading, MainFrame, 0, -45)
 
 local function UpdateReward()
@@ -116,7 +116,7 @@ do
             },
             {
                 name = 'Key Instance',
-                width = 110,
+                width = 140,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',
@@ -191,7 +191,7 @@ do
             },
             {
                 name = 'Key Instance',
-                width = 110,
+                width = 140,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',

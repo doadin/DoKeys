@@ -487,7 +487,10 @@ end
 
 local function DecompressAndDecode(input)
     local decoded = LibDeflate:DecodeForWoWAddonChannel(input)
-    local success, deserialized = AceSerializer:Deserialize(LibDeflate:DecompressDeflate(decoded))
+    if decoded == "request" then
+        return decoded
+    end
+    local success, deserialized = decoded and AceSerializer:Deserialize(LibDeflate:DecompressDeflate(decoded))
     if not success then
         print('There was issue with receiving guild keys, please report this to Addon Author.')
     end
@@ -1238,18 +1241,18 @@ local function OnTooltipSetUnit(self)
                 if playername == nameRealm then
                     found = true
                     _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
-                    _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance) .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel), 1, 1, 1)
+                    _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance or "") .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel or ""), 1, 1, 1)
                     _G.GameTooltip:Show()
                 end
             end
         end
     end
     if found then return end
-    if type(DoKeysPartyKeys) == "table" then
-        for playername,keydata in pairs(DoKeysPartyKeys) do
+    if type(_G.DoKeysPartyKeys) == "table" then
+        for playername,keydata in pairs(_G.DoKeysPartyKeys) do
             if (playername) == nameRealm then
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
-                _G.GameTooltip:AddLine("Current Key: " .. tostring(C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID)) .. " " .. tostring(keydata.KeyLevel), 1, 1, 1)
+                _G.GameTooltip:AddLine("Current Key: " .. tostring(C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID) or "") .. " " .. tostring(keydata.KeyLevel or ""), 1, 1, 1)
                 _G.GameTooltip:Show()
             end
         end
@@ -1264,7 +1267,7 @@ local function RequestPartyKeys(_, event)
     if event == "GROUP_ROSTER_UPDATE" then
         lastrunpartyrequest = _G.GetTime()
     end
-    if _G.GetTime() - lastrunpartyrequest < 1 then
+    --if _G.GetTime() - lastrunpartyrequest < 1 then
         --if type(lastrunpartyrequesttimer) == "table" and lastrunpartyrequesttimer._remainingIterations >= 1 then
         --    return
         --elseif type(lastrunpartyrequesttimer) == "table" and lastrunpartyrequesttimer._remainingIterations == 0 then
@@ -1273,13 +1276,49 @@ local function RequestPartyKeys(_, event)
         --    lastrunpartyrequesttimer:Cancel()
         --    lastrunpartyrequesttimer = _G.C_Timer.NewTimer(2.5, function() RequestPartyKeys() end)
         --end
-        return
-    end
-    C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
+        --return
+    --end
+    --C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
     local nummembers = _G.GetNumGroupMembers()
     if nummembers == 0 then
         if type(DoKeysPartyKeys) == "table" then
             wipe(DoKeysPartyKeys)
+        end
+    end
+
+    if nummembers > 0 then
+        C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
+        local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0")
+        for i=1,_G.GetNumGroupMembers() do
+            local sentRequest = openRaidLib and openRaidLib.RequestAllData()
+            --local unitID = unit..i
+            --local unitInfo = openRaidLib and openRaidLib.GetUnitInfo(unitID and unitId)
+            --local unitName, level, mapID, challengeMapID, classID, rating, mythicPlusMapID, classIconTexture, iconTexCoords, mapName, inMyParty, isOnline, isGuildMember = _G.unpack(unitTable)
+            local allUnitsInfo = openRaidLib and openRaidLib.GetAllUnitsInfo()
+            for unitName, unitInfo in pairs(allUnitsInfo) do
+                local specId = unitInfo.specId
+                local specName = unitInfo.specName
+                local role = unitInfo.role
+                local renown = unitInfo.renown
+                local covenantId = unitInfo.covenantId
+                local talents = unitInfo.talents
+                local pvpTalents = unitInfo.pvpTalents
+                local conduits = unitInfo.conduits
+                local class = unitInfo.class
+                local classId = unitInfo.classId
+                local className = unitInfo.className
+                local unitName = unitInfo.name
+                local unitNameFull = unitInfo.nameFull
+                local keystoneInfo = openRaidLib.KeystoneInfoManager.GetKeystoneInfo(unitName, true)
+                if type(_G.DoKeysPartyKeys) ~= "table" then
+                    _G.DoKeysPartyKeys = {}
+                end
+                if type(_G.DoKeysPartyKeys[unitNameFull]) ~= "table" then
+                    _G.DoKeysPartyKeys[unitNameFull] = {}
+                end
+                _G.DoKeysPartyKeys[unitNameFull] = {KeyInstanceID = keystoneInfo.mythicPlusMapID, KeyLevel = keystoneInfo.level, KeyInstance = C_ChallengeMode.GetMapUIInfo(keystoneInfo.mythicPlusMapID)}
+           end
+            --_G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
     end
 end
