@@ -514,11 +514,12 @@ local function RequestGuildKeys(_, event)
     end
 end
 
-local lasttimesendkeys
+--local lasttimesendkeys
 local function SendGuildKeys(style, prefix)
     if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
-        return
-    end
+    --if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
+    --    return
+    --end
     if style == "AstralKeys" then
         local testtable = {}
         local AstralKeysi = 0
@@ -564,12 +565,12 @@ local function SendGuildKeys(style, prefix)
                 end
                 table.remove(testtable, i)
             end
-            if isAstralKeysRegistered and prefix == "AstralKeys" then
+            --if isAstralKeysRegistered and prefix == "AstralKeys" then
                 C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
-            end
-            if DokeysRegistered and prefix == "DoKeys" then
+            --end
+            --if DokeysRegistered and prefix == "DoKeys" then
                 C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
-            end
+            --end
         end
     end
     if style == "KeystoneManager" then
