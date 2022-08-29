@@ -37,7 +37,6 @@ local DoKeysKeyStoneTrackingFrame = CreateFrame("FRAME")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("BAG_UPDATE")
-DoKeysKeyStoneTrackingFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
 local DoKeysKeyStoneWeeklyBestFrame = CreateFrame("FRAME")
 DoKeysKeyStoneWeeklyBestFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -49,6 +48,7 @@ DoKeysResetFrame:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
 
 local DoKeysGearFrame = CreateFrame("FRAME")
 DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
+DoKeysGearFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
 local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
 DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
@@ -329,7 +329,7 @@ local function UpdateCovenant(_, event, covenantID)
     end
 end
 
-local lasttimesendupdatekeys
+--local lasttimesendupdatekeys
 local function UpdateKeyStone(_, _)
     if not type(UnitLevel("player") == "number") or (UnitLevel("player") < DoKeysCurrentMaxLevel) then return end
     local currentkeymapid = GetOwnedKeystoneChallengeMapID()
@@ -359,9 +359,9 @@ local function UpdateKeyStone(_, _)
             end
         end
     end
-    if type(lasttimesendupdatekeys) == "number" and (_G.GetTime() - lasttimesendupdatekeys < 60) then
-        return
-    end
+    --if type(lasttimesendupdatekeys) == "number" and (_G.GetTime() - lasttimesendupdatekeys < 60) then
+    --    return
+    --end
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
     if isAstralKeysRegistered and isGuildMember() then
         if _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class and _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].WeeklyBest and _G.DoCharacters.Week then
@@ -375,7 +375,7 @@ local function UpdateKeyStone(_, _)
             C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
         end
     end
-    lasttimesendupdatekeys = _G.GetTime()
+    --lasttimesendupdatekeys = _G.GetTime()
 end
 
 local function UpdateGear()
