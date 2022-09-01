@@ -52,9 +52,10 @@ end
 local function UpdateNextRewardLevel()
     local NextRewardLevel
     local WB = _G.DoCharacters[realmgroupid][_G.UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 1
+    if WB <= 0 then WB = 1 end
     local hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlusIncrease(WB)
     if not C_MythicPlus.IsWeeklyRewardAvailable() then
-        if nextMythicPlusLevel and itemLevel then
+        if nextMythicPlusLevel ~= nil or itemLevel ~= nil then
             NextRewardLevel = StdUi:Label(MainFrame,(_G.UnitName("player") .. "'s " .. "weekly reward from M+ increases at level " .. tostring(nextMythicPlusLevel) .. " to item level " .. tostring(itemLevel)))
             StdUi:GlueTop(NextRewardLevel, MainFrame, 0, -30)
         else
