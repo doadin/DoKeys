@@ -37,6 +37,7 @@ local DoKeysKeyStoneTrackingFrame = CreateFrame("FRAME")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("BAG_UPDATE")
+DoKeysKeyStoneTrackingFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
 local DoKeysKeyStoneWeeklyBestFrame = CreateFrame("FRAME")
 DoKeysKeyStoneWeeklyBestFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -516,10 +517,6 @@ end
 
 --local lasttimesendkeys
 local function SendGuildKeys(style, prefix)
-    if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
-    --if type(lasttimesendkeys) == "number" and (_G.GetTime() - lasttimesendkeys < 60) then
-    --    return
-    --end
     if style == "AstralKeys" then
         local testtable = {}
         local AstralKeysi = 0
@@ -565,12 +562,14 @@ local function SendGuildKeys(style, prefix)
                 end
                 table.remove(testtable, i)
             end
-            --if isAstralKeysRegistered and prefix == "AstralKeys" then
+            local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
+            local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
+            if isAstralKeysRegistered then
                 C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
-            --end
-            --if DokeysRegistered and prefix == "DoKeys" then
+            end
+            if DokeysRegistered then
                 C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
-            --end
+            end
         end
     end
     if style == "KeystoneManager" then
@@ -605,6 +604,7 @@ local function SendGuildKeys(style, prefix)
             }
 
         end
+        local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
         if isKeystoneManagerRegistered then
             local KeystoneManagerDataToSend = CompressAndEncode(KeystoneManagerSendTable)
             C_ChatInfo.SendAddonMessage("KeystoneManager", KeystoneManagerDataToSend, 'GUILD')
