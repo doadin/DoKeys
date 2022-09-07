@@ -1139,6 +1139,9 @@ local function DoWeeklyKeyReset()
     if type(_G.DoKeysGuild) == "table" then
         wipe(_G.DoKeysGuild)
     end
+    if type(_G.DoKeysBNETFriendsKeys) == "table" then
+        wipe(_G.DoKeysBNETFriendsKeys)
+    end
 end
 
 local function DoSeasonReset()
