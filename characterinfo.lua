@@ -996,7 +996,13 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
             end
             local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
             if accountInfo.isFriend or accountInfo.isBattleTagFriend then
-                _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
+                if type(_G.DoKeysBNETFriendsKeys[btag]) ~= "table" then
+                    _G.DoKeysBNETFriendsKeys[btag] = {isBattleTagFriend = accountInfo.isBattleTagFriend, hasAK = (prefix == "AstralKeys" and true) or false, hasDoKeys = (prefix == "DoKeys" and true) or false}
+                else
+                    _G.DoKeysBNETFriendsKeys[btag].isBattleTagFriend = accountInfo.isBattleTagFriend
+                    _G.DoKeysBNETFriendsKeys[btag].hasAK = (prefix == "AstralKeys" and true) or false
+                    _G.DoKeysBNETFriendsKeys[btag].hasDoKeys = (prefix == "DoKeys" and true) or false
+                end
             end
         end
         if method == "BNet_query" and KeyData == "ping" then
