@@ -693,7 +693,6 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                                     if KeyMapID then
                                         guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID) or ""
                                     end
-                                    if guildkeyname == "" and tonumber(KeyLevel) == 0 then return end
                                     _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = tonumber(KeyLevel)
                                     _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
                                     if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
@@ -777,7 +776,6 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if KeyInstance then
                 guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance) or ""
             end
-            if guildkeyname == "" and tonumber(KeyLevel) == 0 then return end
             _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = tonumber(KeyLevel)
             _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
             if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
@@ -816,7 +814,6 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 if keyInfo.mapId then
                     guildkeyname = C_ChallengeMode.GetMapUIInfo(keyInfo.mapId)  or ""
                 end
-                if guildkeyname == "" and tonumber(keyInfo.level) == 0 then return end
                 _G.DoKeysGuild[realmgroupid][GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyLevel = tonumber(keyInfo.level)
                 _G.DoKeysGuild[realmgroupid][GuildName][keyInfo.name]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
                 if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][keyInfo.name]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(keyInfo.weeklyBest) then
@@ -869,7 +866,6 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         if KeyMapID then
                             guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyMapID)  or ""
                         end
-                        if guildkeyname == "" and tonumber(KeyLevel) == 0 then return end
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = tonumber(KeyLevel)
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
                         if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(WeeklyBest) then
@@ -954,7 +950,6 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if KeyInstance then
                 guildkeyname = C_ChallengeMode.GetMapUIInfo(KeyInstance)  or ""
             end
-            if guildkeyname == "" and tonumber(KeyLevel) == 0 then return end
             _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyLevel = tonumber(KeyLevel)
             _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].CurrentKeyInstance = guildkeyname
             if (tonumber(_G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].WeeklyBest) or 0) <= tonumber(weeklyBest) then
