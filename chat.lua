@@ -399,6 +399,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
+                    local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
@@ -407,8 +408,12 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             end
                             if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "GUILD")
+                                count = count + 1
                             end
                         end
+                    end
+                    if count == 0 then
+                        SendChatMessage(" Weekly Best: Done", "GUILD")
                     end
                     lastrunguildhelp = _G.GetTime()
                 elseif event == "CHAT_MSG_OFFICER" then
@@ -418,6 +423,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
+                    local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
@@ -426,8 +432,12 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             end
                             if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "OFFICER")
+                                count = count + 1
                             end
                         end
+                    end
+                    if count == 0 then
+                        SendChatMessage(" Weekly Best: Done", "OFFICER")
                     end
                     lastrunofficerhelp = _G.GetTime()
                 elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
@@ -437,6 +447,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
+                    local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
@@ -445,8 +456,12 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             end
                             if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "PARTY")
+                                count = count + 1
                             end
                         end
+                    end
+                    if count == 0 then
+                        SendChatMessage(" Weekly Best: Done", "PARTY")
                     end
                     lastrunpartyhelp = _G.GetTime()
                 elseif event == "CHAT_MSG_WHISPER" then
@@ -456,6 +471,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
+                    local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         if v.level == DoKeysCurrentMaxLevel then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
@@ -464,8 +480,12 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             end
                             if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "WHISPER", nil, sender)
+                                count = count + 1
                             end
                         end
+                    end
+                    if count == 0 then
+                        SendChatMessage(" Weekly Best: Done", "WHISPER", nil, sender)
                     end
                     lastrunwhisperhelp = _G.GetTime()
                 elseif event == "CHAT_MSG_BN_WHISPER" then
@@ -475,6 +495,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
+                    local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         local message = k .. " " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or "")
                         if v.level == DoKeysCurrentMaxLevel then
@@ -484,8 +505,12 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             end
                             if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 BNSendWhisper(bnSenderID, message)
+                                count = count + 1
                             end
                         end
+                    end
+                    if count == 0 then
+                        BNSendWhisper(bnSenderID, " Weekly Best: Done")
                     end
                     lastrunbnwhisperhelp = _G.GetTime()
                 end
