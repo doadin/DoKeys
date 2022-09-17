@@ -266,7 +266,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     lastrunofficerkeys = _G.GetTime()
-                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
                     if type(lastrunpartykeys) == "number" then
                         local diff = now - lastrunpartykeys
                         if diff < 10 then
@@ -349,7 +349,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
 
                     lastrunofficerkeys = _G.GetTime()
-                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
                     if type(lastrunpartykeys) == "number" then
                         local diff = now - lastrunpartykeys
                         if diff < 10 then
@@ -440,7 +440,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         SendChatMessage(" Weekly Best: Done", "OFFICER")
                     end
                     lastrunofficerhelp = _G.GetTime()
-                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
                     if type(lastrunpartyhelp) == "number" then
                         local diff = now - lastrunpartyhelp
                         if diff < 10 then
@@ -546,7 +546,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     lastrunofficerkeys = _G.GetTime()
-                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
                     if type(lastrunpartykeys) == "number" then
                         local diff = now - lastrunpartykeys
                         if diff < 10 then
@@ -606,7 +606,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     SendChatMessage("“ (________) ”~", "GUILD")
                     SendChatMessage("(____________) ”    ", "GUILD")
                     lastrunguilddookies = _G.GetTime()
-                elseif event == "CHAT_MSG_PARTY" or "CHAT_MSG_PARTY_LEADER" then
+                elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
                     if type(lastrunpartydookies) == "number" then
                         local diff = now - lastrunpartydookies
                         if diff < 10 then
