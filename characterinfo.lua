@@ -1387,6 +1387,8 @@ local function TrackKeyChange(_, event)
     if event == "CHALLENGE_MODE_START" then
         OldKeyMapid = GetOwnedKeystoneChallengeMapID()
         OldKeyLevel = GetOwnedKeystoneLevel()
+        --print("OldKeyMapid: ", OldKeyMapid)
+        --print("OldKeyLevel: ", OldKeyLevel)
         for Bag = 0, NUM_BAG_SLOTS do
             for Slot = 1, GetContainerNumSlots(Bag) do
                 local ID = GetContainerItemID(Bag, Slot)
@@ -1400,25 +1402,36 @@ local function TrackKeyChange(_, event)
         end
     end
     if event == "CHALLENGE_MODE_COMPLETED" then
-        if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
-            SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
-        end
-        for Bag = 0, NUM_BAG_SLOTS do
-            for Slot = 1, GetContainerNumSlots(Bag) do
-                local ID = GetContainerItemID(Bag, Slot)
-                if (ID and ID == 187786) then
-                    local ItemLink = GetContainerItemLink(Bag, Slot)
-                    local _,_,three = strsplit("|",ItemLink)
-                    local NewTWKeyMapid
-                    local NewTWKeyLevel
-                    _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
-                    if tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
-                        SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
+        C_Timer.After(10, function()
+            --print("OldKeyMapid: ", OldKeyMapid, "GetOwnedKeystoneChallengeMapID: ", GetOwnedKeystoneChallengeMapID())
+            --print("OldKeyLevel: ", OldKeyLevel, "GetOwnedKeystoneLevel: ", GetOwnedKeystoneLevel())
+            --if OldKeyMapid ~= GetOwnedKeystoneChallengeMapID() then
+            --    print("old map id is not new map id")
+            --end
+            --if OldKeyLevel ~= GetOwnedKeystoneLevel()then
+            --    print("old key level is not new key level")
+            --end
+            if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+                --print("Should Send New Key!")
+                SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
+            end
+            for Bag = 0, NUM_BAG_SLOTS do
+                for Slot = 1, GetContainerNumSlots(Bag) do
+                    local ID = GetContainerItemID(Bag, Slot)
+                    if (ID and ID == 187786) then
+                        local ItemLink = GetContainerItemLink(Bag, Slot)
+                        local _,_,three = strsplit("|",ItemLink)
+                        local NewTWKeyMapid
+                        local NewTWKeyLevel
+                        _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
+                        if tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
+                            SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
+                        end
+                        break
                     end
-                    break
                 end
             end
-        end
+        end)
     end
 end
 
@@ -1467,16 +1480,22 @@ do
 						local fullName = gameAccountInfo.characterName .. '-' .. realmName
                         local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
 						if _G.DoKeysBNETFriendsKeys and _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
-							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance
-							doKeyString:SetWordWrap(false)
-							doKeyString:SetFormattedText("|cffffd200Current Keystone|r\n%d - %s", keyLevel, dungeonID)
-							doKeyString:SetWordWrap(true)
-							doKeyString:SetPoint('TOP', characterNameString, 'BOTTOM', 3, -4)
-							gameInfoString:SetPoint('TOP', doKeyString, 'BOTTOM', 0, 0)
-							doKeyString:Show()
-							stringShown = true
-							FriendsTooltip.height = FriendsTooltip:GetHeight() + doKeyString:GetStringHeight() + 8
-							FriendsTooltip.maxWidth = max(FriendsTooltip.maxWidth, doKeyString:GetStringWidth() + left)
+							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel or 0, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance or ""
+                            if keyLevel and tonumber(keyLevel) > 0 then
+							    doKeyString:SetWordWrap(false)
+							    doKeyString:SetFormattedText("|cffffd200Current Keystone|r\n%d - %s", keyLevel, dungeonID)
+							    doKeyString:SetWordWrap(true)
+							    doKeyString:SetPoint('TOP', characterNameString, 'BOTTOM', 3, -4)
+							    gameInfoString:SetPoint('TOP', doKeyString, 'BOTTOM', 0, 0)
+							    doKeyString:Show()
+							    stringShown = true
+							    FriendsTooltip.height = FriendsTooltip:GetHeight() + doKeyString:GetStringHeight() + 8
+							    FriendsTooltip.maxWidth = max(FriendsTooltip.maxWidth, doKeyString:GetStringWidth() + left)
+                            else
+                                doKeyString:SetText('')
+                                doKeyString:Hide()
+                                gameInfoString:SetPoint('TOP', characterNameString, 'BOTTOM', 0, -4)
+                            end
 						else
 							doKeyString:SetText('')
 							doKeyString:Hide()
@@ -1489,8 +1508,8 @@ do
 				doKeyString:Hide()
 			end
 		end
-		FriendsTooltip:SetWidth(min(FRIENDS_TOOLTIP_MAX_WIDTH, FriendsTooltip.maxWidth + FRIENDS_TOOLTIP_MARGIN_WIDTH));
-		FriendsTooltip:SetHeight(FriendsTooltip.height + (stringShown and 0 or (FRIENDS_TOOLTIP_MARGIN_WIDTH + 8)))
+		--FriendsTooltip:SetWidth(min(FRIENDS_TOOLTIP_MAX_WIDTH, FriendsTooltip.maxWidth + FRIENDS_TOOLTIP_MARGIN_WIDTH))
+		--FriendsTooltip:SetHeight(FriendsTooltip.height + (stringShown and 0 or (FRIENDS_TOOLTIP_MARGIN_WIDTH + 8)))
         lastrunonenter = _G.GetTime()
 	end
 
