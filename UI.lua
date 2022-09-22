@@ -92,56 +92,64 @@ do
                 index = 'name',
                 format = 'string',
             },
-            {
-                name = 'Level',
-                width = 60,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'level',
-                format = 'string',
-            },
+            --{
+            --    name = 'Level',
+            --    width = 60,
+            --    align = 'CENTER',
+            --    defaultsort = 'dsc',
+            --    index = 'level',
+            --    format = 'string',
+            --},
             {
                 name = 'Weekly Count',
-                width = 90,
-                align = 'RIGHT',
+                width = 110,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'weeklyCount',
             },
             {
                 name = 'Weekly Best',
-                width = 85,
-                align = 'RIGHT',
+                width = 100,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'WeeklyBest',
                 format = 'string',
             },
+            --{
+            --    name = 'Weekly Best Timed',
+            --    width = 20,
+            --    align = 'CENTER',
+            --    defaultsort = 'dsc',
+            --    index = 'WeeklyBestLevelTimed',
+            --    format = 'string',
+            --},
             {
                 name = 'Key Level',
-                width = 70,
-                align = 'RIGHT',
+                width = 85,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyLevel',
             },
             {
-                name = 'Key Instance',
-                width = 140,
-                align = 'RIGHT',
+                name = 'Dungeon',
+                width = 160,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',
                 format = 'string',
             },
             {
-                name = 'Average Item Level',
-                width = 130,
-                align = 'RIGHT',
+                name = 'AVG Ilvl',
+                width = 75,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'avgItemLevel',
                 format = 'string',
             },
             {
                 name = 'M+ Score',
-                width = 70,
-                align = 'RIGHT',
+                width = 85,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'currentSeasonScore',
                 format = 'string',
@@ -149,13 +157,13 @@ do
             {
                 name = 'TW Key Level',
                 width = 90,
-                align = 'RIGHT',
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'CurrentTWKeyLevel',
                 format = 'string',
             },
             {
-                name = 'TW Key Instance',
+                name = 'TW Key Dungeon',
                 width = 110,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
@@ -174,56 +182,64 @@ do
                 index = 'name',
                 format = 'string',
             },
-            {
-                name = 'Level',
-                width = 60,
-                align = 'RIGHT',
-                defaultsort = 'dsc',
-                index = 'level',
-                format = 'string',
-            },
+            --{
+            --    name = 'Level',
+            --    width = 60,
+            --    align = 'CENTER',
+            --    defaultsort = 'dsc',
+            --    index = 'level',
+            --    format = 'string',
+            --},
             {
                 name = 'Weekly Count',
-                width = 90,
-                align = 'RIGHT',
+                width = 110,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'weeklyCount',
             },
             {
                 name = 'Weekly Best',
-                width = 85,
-                align = 'RIGHT',
+                width = 100,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'WeeklyBest',
                 format = 'string',
             },
+            --{
+            --    name = 'Weekly Best Timed',
+            --    width = 20,
+            --    align = 'CENTER',
+            --    defaultsort = 'dsc',
+            --    index = 'WeeklyBestLevelTimed',
+            --    format = 'string',
+            --},
             {
                 name = 'Key Level',
-                width = 70,
-                align = 'RIGHT',
+                width = 85,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyLevel',
             },
             {
-                name = 'Key Instance',
-                width = 140,
-                align = 'RIGHT',
+                name = 'Dungeon',
+                width = 160,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'CurrentKeyInstance',
                 format = 'string',
             },
             {
-                name = 'Average Item Level',
-                width = 130,
-                align = 'RIGHT',
+                name = 'AVG Ilvl',
+                width = 75,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'avgItemLevel',
                 format = 'string',
             },
             {
                 name = 'M+ Score',
-                width = 70,
-                align = 'RIGHT',
+                width = 85,
+                align = 'CENTER',
                 defaultsort = 'dsc',
                 index = 'currentSeasonScore',
                 format = 'string',
@@ -425,8 +441,8 @@ ReportToDropDown:SetPoint('CENTER')
 
 StdUi:AddLabel(ReportHeading, ReportToDropDown, "Report Weekly Best To:", "LEFT", 155)
 
-local ReportToButton = StdUi:Button(ReportHeading, 35, 20, "Send")
-StdUi:GlueTop(ReportToButton, ReportHeading, -265, -20, 'RIGHT')
+local ReportToButton = StdUi:Button(ReportHeading, 37, 19, "Send")
+StdUi:GlueTop(ReportToButton, ReportHeading, -265, -22, 'RIGHT')
 
 local ReportToDropDownValue
 ReportToDropDown.OnValueChanged = function(self, value)
@@ -456,8 +472,8 @@ local ReportKeysToDropDownitems = {
 local ReportKeysToDropDown = StdUi:Dropdown(ReportHeading, 200, 20, ReportKeysToDropDownitems)
 StdUi:GlueBelow(ReportKeysToDropDown, ReportToDropDown, 0, 2)
 StdUi:AddLabel(ReportHeading, ReportKeysToDropDown, "Report Your Keys To:", "LEFT", 155)
-local ReportKeysToButton = StdUi:Button(ReportHeading, 35, 20, "Send")
-StdUi:GlueTop(ReportKeysToButton, ReportHeading, -265, -40, 'RIGHT')
+local ReportKeysToButton = StdUi:Button(ReportHeading, 37, 19, "Send")
+StdUi:GlueTop(ReportKeysToButton, ReportHeading, -265, -42, 'RIGHT')
 local ReportKeysToDropDownValue
 ReportKeysToDropDown.OnValueChanged = function(self, value)
     ReportKeysToDropDownValue = value
@@ -488,23 +504,23 @@ local GuildcolumnHeaders = {
     {
         name = 'Weekly Best',
         width = 80,
-        align = 'RIGHT',
+        align = 'CENTER',
         defaultsort = 'dsc',
         index = 'WeeklyBest',
         format = 'number',
     },
     {
-        name = 'CurrentKeyLevel',
+        name = 'Key Level',
         width = 110,
-        align = 'RIGHT',
+        align = 'CENTER',
         defaultsort = 'dsc',
         index = 'CurrentKeyLevel',
         format = 'number',
     },
     {
-        name = 'CurrentKeyInstance',
-        width = 130,
-        align = 'RIGHT',
+        name = 'Dungeon',
+        width = 160,
+        align = 'CENTER',
         defaultsort = 'dsc',
         index = 'CurrentKeyInstance',
         format = 'string',
@@ -535,7 +551,7 @@ local AffixIcons = {
     ["Tormented"] = "Interface\\Icons\\spell_animamaw_orb",
 }
 
-local AffixHeading = StdUi:PanelWithTitle(MainFrame, 800, 90, "This Weeks Affixs", 25, 16)
+local AffixHeading = StdUi:PanelWithTitle(MainFrame, 800, 90, "This Week's Affixes", 25, 16)
 StdUi:GlueTop(AffixHeading, MainFrame, 0, -450)
 
 local function GetAffixes(_,event, one, two)
@@ -544,7 +560,7 @@ local function GetAffixes(_,event, one, two)
     local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
     local AffixOne = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixOne:SetNormalTexture(AffixOnefiledataid)
-    StdUi:GlueTop(AffixOne, AffixHeading, -70, -30)
+    StdUi:GlueTop(AffixOne, AffixHeading, -48, -30)
     AffixOne:SetScript("OnEnter",function()
         GameTooltip:SetOwner(AffixOne, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixOnename .. ": " .. AffixOnedescription,1,1,1,1)
@@ -556,7 +572,7 @@ local function GetAffixes(_,event, one, two)
     local AffixTwoname, AffixTwodescription, AffixTwofiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[2].id)
     local AffixTwo = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixTwo:SetNormalTexture(AffixTwofiledataid)
-    StdUi:GlueTop(AffixTwo, AffixHeading, -35, -30)
+    StdUi:GlueTop(AffixTwo, AffixHeading, -16, -30)
     AffixTwo:SetScript("OnEnter",function()
         GameTooltip:SetOwner(AffixTwo, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixTwoname .. ": " .. AffixTwodescription,1,1,1,1)
@@ -568,7 +584,7 @@ local function GetAffixes(_,event, one, two)
     local AffixThreename, AffixThreedescription, AffixThreefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[3].id)
     local AffixThree = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixThree:SetNormalTexture(AffixThreefiledataid)
-    StdUi:GlueTop(AffixThree, AffixHeading, 5, -30)
+    StdUi:GlueTop(AffixThree, AffixHeading, 16, -30)
     AffixThree:SetScript("OnEnter",function()
         GameTooltip:SetOwner(AffixThree, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixThreename .. ": " .. AffixThreedescription,1,1,1,1)
@@ -580,7 +596,7 @@ local function GetAffixes(_,event, one, two)
     local AffixFourname, AffixFourdescription, AffixFourfiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[4].id)
     local AffixFour = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixFour:SetNormalTexture(AffixFourfiledataid)
-    StdUi:GlueTop(AffixFour, AffixHeading, 40, -30)
+    StdUi:GlueTop(AffixFour, AffixHeading, 48, -30)
     AffixFour:SetScript("OnEnter",function()
         GameTooltip:SetOwner(AffixFour, "ANCHOR_BOTTOM",0,-5)
         GameTooltip:SetText(AffixFourname .. ": " .. AffixFourdescription,1,1,1,1)
@@ -599,14 +615,25 @@ local function GetTable()
     local sttestdata = {}
     local characteri=0
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
+        local charname
+        if _G.DoCharacters[realmgroupid][character].realm and _G.DoCharacters[realmgroupid][character].realm == realmName then
+            charname = _G.DoCharacters[realmgroupid][character].name
+        else
+            charname = _G.DoCharacters[realmgroupid][character].name .. "-" .. _G.DoCharacters[realmgroupid][character].realm
+        end
+        local charlvl
+        --if _G.DoCharacters[realmgroupid][character].level and _G.DoCharacters[realmgroupid][character].level ~= 60 then
+        --    return
+        --end
         tinsert(sttestdata,characteri+1,
-            { name = _G.DoCharacters[realmgroupid][character].name .. "-" .. _G.DoCharacters[realmgroupid][character].realm,
-              level =_G.DoCharacters[realmgroupid][character].level,
+            { name = charname,
+              --level =_G.DoCharacters[realmgroupid][character].level,
               weeklyCount = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].weeklyCount or 0,
-              WeeklyBest = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
+              WeeklyBest = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBest or 0),
+              WeeklyBestLevelTimed = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
               CurrentKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
               CurrentKeyInstance = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
-              avgItemLevel = _G.DoCharacters[realmgroupid][character].avgItemLevel or 0,
+              avgItemLevel = math.floor(_G.DoCharacters[realmgroupid][character].avgItemLevel) or 0,
               currentSeasonScore = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
               CurrentTWKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
               CurrentTWKeyInstanceName = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
@@ -622,15 +649,20 @@ local function GetTable()
         for RealmID,GuildName in pairs(_G.DoKeysGuild) do
             for GuildName,characterTable in pairs(GuildName) do
                 for characterInfo,character in pairs(characterTable) do
-                    --if type(character.name) == "string" then
-                        tinsert(guilddata,guildi+1,
-                            {name = character.name,
-                             WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
-                             CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
-                             CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
-                             color = RAID_CLASS_COLORS[character.Class]
-                            }
-                        )
+                    local charname, charrealm = strsplit("-",character.name)
+                    if charrealm and charrealm == realmName then
+                        charname = charname
+                    else
+                        charname = charname .. "-" .. charrealm
+                    end
+                    tinsert(guilddata,guildi+1,
+                        {name = charname,
+                         WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
+                         CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
+                         CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
+                         color = RAID_CLASS_COLORS[character.Class]
+                        }
+                    )
                     --end
                 end
             end
