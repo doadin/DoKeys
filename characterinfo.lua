@@ -90,6 +90,9 @@ local TrackKeyChangeFrame = CreateFrame("FRAME")
 TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_START")
 TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 
+local TrackNumRunsCompletedFrame = CreateFrame("FRAME")
+TrackNumRunsCompletedFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+
 local realmName = GetRealmName()
 
 local playerName = UnitName("player")
@@ -188,6 +191,7 @@ local function SetupDB(_, event, one, _)
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyChestRewardLevel = C_MythicPlus.GetWeeklyChestRewardLevel() or 0
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid = currentkeymapid or 0
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0
         local data = C_PlayerInfo.GetPlayerMythicPlusRatingSummary("player")
         local seasonScore = data and data.currentSeasonScore
         if seasonScore and seasonScore >= 0 then
@@ -1130,6 +1134,7 @@ local function DoWeeklyKeyReset()
                         v.CurrentTWKeyLevel = 0
                         v.CurrentTWKeyInstanceName = ""
                         v.CurrentTWKeyID = 0
+                        v.weeklyCount = 0
                     end
                  end
               end
@@ -1435,6 +1440,30 @@ local function TrackKeyChange(_, event)
     end
 end
 
+local function TrackNumRunsCompleted()
+    if _G.DoCharacters then
+    else
+        _G.DoCharacters = {}
+    end
+    if _G.DoCharacters[realmgroupid] then
+    else
+        _G.DoCharacters[realmgroupid] = {}
+    end
+    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] then
+    else
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()] = {}
+    end
+    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] then
+    else
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"] = {}
+    end
+    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] then
+    else
+        _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] = {}
+    end
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0) + 1
+end
+
 -- Friend's list Hooking
 do
     for i = 1, 5 do
@@ -1548,3 +1577,4 @@ TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
 TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
 FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
 TrackKeyChangeFrame:SetScript("OnEvent", TrackKeyChange)
+TrackNumRunsCompletedFrame:SetScript("OnEvent", TrackNumRunsCompleted)

@@ -23,7 +23,7 @@ end
 
 local StdUi = LibStub("StdUi")
 
-local MainFrame = StdUi:Window(UIParent, 820, 550, 'DoKeys')
+local MainFrame = StdUi:Window(UIParent, 850, 550, 'DoKeys')
 MainFrame:SetPoint('CENTER')
 MainFrame:Hide()
 
@@ -34,7 +34,7 @@ SeasonBestsFrame:Hide()
 local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 1100, 250, "Player's Season Bests Tyrannical/Fortified", 25, 16)
 StdUi:GlueTop(SeasonBestsHeading, SeasonBestsFrame, 0, -40)
 
-local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 820, 160, "Player's Keys", 25, 16)
+local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 850, 160, "Player's Keys", 25, 16)
 StdUi:GlueTop(PlayerHeading, MainFrame, 0, -45)
 
 local function UpdateReward()
@@ -99,6 +99,13 @@ do
                 defaultsort = 'dsc',
                 index = 'level',
                 format = 'string',
+            },
+            {
+                name = 'Weekly Count',
+                width = 90,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'weeklyCount',
             },
             {
                 name = 'Weekly Best',
@@ -174,6 +181,13 @@ do
                 defaultsort = 'dsc',
                 index = 'level',
                 format = 'string',
+            },
+            {
+                name = 'Weekly Count',
+                width = 90,
+                align = 'RIGHT',
+                defaultsort = 'dsc',
+                index = 'weeklyCount',
             },
             {
                 name = 'Weekly Best',
@@ -588,6 +602,7 @@ local function GetTable()
         tinsert(sttestdata,characteri+1,
             { name = _G.DoCharacters[realmgroupid][character].name .. "-" .. _G.DoCharacters[realmgroupid][character].realm,
               level =_G.DoCharacters[realmgroupid][character].level,
+              weeklyCount = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].weeklyCount or 0,
               WeeklyBest = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
               CurrentKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
               CurrentKeyInstance = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
