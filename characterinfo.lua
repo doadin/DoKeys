@@ -857,7 +857,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 local AstralCharacterTable = {strsplit("_",NewText2)}
                 for i,data in pairs(AstralCharacterTable) do
                     if data then
-                        local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week,AIL = strsplit(":",data)
+                        local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week,TS,AIL = strsplit(":",data)
                         if tonumber(Week) ~= tonumber(_G.DoCharacters.Week) then return end
                         if NameRealm and Class and KeyMapID and KeyLevel and WeeklyBest and Week then
                             if type(_G.DoKeysGuild) ~= "table" then
