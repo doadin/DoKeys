@@ -556,23 +556,38 @@ local function SendGuildKeys(style, prefix)
             end
         end
         local text = ""
-        while testtable[1] do
-            text = "sync5 "
-            for i=1,4 do
-                if testtable[i] then
-                    if testtable[i].level == 60 then
-                        text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
+        if prefix == "AstralKeys" then
+            while testtable[1] do
+                text = "sync5 "
+                for i=1,4 do
+                    if testtable[i] then
+                        if testtable[i].level == 60 then
+                            text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
+                        end
                     end
+                    table.remove(testtable, i)
                 end
-                table.remove(testtable, i)
+                local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
+                if isAstralKeysRegistered then
+                    C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
+                end
             end
-            local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
-            local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
-            if isAstralKeysRegistered then
-                C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
-            end
-            if DokeysRegistered then
-                C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
+        end
+        if prefix == "DoKeys" then
+            while testtable[1] do
+                text = "sync5 "
+                for i=1,4 do
+                    if testtable[i] then
+                        if testtable[i].level == 60 then
+                            text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. ":" .. testtable[i].avgItemLevelEquipped .. "_"
+                        end
+                    end
+                    table.remove(testtable, i)
+                end
+                local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
+                if DokeysRegistered then
+                    C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
+                end
             end
         end
     end
@@ -842,7 +857,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                 local AstralCharacterTable = {strsplit("_",NewText2)}
                 for i,data in pairs(AstralCharacterTable) do
                     if data then
-                        local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week = strsplit(":",data)
+                        local NameRealm,Class,KeyMapID,KeyLevel,WeeklyBest,Week,AIL = strsplit(":",data)
                         if tonumber(Week) ~= tonumber(_G.DoCharacters.Week) then return end
                         if NameRealm and Class and KeyMapID and KeyLevel and WeeklyBest and Week then
                             if type(_G.DoKeysGuild) ~= "table" then
@@ -878,6 +893,7 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
+                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].avgItemLevelEquipped = AIL and tonumber(AIL) or 0
                     end
                 end
             end

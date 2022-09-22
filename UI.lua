@@ -139,7 +139,7 @@ do
                 format = 'string',
             },
             {
-                name = 'AVG Ilvl',
+                name = 'Avg ILvl',
                 width = 75,
                 align = 'CENTER',
                 defaultsort = 'dsc',
@@ -229,7 +229,7 @@ do
                 format = 'string',
             },
             {
-                name = 'AVG Ilvl',
+                name = 'Avg ILvl',
                 width = 75,
                 align = 'CENTER',
                 defaultsort = 'dsc',
@@ -525,6 +525,14 @@ local GuildcolumnHeaders = {
         index = 'CurrentKeyInstance',
         format = 'string',
     },
+    {
+        name = 'Avg ILvl',
+        width = 75,
+        align = 'CENTER',
+        defaultsort = 'dsc',
+        index = 'AIL',
+        format = 'number',
+    },
 }
 
 local GuildHeading = StdUi:PanelWithTitle(MainFrame, 800, 160, "Guild Member's Keys", 25, 16)
@@ -660,6 +668,7 @@ local function GetTable()
                          WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
                          CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
                          CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
+                         AIL = character.avgItemLevelEquipped or 0,
                          color = RAID_CLASS_COLORS[character.Class]
                         }
                     )
