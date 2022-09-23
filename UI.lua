@@ -641,7 +641,7 @@ local function GetTable()
               WeeklyBestLevelTimed = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""),
               CurrentKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyLevel or 0,
               CurrentKeyInstance = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentKeyInstance or "",
-              avgItemLevel = math.floor(_G.DoCharacters[realmgroupid][character].avgItemLevel) or 0,
+              avgItemLevel = _G.DoCharacters[realmgroupid][character].avgItemLevel and math.floor(_G.DoCharacters[realmgroupid][character].avgItemLevel) or 0,
               currentSeasonScore = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].currentSeasonScore or 0,
               CurrentTWKeyLevel = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyLevel or 0,
               CurrentTWKeyInstanceName = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"].CurrentTWKeyInstanceName or "",
@@ -668,7 +668,7 @@ local function GetTable()
                          WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
                          CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
                          CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
-                         AIL = math.floor(character.avgItemLevelEquipped) or 0,
+                         AIL = character.avgItemLevelEquipped and math.floor(character.avgItemLevelEquipped) or 0,
                          color = RAID_CLASS_COLORS[character.Class]
                         }
                     )
