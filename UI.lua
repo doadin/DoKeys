@@ -861,6 +861,7 @@ function addon:SetupOptions()
     addon.optionspanel = CreateFrame( "Frame", "DoKeysOptionsPanel", UIParent )
     addon.optionspanel.name = "DoKeys"
     InterfaceOptions_AddCategory(DoKeysOptionsPanel)
+
     local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     myCheckButton:SetPoint("TOPLEFT", 25, -10)
     myCheckButton:SetChecked(not self.db.profile.minimap.hide)
@@ -877,4 +878,20 @@ function addon:SetupOptions()
             end
         end
     )
+
+    local whoDatButton = CreateFrame("CheckButton", "DoKeysOptionswhoDatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
+    whoDatButton:SetPoint("TOPLEFT", 25, -40)
+    whoDatButton:SetChecked(_G.DoCharacters.whodat or false)
+    DoKeysOptionswhoDatCheck.Text:SetText("Print to Chat LFD Invite Details")
+    whoDatButton.tooltip = "Print to Chat LFD Invite Details."
+    whoDatButton:SetScript("OnClick",
+        function()
+            if _G.DoCharacters.whodat then
+                _G.DoCharacters.whodat = false
+            else
+                _G.DoCharacters.whodat = true
+            end
+        end
+    )
+
 end
