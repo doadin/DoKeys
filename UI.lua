@@ -668,7 +668,7 @@ local function GetTable()
                          WeeklyBest = character["mythicplus"]["keystone"].WeeklyBest or 0,
                          CurrentKeyLevel = character["mythicplus"]["keystone"].CurrentKeyLevel or 0,
                          CurrentKeyInstance = character["mythicplus"]["keystone"].CurrentKeyInstance  or "",
-                         AIL = character.avgItemLevelEquipped or 0,
+                         AIL = math.floor(character.avgItemLevelEquipped) or 0,
                          color = RAID_CLASS_COLORS[character.Class]
                         }
                     )
