@@ -22,7 +22,7 @@ local function OnEvent(_, _) --self, event
                         if ID == 180653 then
                             C_ChallengeMode.SlotKeystone()
                         end
-                        if ID == 187786 then
+                        if ID == 187786 or ID == 180653 then
                             _G.UseContainerItem(Bag, Slot)
                         end
                     end
