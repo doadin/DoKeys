@@ -1372,7 +1372,7 @@ local function RequestPartyKeys(_, event)
             --local unitInfo = openRaidLib and openRaidLib.GetUnitInfo(unitID and unitId)
             --local unitName, level, mapID, challengeMapID, classID, rating, mythicPlusMapID, classIconTexture, iconTexCoords, mapName, inMyParty, isOnline, isGuildMember = _G.unpack(unitTable)
             local allUnitsInfo = openRaidLib and openRaidLib.GetAllUnitsInfo()
-            for unitName, unitInfo in pairs(allUnitsInfo) do
+            for unitname, unitInfo in pairs(allUnitsInfo) do
                 local specId = unitInfo.specId
                 local specName = unitInfo.specName
                 local role = unitInfo.role
@@ -1386,7 +1386,7 @@ local function RequestPartyKeys(_, event)
                 local className = unitInfo.className
                 local unitName = unitInfo.name
                 local unitNameFull = unitInfo.nameFull
-                local keystoneInfo = openRaidLib.KeystoneInfoManager.GetKeystoneInfo(unitName, true)
+                local keystoneInfo = openRaidLib.KeystoneInfoManager.GetKeystoneInfo(unitname, true)
                 if type(_G.DoKeysPartyKeys) ~= "table" then
                     _G.DoKeysPartyKeys = {}
                 end
