@@ -186,7 +186,7 @@ local function SetupDB(_, event, one, _)
         local currentkeymapid = GetOwnedKeystoneChallengeMapID()
         local name = ""
         if type(currentkeymapid) == "number" then
-            name = C_ChallengeMode.GetMapUIInfo(currentkeymapid)
+            name = currentkeymapid and C_ChallengeMode.GetMapUIInfo(currentkeymapid)
         end
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyChestRewardLevel = C_MythicPlus.GetWeeklyChestRewardLevel() or 0
@@ -341,7 +341,7 @@ local function UpdateKeyStone(_, _)
     local name
     local keylevel
     if type(currentkeymapid) == "number" then
-        name = C_ChallengeMode.GetMapUIInfo(currentkeymapid)
+        name = currentkeymapid and C_ChallengeMode.GetMapUIInfo(currentkeymapid)
         keylevel = GetOwnedKeystoneLevel()
     end
     _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyInstance = name or ""
@@ -395,7 +395,7 @@ local function UpdateWeeklyBest(_, event, one, _, three)
     if event == "MYTHIC_PLUS_NEW_WEEKLY_RECORD" then
         local name
         if one then
-            name = C_ChallengeMode.GetMapUIInfo(one)
+            name = one and C_ChallengeMode.GetMapUIInfo(one)
         end
         local _, _, _, _, keystoneUpgradeLevels, _ = C_ChallengeMode.GetCompletionInfo()
         local weeklybest = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0
@@ -1117,7 +1117,7 @@ local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, 
             if type(_G.DoKeysPartyKeys) ~= "table" then
                 _G.DoKeysPartyKeys = {}
             end
-            _G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
+            _G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = KeyInstanceID and C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
     end
 end
@@ -1329,7 +1329,7 @@ local function OnTooltipSetUnit(self)
         for playername,keydata in pairs(_G.DoKeysPartyKeys) do
             if (playername) == nameRealm then
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
-                _G.GameTooltip:AddLine("Current Key: " .. tostring(C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID) or "") .. " " .. tostring(keydata.KeyLevel or ""), 1, 1, 1)
+                _G.GameTooltip:AddLine("Current Key: " .. tostring(keydata.KeyInstanceID and C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID) or "") .. " " .. tostring(keydata.KeyLevel or ""), 1, 1, 1)
                 _G.GameTooltip:Show()
             end
         end
@@ -1393,7 +1393,9 @@ local function RequestPartyKeys(_, event)
                 if type(_G.DoKeysPartyKeys[unitNameFull]) ~= "table" then
                     _G.DoKeysPartyKeys[unitNameFull] = {}
                 end
-                _G.DoKeysPartyKeys[unitNameFull] = {KeyInstanceID = keystoneInfo.mythicPlusMapID, KeyLevel = keystoneInfo.level, KeyInstance = keystoneInfo.mythicPlusMapID and C_ChallengeMode.GetMapUIInfo(keystoneInfo.mythicPlusMapID)}
+                if keystoneInfo.level and tonumber(keystoneInfo.level) > 0 then
+                    _G.DoKeysPartyKeys[unitNameFull] = {KeyInstanceID = keystoneInfo.mythicPlusMapID, KeyLevel = keystoneInfo.level, KeyInstance = keystoneInfo.mythicPlusMapID and C_ChallengeMode.GetMapUIInfo(keystoneInfo.mythicPlusMapID)}
+                end
            end
             --_G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
