@@ -1393,7 +1393,7 @@ local function RequestPartyKeys(_, event)
                 if type(_G.DoKeysPartyKeys[unitNameFull]) ~= "table" then
                     _G.DoKeysPartyKeys[unitNameFull] = {}
                 end
-                _G.DoKeysPartyKeys[unitNameFull] = {KeyInstanceID = keystoneInfo.mythicPlusMapID, KeyLevel = keystoneInfo.level, KeyInstance = C_ChallengeMode.GetMapUIInfo(keystoneInfo.mythicPlusMapID)}
+                _G.DoKeysPartyKeys[unitNameFull] = {KeyInstanceID = keystoneInfo.mythicPlusMapID, KeyLevel = keystoneInfo.level, KeyInstance = keystoneInfo.mythicPlusMapID and C_ChallengeMode.GetMapUIInfo(keystoneInfo.mythicPlusMapID)}
            end
             --_G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
