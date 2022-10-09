@@ -1425,6 +1425,25 @@ local function TrackKeyChange(_, event)
         end
     end
     if event == "CHALLENGE_MODE_COMPLETED" then
+        --for Bag = 0, NUM_BAG_SLOTS do
+        --    for Slot = 1, GetContainerNumSlots(Bag) do
+        --        local ID = GetContainerItemID(Bag, Slot)
+        --        if (ID and ID == 180653) then
+        --            local ItemLink = GetContainerItemLink(Bag, Slot)
+        --            local _,_,three = strsplit("|",ItemLink)
+        --            local NewKeyMapid
+        --            local NewKeyLevel
+        --            _,_,NewKeyMapid,NewKeyLevel = strsplit(":",ItemLink)
+        --            NewKeyMapid = tonumber(NewKeyMapid)
+        --            NewKeyLevel = tonumber(NewKeyLevel)
+        --            if tonumber(OldKeyMapid) ~= tonumber(NewKeyMapid) and tonumber(OldKeyLevel) ~= tonumber(NewKeyLevel) then
+        --                --print("Should Send New Key!")
+        --                SendChatMessage("New-Key: " .. DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
+        --            end
+        --            break
+        --        end
+        --    end
+        --end
         C_Timer.After(10, function()
             --print("OldKeyMapid: ", OldKeyMapid, "GetOwnedKeystoneChallengeMapID: ", GetOwnedKeystoneChallengeMapID())
             --print("OldKeyLevel: ", OldKeyLevel, "GetOwnedKeystoneLevel: ", GetOwnedKeystoneLevel())
@@ -1434,28 +1453,31 @@ local function TrackKeyChange(_, event)
             --if OldKeyLevel ~= GetOwnedKeystoneLevel()then
             --    print("old key level is not new key level")
             --end
-            --if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
-            --    --print("Should Send New Key!")
-            --    SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
-            --end
-
-            for Bag = 0, NUM_BAG_SLOTS do
-                for Slot = 1, GetContainerNumSlots(Bag) do
-                    local ID = GetContainerItemID(Bag, Slot)
-                    if (ID and ID == 180653) then
-                        local ItemLink = GetContainerItemLink(Bag, Slot)
-                        local _,_,three = strsplit("|",ItemLink)
-                        local NewKeyMapid
-                        local NewKeyLevel
-                        _,_,NewKeyMapid,NewKeyLevel = strsplit(":",ItemLink)
-                        if tonumber(OldKeyMapid) ~= tonumber(NewKeyMapid) and tonumber(OldKeyLevel) ~= tonumber(NewKeyLevel) then
-                            --print("Should Send New Key!")
-                            SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
-                        end
-                        break
-                    end
-                end
+            if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+                --print("Should Send New Key!")
+                --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
+                SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
             end
+
+            --for Bag = 0, NUM_BAG_SLOTS do
+            --    for Slot = 1, GetContainerNumSlots(Bag) do
+            --        local ID = GetContainerItemID(Bag, Slot)
+            --        if (ID and ID == 180653) then
+            --            local ItemLink = GetContainerItemLink(Bag, Slot)
+            --            local _,_,three = strsplit("|",ItemLink)
+            --            local NewKeyMapid
+            --            local NewKeyLevel
+            --            _,_,NewKeyMapid,NewKeyLevel = strsplit(":",ItemLink)
+            --            NewKeyMapid = tonumber(NewKeyMapid)
+            --            NewKeyLevel = tonumber(NewKeyLevel)
+            --            if tonumber(OldKeyMapid) ~= tonumber(NewKeyMapid) and tonumber(OldKeyLevel) ~= tonumber(NewKeyLevel) then
+            --                --print("Should Send New Key!")
+            --                SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
+            --            end
+            --            break
+            --        end
+            --    end
+            --end
 
             for Bag = 0, NUM_BAG_SLOTS do
                 for Slot = 1, GetContainerNumSlots(Bag) do
