@@ -89,6 +89,7 @@ FindAddonUsersFrame:RegisterEvent("BN_FRIEND_ACCOUNT_OFFLINE")
 local TrackKeyChangeFrame = CreateFrame("FRAME")
 TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_START")
 TrackKeyChangeFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+TrackKeyChangeFrame:RegisterEvent("ITEM_CHANGED")
 
 local TrackNumRunsCompletedFrame = CreateFrame("FRAME")
 TrackNumRunsCompletedFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
@@ -1406,7 +1407,7 @@ local OldKeyMapid
 local OldKeyLevel
 local OldTWKeyMapid
 local OldTWKeyLevel
-local function TrackKeyChange(_, event)
+local function TrackKeyChange(_, event, prevItem, newItem)
     if event == "CHALLENGE_MODE_START" then
         OldKeyMapid = GetOwnedKeystoneChallengeMapID()
         OldKeyLevel = GetOwnedKeystoneLevel()
@@ -1496,6 +1497,16 @@ local function TrackKeyChange(_, event)
                 end
             end
         end)
+    end
+    --
+    --"DevTools_Dump(|cffa335ee|Hitem:180653::::::::60:257::::6:17:166:18:17:19:9:20:11:21:3:22:131:::::|h[Mythic Keystone]|h|r)"
+    if event == "ITEM_CHANGED" then
+        --local _,olditemid = string.split(":",prevItem)
+        local _,newitemid = string.split(":",newItem)
+        if newitemid == "180653" then
+            SendChatMessage("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+            --print("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""}))
+        end
     end
 end
 
