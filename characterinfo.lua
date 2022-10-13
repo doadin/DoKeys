@@ -1499,14 +1499,16 @@ local function TrackKeyChange(_, event, prevItem, newItem)
         end)
     end
     --
-    --"DevTools_Dump(|cffa335ee|Hitem:180653::::::::60:257::::6:17:166:18:17:19:9:20:11:21:3:22:131:::::|h[Mythic Keystone]|h|r)"
-    if event == "ITEM_CHANGED" then
-        --local _,olditemid = string.split(":",prevItem)
-        local _,newitemid = string.split(":",newItem)
-        if newitemid == "180653" then
-            SendChatMessage("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
-            --print("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""}))
-        end
+    if event == "ITEM_CHANGED" and IsInInstance() then
+        C_Timer.After(10, function()
+            --"DevTools_Dump(|cffa335ee|Hitem:180653::::::::60:257::::6:17:166:18:17:19:9:20:11:21:3:22:131:::::|h[Mythic Keystone]|h|r)"
+            --local _,olditemid = string.split(":",prevItem)
+            local _,newitemid = string.split(":",newItem)
+            if newitemid == "180653" then
+                SendChatMessage("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+                --print("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""}))
+            end
+        end)
     end
 end
 
