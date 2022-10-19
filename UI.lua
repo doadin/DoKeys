@@ -51,7 +51,7 @@ end
 
 local function UpdateNextRewardLevel()
     local NextRewardLevel
-    if not _G.DoCharacters or _G.DoCharacters[realmgroupid] then return end
+    if not _G.DoCharacters or not _G.DoCharacters[realmgroupid] then return end
     local WB = _G.DoCharacters[realmgroupid][_G.UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 1
     if WB <= 0 then WB = 1 end
     local hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlusIncrease(WB)
@@ -623,7 +623,7 @@ eventframe:SetScript("OnEvent", GetAffixes)
 local function GetTable()
     local sttestdata = {}
     local characteri=0
-    if not _G.DoCharacters or _G.DoCharacters[realmgroupid] then return end
+    if not _G.DoCharacters or not _G.DoCharacters[realmgroupid] then return end
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
         local charname
         if _G.DoCharacters[realmgroupid][character].realm and _G.DoCharacters[realmgroupid][character].realm == realmName then
