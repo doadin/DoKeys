@@ -1618,7 +1618,10 @@ do
 
 	end
 
-	local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
+    local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
+    if not buttons then
+        return
+    end
 	for i = 1, #buttons do
 		local button = buttons[i]
 		local oldOnEnter = button.OnEnter
