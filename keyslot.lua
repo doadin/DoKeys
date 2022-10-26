@@ -1,8 +1,8 @@
 local CreateFrame = _G.CreateFrame
 local C_ChallengeMode = _G.C_ChallengeMode
 local ItemLocation = _G.ItemLocation
-local GetContainerNumSlots = _G.GetContainerNumSlots
-local GetContainerItemID = _G.GetContainerItemID
+local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots
+local GetContainerItemID = _G.C_Container.GetContainerItemID
 local NUM_BAG_SLOTS = _G.NUM_BAG_SLOTS
 
 local f = CreateFrame("Frame")

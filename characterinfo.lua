@@ -13,6 +13,9 @@ local UnitClass = _G.UnitClass
 local UnitLevel = _G.UnitLevel
 local C_Covenants = _G.C_Covenants
 local tinsert = _G.tinsert
+local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots
+local GetContainerItemID = _G.C_Container.GetContainerItemID
+local GetContainerItemLink = _G.C_Container.GetContainerItemLink
 local LibDeflate = _G.LibStub:GetLibrary("LibDeflate")
 local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
 
@@ -1337,7 +1340,8 @@ local function OnTooltipSetUnit(self)
     end
 end
 
-_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+--TODO
+--_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 
 local lastrunpartyrequest
 --local lastrunpartyrequesttimer
@@ -1618,7 +1622,7 @@ do
 
 	end
 
-    local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
+	local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
     if not buttons then
         return
     end
