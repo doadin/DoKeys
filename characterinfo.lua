@@ -13,9 +13,9 @@ local UnitClass = _G.UnitClass
 local UnitLevel = _G.UnitLevel
 local C_Covenants = _G.C_Covenants
 local tinsert = _G.tinsert
-local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots
-local GetContainerItemID = _G.C_Container.GetContainerItemID
-local GetContainerItemLink = _G.C_Container.GetContainerItemLink
+local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots and _G.C_Container.GetContainerItemID or _G.GetContainerNumSlots
+local GetContainerItemID = _G.C_Container.GetContainerItemID and _G.C_Container.GetContainerItemID or _G.GetContainerItemID
+local GetContainerItemLink = _G.C_Container.GetContainerItemLink and _G.C_Container.GetContainerItemLink or _G.GetContainerItemLink
 local LibDeflate = _G.LibStub:GetLibrary("LibDeflate")
 local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
 
@@ -28,7 +28,7 @@ local wipe = _G.wipe
 local strsplit = _G.strsplit
 local GetGuildInfo = _G.GetGuildInfo
 
-local DoKeysCurrentMaxLevel = _G.GetMaxLevelForExpansionLevel(_G.GetMaximumExpansionLevel())
+local DoKeysCurrentMaxLevel = 60
 
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -54,7 +54,7 @@ local DoKeysGearFrame = CreateFrame("FRAME")
 DoKeysGearFrame:RegisterEvent("BAG_UPDATE")
 DoKeysGearFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
-local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME", "DoKeysTrackGuildKeysFrame")
+local DoKeysTrackGuildKeysFrame = CreateFrame("FRAME")
 DoKeysTrackGuildKeysFrame:RegisterEvent("CHAT_MSG_ADDON")
 
 local DoKeysRequestAKKMGuildKeysFrame = CreateFrame("FRAME")
@@ -1341,7 +1341,7 @@ local function OnTooltipSetUnit(self)
 end
 
 --TODO
---_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 
 local lastrunpartyrequest
 --local lastrunpartyrequesttimer
@@ -1623,18 +1623,18 @@ do
 	end
 
 	local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
-    if not buttons then
-        return
+    if buttons then
+        for i = 1, #buttons do
+            local button = buttons[i]
+            local oldOnEnter = button.OnEnter
+            function button:OnEnter()
+                oldOnEnter(self)
+                OnEnter(self)
+            end
+            button:HookScript("OnEnter", OnEnter)
+        end
     end
-	for i = 1, #buttons do
-		local button = buttons[i]
-		local oldOnEnter = button.OnEnter
-		function button:OnEnter()
-			oldOnEnter(self)
-			OnEnter(self)
-		end
-		button:HookScript("OnEnter", OnEnter)
-	end
+
 
 	FriendsTooltip:HookScript('OnHide', OnHide)
 	--FriendsTooltip:HookScript('OnShow', OnEnter)

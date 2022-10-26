@@ -38,7 +38,7 @@ local lastrunbnwhisperhelp
 local lastrunguilddookies
 local lastrunpartydookies
 
-local DoKeysCurrentMaxLevel = _G.GetMaxLevelForExpansionLevel(_G.GetMaximumExpansionLevel())
+local DoKeysCurrentMaxLevel = 60
 
 local realmgroupid
 for i = 1, #connectionData do
