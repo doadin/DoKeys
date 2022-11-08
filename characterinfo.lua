@@ -96,6 +96,7 @@ TrackKeyChangeFrame:RegisterEvent("ITEM_CHANGED")
 
 local TrackNumRunsCompletedFrame = CreateFrame("FRAME")
 TrackNumRunsCompletedFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+TrackNumRunsCompletedFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
 
 local realmName = GetRealmName()
 
@@ -1537,7 +1538,15 @@ local function TrackNumRunsCompleted()
     else
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] = {}
     end
-    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0) + 1
+    --_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0) + 1
+    local count = 0
+    local runHistory = C_MythicPlus.GetRunHistory(false,false)
+    for i,run in pairs(runHistory) do
+        if run.thisWeek == true then
+            count = count + 1
+        end
+    end
+    _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = count
 end
 
 -- Friend's list Hooking
