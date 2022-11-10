@@ -66,10 +66,10 @@ local function UpdateNextRewardLevel()
     end
 end
 
-local UpdateRewardFrame = CreateFrame("Frame")
-UpdateRewardFrame:RegisterEvent("WEEKLY_REWARDS_UPDATE")
-UpdateRewardFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
-UpdateRewardFrame:SetScript("OnEvent", UpdateReward)
+--local UpdateRewardFrame = CreateFrame("Frame")
+--UpdateRewardFrame:RegisterEvent("WEEKLY_REWARDS_UPDATE")
+--UpdateRewardFrame:RegisterEvent("LOADING_SCREEN_DISABLED")
+--UpdateRewardFrame:SetScript("OnEvent", UpdateReward)
 
 local columnHeaders
 do
@@ -616,9 +616,9 @@ local function GetAffixes(_,event, one, two)
     end)
 end
 
-local eventframe = CreateFrame("Frame")
-eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
-eventframe:SetScript("OnEvent", GetAffixes)
+--local eventframe = CreateFrame("Frame")
+--eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
+--eventframe:SetScript("OnEvent", GetAffixes)
 
 local function GetTable()
     local sttestdata = {}
@@ -777,8 +777,8 @@ OnClick = function(clickedframe, button)
                             MainFrame:Hide()
                         else
                             GetTable()
-                            UpdateNextRewardLevel()
-                            GetAffixes()
+                            --UpdateNextRewardLevel()
+                            --GetAffixes()
                             MainFrame:Show()
                         end
                     end
@@ -852,8 +852,8 @@ function addon:OpenUI(one, two, three, four)
             MainFrame:Hide()
         else
             GetTable()
-            UpdateNextRewardLevel()
-            GetAffixes()
+            --UpdateNextRewardLevel()
+            --GetAffixes()
             MainFrame:Show()
         end
     end
