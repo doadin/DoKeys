@@ -1341,8 +1341,8 @@ local function OnTooltipSetUnit(self)
     end
 end
 
---TODO
-_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+--_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, OnTooltipSetUnit)
 
 local lastrunpartyrequest
 --local lastrunpartyrequesttimer
