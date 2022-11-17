@@ -4,6 +4,7 @@ local ItemLocation = _G.ItemLocation
 local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots or _G.GetContainerNumSlots
 local GetContainerItemID = _G.C_Container.GetContainerItemID or _G.GetContainerItemID
 local NUM_BAG_SLOTS = _G.NUM_BAG_SLOTS
+local UseContainerItem = _G.C_Container.UseContainerItem
 
 local f = CreateFrame("Frame")
 
