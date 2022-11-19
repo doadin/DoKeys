@@ -5,6 +5,8 @@ local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots or _G.GetContai
 local GetContainerItemID = _G.C_Container.GetContainerItemID or _G.GetContainerItemID
 local NUM_BAG_SLOTS = _G.NUM_BAG_SLOTS
 local UseContainerItem = _G.C_Container.UseContainerItem
+local SlotKeystone = _G.C_ChallengeMode.SlotKeystone
+local CanUseKeystoneInCurrentMap = _G.C_ChallengeMode.CanUseKeystoneInCurrentMap
 
 local f = CreateFrame("Frame")
 
@@ -18,13 +20,13 @@ local function OnEvent(_, _) --self, event
                 if (ID and ID == 180653) or (ID and ID == 187786) then
                     --return UseContainerItem(Bag, Slot)
                     location = ItemLocation:CreateFromBagAndSlot(Bag, Slot)
-                    canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(location)
+                    canUse = CanUseKeystoneInCurrentMap(location)
                     if canUse then
                         if ID == 180653 then
-                            C_ChallengeMode.SlotKeystone()
+                            SlotKeystone()
                         end
                         if ID == 187786 or ID == 180653 then
-                            _G.UseContainerItem(Bag, Slot)
+                            UseContainerItem(Bag, Slot)
                         end
                     end
                 end
