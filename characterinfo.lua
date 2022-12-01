@@ -28,7 +28,7 @@ local wipe = _G.wipe
 local strsplit = _G.strsplit
 local GetGuildInfo = _G.GetGuildInfo
 
-local DoKeysCurrentMaxLevel = 60
+local DoKeysCurrentMaxLevel = 70
 
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
