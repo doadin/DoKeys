@@ -357,67 +357,67 @@ do
                 --format = 'string',
             },
             {
-                name = 'ID',
+                name = 'HoV',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'ID',
+                index = 'HoV',
                 --format = 'string',
             },
             {
-                name = 'RtKU',
+                name = 'CoS',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'RtKU',
+                index = 'CoS',
                 --format = 'string',
             },
             {
-                name = 'RtKL',
+                name = 'TAV',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'RtKL',
+                index = 'TAV',
                 --format = 'string',
             },
             {
-                name = 'OMW',
+                name = 'TotJS',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'OMW',
+                index = 'TotJS',
                 --format = 'string',
             },
             {
-                name = 'OMJ',
+                name = 'AA',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'OMJ',
+                index = 'AA',
                 --format = 'string',
             },
             {
-                name = 'GD',
+                name = 'RLP',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'GD',
+                index = 'RLP',
                 --format = 'string',
             },
             {
-                name = 'TazSoW',
+                name = 'TNO',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'TSoW',
+                index = 'TNO',
                 --format = 'string',
             },
             {
-                name = 'TazSG',
+                name = 'SBG',
                 width = 100,
                 align = 'RIGHT',
                 defaultsort = 'dsc',
-                index = 'TSG',
+                index = 'SBG',
                 --format = 'string',
             },
         }
@@ -723,25 +723,25 @@ local function SeasonBestsGetTable()
         for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
             if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
             and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]
-            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Valor"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Court of Stars"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Azure Vault"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Temple of the Jade Serpent"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Algeth'ar Academy"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ruby Life Pools"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Nokhud Offensive"]
+            and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Shadowmoon Burial Grounds"]
             then
                 tinsert(SeasonBestsstdata,SeasonBesti+1,
                     { name = _G.DoCharacters[realmgroupid][character].name,
-                      ID = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Iron Docks"]["Fortified"][1] or 0) ,
-                      RtKU = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Upper"]["Fortified"][1] or 0) ,
-                      RtKL = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Return to Karazhan: Lower"]["Fortified"][1] or 0) ,
-                      OMW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Workshop"]["Fortified"][1] or 0) ,
-                      OMJ = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Operation: Mechagon - Junkyard"]["Fortified"][1] or 0) ,
-                      GD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grimrail Depot"]["Fortified"][1] or 0) ,
-                      TSoW = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: Streets of Wonder"]["Fortified"][1] or 0) ,
-                      TSG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Tazavesh: So'leah's Gambit"]["Fortified"][1] or 0) ,
+                      HoV = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Valor"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Valor"]["Fortified"][1] or 0) ,
+                      CoS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Court of Stars"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Court of Stars"]["Fortified"][1] or 0) ,
+                      TAV = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Azure Vault"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Azure Vault"]["Fortified"][1] or 0) ,
+                      TotJS = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Temple of the Jade Serpent"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Temple of the Jade Serpent"]["Fortified"][1] or 0) ,
+                      AA = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Algeth'ar Academy"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Algeth'ar Academy"]["Fortified"][1] or 0) ,
+                      RLP = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ruby Life Pools"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ruby Life Pools"]["Fortified"][1] or 0) ,
+                      TNO = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Nokhud Offensive"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Nokhud Offensive"]["Fortified"][1] or 0) ,
+                      SBG = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Shadowmoon Burial Grounds"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Shadowmoon Burial Grounds"]["Fortified"][1] or 0) ,
                       color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
                     }
                 )
