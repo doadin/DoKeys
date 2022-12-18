@@ -1459,10 +1459,14 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             --if OldKeyLevel ~= GetOwnedKeystoneLevel()then
             --    print("old key level is not new key level")
             --end
-            if tonumber(OldKeyMapid) ~= tonumber(GetOwnedKeystoneChallengeMapID()) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
-                --print("Should Send New Key!")
-                --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
-                SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+            local newkeymapid = GetOwnedKeystoneChallengeMapID()
+            local newkeylevel = GetOwnedKeystoneLevel()
+            if (OldKeyMapid and newkeymapid and OldKeyLevel and newkeylevel) then
+                if tonumber(OldKeyMapid) ~= tonumber(newkeymapid) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+                    --print("Should Send New Key!")
+                    --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
+                    SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+                end
             end
 
             --for Bag = 0, NUM_BAG_SLOTS do
@@ -1494,7 +1498,7 @@ local function TrackKeyChange(_, event, prevItem, newItem)
                         local NewTWKeyMapid
                         local NewTWKeyLevel
                         _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
-                        if tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
+                        if OldTWKeyMapid and tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
                             SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
                         end
                         break
