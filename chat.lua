@@ -69,6 +69,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
+                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
                 if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
 	                link = string.format(
@@ -80,8 +81,9 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
+                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
-                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 10 then
+                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 9 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -92,6 +94,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
+                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
                 if data.CurrentKeyLevel >= 10 then
 	                link = string.format(
@@ -166,6 +169,7 @@ function DoKeysCreateLink(data,keytype)
 	    	twlink = "None"
 	    end
     end
+
     if keytype == "normal" and type(link) == "string" and link ~= "" then
         return link
     end
