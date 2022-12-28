@@ -62,39 +62,42 @@ function DoKeysCreateLink(data,keytype)
             if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and type(AffixTable) == "table" then
                 if data.CurrentKeyLevel <= 3 then
 	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
 	                	data.CurrentKeyLevel, --data.level
                         AffixTable[1].id or 0,
+                        0,
+                        0,
+                        0,
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
-                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
                 if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
 	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
 	                	data.CurrentKeyLevel, --data.level
                         AffixTable[1].id or 0,
                         AffixTable[2].id or 0,
+                        0,
+                        0,
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
-                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
                 if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 9 then
 	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
 	                	data.CurrentKeyLevel, --data.level
                         AffixTable[1].id or 0,
                         AffixTable[2].id or 0,
                         AffixTable[3].id or 0,
+                        0,
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
 	                )
-                    link = "Keystone: " .. data.CurrentKeyInstance .. "(" .. data.CurrentKeyLevel .. ")"
                 end
                 if data.CurrentKeyLevel >= 10 then
 	                link = string.format(
@@ -120,33 +123,39 @@ function DoKeysCreateLink(data,keytype)
             if data.CurrentTWKeyID and data.CurrentTWKeyLevel and data.CurrentTWKeyInstanceName and type(AffixTable) == "table" then
                 if tonumber(data.CurrentTWKeyLevel) <= 3 then
 	                twlink = string.format(
-	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.CurrentTWKeyID or 0, --data.mapId
 	                	data.CurrentTWKeyLevel, --data.level
                         _G.DoCharacters.CurrentTWKeyAffix1 or 0,
+                        0,
+                        0,
+                        0,
 	                	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
 	                	data.CurrentTWKeyLevel --data.level
 	                )
                 end
                 if tonumber(data.CurrentTWKeyLevel)>= 4 and data.CurrentKeyLevel <= 6 then
 	                twlink = string.format(
-	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.CurrentTWKeyID or 0, --data.mapId
 	                	data.CurrentTWKeyLevel, --data.level
                         _G.DoCharacters.CurrentTWKeyAffix1 or 0,
                         _G.DoCharacters.CurrentTWKeyAffix2 or 0,
+                        0,
+                        0,
 	                	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
 	                	data.CurrentTWKeyLevel --data.level
 	                )
                 end
                 if tonumber(data.CurrentTWKeyLevel) >= 7 and data.CurrentKeyLevel <= 10 then
 	                twlink = string.format(
-	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	                	'|cffa335ee|Hkeystone:187786:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.CurrentTWKeyID or 0, --data.mapId
 	                	data.CurrentTWKeyLevel, --data.level
                         _G.DoCharacters.CurrentTWKeyAffix1 or 0,
                         _G.DoCharacters.CurrentTWKeyAffix2 or 0,
                         _G.DoCharacters.CurrentTWKeyAffix3 or 0,
+                        0,
 	                	data.CurrentTWKeyInstanceName, --data.mapNamePlain or data.mapName
 	                	data.CurrentTWKeyLevel --data.level
 	                )
