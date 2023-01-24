@@ -565,7 +565,7 @@ StdUi:GlueTop(AffixHeading, MainFrame, 0, -450)
 
 local function GetAffixes(_,event, one, two)
     local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
-    if not CurrentAffixes then C_Timer.After(1, GetAffixes) return end
+    if not CurrentAffixes then return end
     local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
     local AffixOne = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixOne:SetNormalTexture(AffixOnefiledataid)
@@ -616,9 +616,9 @@ local function GetAffixes(_,event, one, two)
     end)
 end
 
---local eventframe = CreateFrame("Frame")
---eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
---eventframe:SetScript("OnEvent", GetAffixes)
+local eventframe = CreateFrame("Frame")
+eventframe:RegisterEvent("MYTHIC_PLUS_CURRENT_AFFIX_UPDATE")
+eventframe:SetScript("OnEvent", GetAffixes)
 
 local function GetTable()
     local sttestdata = {}
