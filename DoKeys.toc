@@ -1,5 +1,5 @@
-## Interface: 100002
-## Interface-Retail: 100002
+## Interface: 100005
+## Interface-Retail: 100005
 ## Title: DoKeys
 ## Version: @project-version@
 
