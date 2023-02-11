@@ -566,7 +566,7 @@ local function SendGuildKeys(style, prefix)
                 text = "sync5 "
                 for i=1,4 do
                     if testtable[i] then
-                        if testtable[i].level == 60 then
+                        if testtable[i].level == 70 then
                             text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
                         end
                     end
@@ -583,7 +583,7 @@ local function SendGuildKeys(style, prefix)
                 text = "sync5 "
                 for i=1,4 do
                     if testtable[i] then
-                        if testtable[i].level == 60 then
+                        if testtable[i].level == 70 then
                             text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. ":" .. testtable[i].avgItemLevelEquipped .. "_"
                         end
                     end
@@ -1071,7 +1071,7 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
                 text = "sync4 "
                 for i=1,4 do
                     if testtable[i] then
-                        if testtable[i].level == 60 then
+                        if testtable[i].level == 70 then
                             text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
                         end
                     end
