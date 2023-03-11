@@ -41,6 +41,7 @@ DoKeysKeyStoneTrackingFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("BAG_UPDATE")
 DoKeysKeyStoneTrackingFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+DoKeysKeyStoneTrackingFrame:RegisterEvent("ITEM_CHANGED")
 
 local DoKeysKeyStoneWeeklyBestFrame = CreateFrame("FRAME")
 DoKeysKeyStoneWeeklyBestFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
