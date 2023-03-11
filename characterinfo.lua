@@ -375,14 +375,14 @@ local function UpdateKeyStone(_, _)
     local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
     if isAstralKeysRegistered and isGuildMember() then
         if _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class and _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].WeeklyBest and _G.DoCharacters.Week then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
         end
     end
 
     local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
     if DokeysRegistered and isGuildMember() then
         if _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class and _G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].WeeklyBest and _G.DoCharacters.Week then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
+            C_ChatInfo.SendAddonMessage('DoKeys', 'updateV8 ' .. UnitName("player") .. "-" .. GetRealmName() .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player")  .. "-" .. GetRealmName()].class) .. ":" .. (currentkeymapid or 0) .. ":" .. (GetOwnedKeystoneLevel() or 0) .. ":" .. (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0) .. ":" .. _G.DoCharacters.Week .. ":" .. "1", 'GUILD')
         end
     end
     --lasttimesendupdatekeys = _G.GetTime()
@@ -424,11 +424,11 @@ local function UpdateWeeklyBest(_, event, one, _, three)
         end
         local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
         if isAstralKeysRegistered and isGuildMember() then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'AstralKeys', 'updateWeekly ' .. three, 'GUILD')
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'updateWeekly ' .. three, 'GUILD')
         end
         local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if DokeysRegistered and isGuildMember() then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'DoKeys', 'updateWeekly ' .. three, 'GUILD')
+            C_ChatInfo.SendAddonMessage('DoKeys', 'updateWeekly ' .. three, 'GUILD')
         end
     end
 end
@@ -513,13 +513,13 @@ local function RequestGuildKeys(_, event)
         local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
         local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
         if isAstralKeysRegistered then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'AstralKeys', 'request', 'GUILD')
+            C_ChatInfo.SendAddonMessage('AstralKeys', 'request', 'GUILD')
         end
         if isKeystoneManagerRegistered then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'KeystoneManager', 'request', 'GUILD')
+            C_ChatInfo.SendAddonMessage('KeystoneManager', 'request', 'GUILD')
         end
         if DokeysRegistered then
-            ChatThrottleLib:SendAddonMessage("NORMAL",'DoKeys', 'request', 'GUILD')
+            C_ChatInfo.SendAddonMessage('DoKeys', 'request', 'GUILD')
         end
     end
 end
@@ -574,7 +574,7 @@ local function SendGuildKeys(style, prefix)
                 end
                 local isAstralKeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("AstralKeys")
                 if isAstralKeysRegistered then
-                    ChatThrottleLib:SendAddonMessage("NORMAL","AstralKeys", text, "GUILD")
+                    C_ChatInfo.SendAddonMessage("AstralKeys", text, "GUILD")
                 end
             end
         end
@@ -591,7 +591,7 @@ local function SendGuildKeys(style, prefix)
                 end
                 local DokeysRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("DoKeys")
                 if DokeysRegistered then
-                    ChatThrottleLib:SendAddonMessage("NORMAL","DoKeys", text, 'GUILD')
+                    C_ChatInfo.SendAddonMessage("DoKeys", text, 'GUILD')
                 end
             end
         end
@@ -631,7 +631,7 @@ local function SendGuildKeys(style, prefix)
         local isKeystoneManagerRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("KeystoneManager")
         if isKeystoneManagerRegistered then
             local KeystoneManagerDataToSend = CompressAndEncode(KeystoneManagerSendTable)
-            ChatThrottleLib:SendAddonMessage("NORMAL","KeystoneManager", KeystoneManagerDataToSend, 'GUILD')
+            C_ChatInfo.SendAddonMessage("KeystoneManager", KeystoneManagerDataToSend, 'GUILD')
         end
     end
     lasttimesendkeys = _G.GetTime()
@@ -1114,7 +1114,7 @@ local function TrackPartyKeys(_, event, prefix, text, channel, sender, _, _, _, 
     if prefix == "DoKeys" then
         if text == "PartyRequest" then
             local bName , bRealm = UnitName("player"), GetRealmName()
-            ChatThrottleLib:SendAddonMessage("NORMAL","DoKeys","PARTYKEY" .. " " .. tostring(UnitName("player")) .. "-" .. tostring(GetRealmName()) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
+            C_ChatInfo.SendAddonMessage("DoKeys","PARTYKEY" .. " " .. tostring(UnitName("player")) .. "-" .. tostring(GetRealmName()) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].currentkeymapid) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].CurrentKeyLevel) .. ":" .. tostring(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest), "PARTY")
         end
         if method == "PARTYKEY" then
             local _,KeyData = strsplit(" ", text)
@@ -1370,7 +1370,7 @@ local function RequestPartyKeys(_, event)
     end
 
     if nummembers > 0 then
-        ChatThrottleLib:SendAddonMessage("NORMAL","DoKeys", "PartyRequest", "PARTY")
+        C_ChatInfo.SendAddonMessage("DoKeys", "PartyRequest", "PARTY")
         local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0")
         for i=1,_G.GetNumGroupMembers() do
             local sentRequest = openRaidLib and openRaidLib.RequestAllData()
