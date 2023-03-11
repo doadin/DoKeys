@@ -1544,7 +1544,7 @@ local function TrackNumRunsCompleted()
     end
     --_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0) + 1
     local count = 0
-    local runHistory = C_MythicPlus.GetRunHistory(false,false)
+    local runHistory = C_MythicPlus.GetRunHistory(false,true)
     for i,run in pairs(runHistory) do
         if run.thisWeek == true then
             count = count + 1
