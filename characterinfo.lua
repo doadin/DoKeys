@@ -318,16 +318,13 @@ local function SetupDB(_, event, one, _)
         end
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].GuildName = isGuildMember() and GetGuildInfo("player") or "false"
     end
-    if isAstralKeysRegistered then
-    else
+    if not isAstralKeysRegistered then
         C_ChatInfo.RegisterAddonMessagePrefix("AstralKeys")
     end
-    if isKeystoneManagerRegistered then
-    else
+    if not isKeystoneManagerRegistered then
         C_ChatInfo.RegisterAddonMessagePrefix("KeystoneManager")
     end
-    if DokeysRegistered then
-    else
+    if not DokeysRegistered then
         C_ChatInfo.RegisterAddonMessagePrefix("DoKeys")
     end
 end
