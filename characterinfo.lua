@@ -1528,106 +1528,6 @@ local function TrackNumRunsCompleted()
     _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = count
 end
 
--- Friend's list Hooking
-do
-    for i = 1, 5 do
-		local textString = FriendsTooltip:CreateFontString('FriendsTooltipDoKeysInfo' .. i, 'ARTWORK', 'FriendsFont_Small')
-		textString:SetJustifyH('LEFT')
-		textString:SetSize(168, 0)
-		textString:SetTextColor(0.486, 0.518, 0.541)
-	end
-	local OnEnter, OnHide
-    local lastrunonenter
-	function OnEnter(self)
-        if type(lastrunonenter) == "number" then
-            local diff = _G.GetTime() - lastrunonenter
-            if diff < 1 then return end
-        end
-		if not self.id then return end -- Friend Groups adds fake units with no ide for group heeaders
-		if not FriendsTooltip.maxWidth then return end -- Why? Who knows
-
-		local left = FRIENDS_TOOLTIP_MAX_WIDTH - FRIENDS_TOOLTIP_MARGIN_WIDTH - FriendsTooltipDoKeysInfo1:GetWidth()
-		local stringShown = false
-
-		for gameIndex = 1, C_BattleNet.GetFriendNumGameAccounts(self.id) do
-			if gameIndex > FRIENDS_TOOLTIP_MAX_GAME_ACCOUNTS then break end -- Blizzard only wrote lines for 5 game indices
-			local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(self.id, gameIndex)
-            local accountInfo = C_BattleNet.GetFriendAccountInfo(self.id)
-			local characterNameString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Name']
-			local gameInfoString = _G['FriendsTooltipGameAccount' .. gameIndex .. 'Info']
-			local doKeyString = _G['FriendsTooltipDoKeysInfo' .. gameIndex]
-
-			if (gameAccountInfo) and (gameAccountInfo.clientProgram == BNET_CLIENT_WOW) and (gameAccountInfo.wowProjectID == 1) then -- They are playing retail WoW
-				if gameAccountInfo.gameAccountID then
-					local realmName
-					if gameAccountInfo.realmName then
-						realmName = gameAccountInfo.realmName
-					elseif gameAccountInfo.realmDisplayName then
-						realmName = gameAccountInfo.realmDisplayName:gsub('%s+', '')
-					elseif gameAccountInfo.richPresence and gameAccountInfo.richPresence:find('-') then
-						realmName = gameAccountInfo.richPresence:sub(gameAccountInfo.richPresence:find('-') + 1, -1):gsub('%s+', '') -- Character - Realm Name stripped down to RealmName
-					else
-						-- I really don't know what is going on with their API....
-					end
-					if realmName then
-						local fullName = gameAccountInfo.characterName .. '-' .. realmName
-                        local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
-						if _G.DoKeysBNETFriendsKeys and _G.DoKeysBNETFriendsKeys[btag] and _G.DoKeysBNETFriendsKeys[btag][fullName] then
-							local keyLevel, dungeonID = _G.DoKeysBNETFriendsKeys[btag][fullName].KeyLevel or 0, _G.DoKeysBNETFriendsKeys[btag][fullName].KeyInstance or ""
-                            if keyLevel and tonumber(keyLevel) > 0 then
-							    doKeyString:SetWordWrap(false)
-							    doKeyString:SetFormattedText("|cffffd200Current Keystone|r\n%d - %s", keyLevel, dungeonID)
-							    doKeyString:SetWordWrap(true)
-							    doKeyString:SetPoint('TOP', characterNameString, 'BOTTOM', 3, -4)
-							    gameInfoString:SetPoint('TOP', doKeyString, 'BOTTOM', 0, 0)
-							    doKeyString:Show()
-							    stringShown = true
-							    FriendsTooltip.height = FriendsTooltip:GetHeight() + doKeyString:GetStringHeight() + 8
-							    FriendsTooltip.maxWidth = max(FriendsTooltip.maxWidth, doKeyString:GetStringWidth() + left)
-                            else
-                                doKeyString:SetText('')
-                                doKeyString:Hide()
-                                gameInfoString:SetPoint('TOP', characterNameString, 'BOTTOM', 0, -4)
-                            end
-						else
-							doKeyString:SetText('')
-							doKeyString:Hide()
-							gameInfoString:SetPoint('TOP', characterNameString, 'BOTTOM', 0, -4)
-						end
-					end
-				end
-			else
-				doKeyString:SetText('')
-				doKeyString:Hide()
-			end
-		end
-		--FriendsTooltip:SetWidth(min(FRIENDS_TOOLTIP_MAX_WIDTH, FriendsTooltip.maxWidth + FRIENDS_TOOLTIP_MARGIN_WIDTH))
-		--FriendsTooltip:SetHeight(FriendsTooltip.height + (stringShown and 0 or (FRIENDS_TOOLTIP_MARGIN_WIDTH + 8)))
-        lastrunonenter = _G.GetTime()
-	end
-
-	function OnHide()
-
-	end
-
-	local buttons = FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame or FriendsListFrame and FriendsListFrame.buttons -- DF, retail and classic support
-    if buttons then
-        for i = 1, #buttons do
-            local button = buttons[i]
-            local oldOnEnter = button.OnEnter
-            function button:OnEnter()
-                oldOnEnter(self)
-                OnEnter(self)
-            end
-            button:HookScript("OnEnter", OnEnter)
-        end
-    end
-
-
-	FriendsTooltip:HookScript('OnHide', OnHide)
-	--FriendsTooltip:HookScript('OnShow', OnEnter)
-end
-
 
 DoKeysTrackGuildKeysFrame:SetScript("OnEvent", TrackGuildKeys)
 DoKeysRequestAKKMGuildKeysFrame:SetScript("OnEvent", RequestGuildKeys)
@@ -1639,9 +1539,9 @@ DoKeysGearFrame:SetScript("OnEvent", UpdateGear)
 UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
 UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
 C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
-RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
+--RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
 TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
-TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
-FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
+--TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
+--FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
 TrackKeyChangeFrame:SetScript("OnEvent", TrackKeyChange)
 TrackNumRunsCompletedFrame:SetScript("OnEvent", TrackNumRunsCompleted)
