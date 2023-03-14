@@ -522,8 +522,12 @@ local function RequestGuildKeys(_, event)
     end
 end
 
---local lasttimesendkeys
+local lasttimesendkeys
 local function SendGuildKeys(style, prefix)
+    if type(lasttimesendkeys) == "number" then
+        local diff = _G.GetTime() - lasttimesendkeys
+        if diff < 5 then return end
+    end
     if style == "AstralKeys" then
         local testtable = {}
         local AstralKeysi = 0
@@ -605,7 +609,7 @@ local function SendGuildKeys(style, prefix)
             C_ChatInfo.SendAddonMessage("KeystoneManager", KeystoneManagerDataToSend, 'GUILD')
         end
     end
-    --lasttimesendkeys = _G.GetTime()
+    lasttimesendkeys = _G.GetTime()
 end
 
 local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, _, _)
