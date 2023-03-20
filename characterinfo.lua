@@ -538,7 +538,7 @@ local function SendGuildKeys(style, prefix)
                AstralKeysi = AstralKeysi+1
                tinsert(testtable,AstralKeysi,value)
             end
-         end
+        end
         local text = ""
         if prefix == "AstralKeys" then
             while testtable[1] do
