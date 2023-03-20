@@ -1011,34 +1011,11 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
             local testtable = {}
             local AstralKeysi = 0
             for key, value in pairs(_G.DoCharacters[realmgroupid]) do
-                AstralKeysi = AstralKeysi+1
-                tinsert(testtable,AstralKeysi,value)
-            end
-            for i=1,#testtable do
-                local needtoremove = false
-                if not testtable[i].level then
-                    needtoremove = true
-                end
-                if not testtable[i].name  then
-                    needtoremove = true
-                end
-                if not testtable[i].realm  then
-                    needtoremove = true
-                end
-                if not testtable[i].class then
-                    needtoremove = true
-                end
-                if not testtable[i]["mythicplus"]["keystone"].currentkeymapid then
-                    needtoremove = true
-                end
-                if not testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel then
-                    needtoremove = true
-                end
-                if not testtable[i]["mythicplus"]["keystone"].WeeklyBest then
-                    needtoremove = true
-                end
-                if needtoremove then
-                    table.remove(testtable,i)
+                if (value["mythicplus"]["keystone"].currentkeymapid and value["mythicplus"]["keystone"].currentkeymapid ~= 0) or
+                (value["mythicplus"]["keystone"].CurrentKeyLevel and value["mythicplus"]["keystone"].CurrentKeyLevel ~= 0) or
+                (value["mythicplus"]["keystone"].WeeklyBest and value["mythicplus"]["keystone"].WeeklyBest ~= 0) then
+                   AstralKeysi = AstralKeysi+1
+                   tinsert(testtable,AstralKeysi,value)
                 end
             end
             local text = ""
@@ -1046,9 +1023,7 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
                 text = "sync4 "
                 for i=1,4 do
                     if testtable[i] then
-                        if testtable[i].level == 70 then
-                            text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
-                        end
+                        text = text .. testtable[i].name .. "-" .. testtable[i].realm .. ":" .. testtable[i].class .. ":" .. testtable[i]["mythicplus"]["keystone"].currentkeymapid .. ":" .. testtable[i]["mythicplus"]["keystone"].CurrentKeyLevel .. ":" .. testtable[i]["mythicplus"]["keystone"].WeeklyBest .. ":" .. _G.DoCharacters.Week .. ":1" .. "_"
                     end
                     table.remove(testtable, i)
                 end
