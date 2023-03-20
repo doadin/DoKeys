@@ -1518,6 +1518,7 @@ local function TrackNumRunsCompleted()
         _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"] = {}
     end
     --_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount = (_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].weeklyCount or 0) + 1
+    C_MythicPlus.RequestMapInfo()
     local count = 0
     local runHistory = C_MythicPlus.GetRunHistory(false,true)
     for i,run in pairs(runHistory) do
