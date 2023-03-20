@@ -1515,9 +1515,9 @@ DoKeysGearFrame:SetScript("OnEvent", UpdateGear)
 UpdateSeasonBestsFrame:SetScript("OnEvent", UpdateSeasonBests)
 UpdateCovenantFrame:SetScript("OnEvent", UpdateCovenant)
 C_MythicPlusEventFrame:SetScript("OnEvent", UpdateC_MythicPlusEvent)
---RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys)
+RequestPartyKeysFrame:SetScript("OnEvent", RequestPartyKeys) -- Potential Need Throttle
 TrackPartyKeysFrame:SetScript("OnEvent", TrackPartyKeys)
---TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends)
---FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers)
+TrackBNETKeysFrame:SetScript("OnEvent", TrackBNETFriends) -- Potential Need Throttle
+FindAddonUsersFrame:SetScript("OnEvent", FindAddonUsers) -- Potential Need Throttle
 TrackKeyChangeFrame:SetScript("OnEvent", TrackKeyChange)
 TrackNumRunsCompletedFrame:SetScript("OnEvent", TrackNumRunsCompleted)
