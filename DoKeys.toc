@@ -9,6 +9,7 @@
 ## SavedVariables: DoCharacters,DoKeysGuild,DoKeysDB,DoKeysUtility,DoKeysBNETFriendsKeys
 ## X-Curse-Project-ID: 554554
 
+## AddonCompartmentFunc: DoKeysOnAddonCompartmentClick
 ## IconTexture: Interface\Icons\spell_nature_moonkey
 
 Libs\LibStub\LibStub.lua

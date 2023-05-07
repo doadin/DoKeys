@@ -754,54 +754,39 @@ local function SeasonBestsGetTable()
 end
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("DoKeys", "AceConsole-3.0")
-local DoKeysLDB = LibStub("LibDataBroker-1.1"):NewDataObject("DoKeysLDB", {
-type = "launcher",
-text = "DoKeys",
-icon = "Interface\\Icons\\spell_nature_moonkey",
-OnTooltipShow = function(tooltip)
-    tooltip:SetText("DoKeys")
-    tooltip:AddLine("Left Click To Show Your Character/Guild Info", 1, 1, 1)
-    tooltip:AddLine("Right Click To Show Your Characters Season Bests", 1, 1, 1)
-    tooltip:Show()
-end,
-OnClick = function(clickedframe, button)
-                if button == "LeftButton" then
-                    local alt_key = IsAltKeyDown()
-                    local shift_key = IsShiftKeyDown()
-                    local control_key = IsControlKeyDown()
-                    if shift_key then
-                    elseif alt_key then
-                    elseif control_key then
-                    else
-                        if MainFrame:IsShown() then
-                            MainFrame:Hide()
-                        else
-                            GetTable()
-                            --UpdateNextRewardLevel()
-                            --GetAffixes()
-                            MainFrame:Show()
-                        end
-                    end
-                end
-                if button == "RightButton" then
-                    if SeasonBestsFrame:IsShown() then
-                        SeasonBestsFrame:Hide()
-                    else
-                        SeasonBestsGetTable()
-                        SeasonBestsFrame:Show()
-                    end
-                end
-          end,
-    }
-)
-local LibDBIcon = LibStub("LibDBIcon-1.0")
+
+function DoKeysOnAddonCompartmentClick(_, button)
+    if button == "LeftButton" then
+        local alt_key = IsAltKeyDown()
+        local shift_key = IsShiftKeyDown()
+        local control_key = IsControlKeyDown()
+        if shift_key then
+        elseif alt_key then
+        elseif control_key then
+        else
+            if MainFrame:IsShown() then
+                MainFrame:Hide()
+            else
+                GetTable()
+                --UpdateNextRewardLevel()
+                --GetAffixes()
+                MainFrame:Show()
+            end
+        end
+    end
+    if button == "RightButton" then
+        if SeasonBestsFrame:IsShown() then
+            SeasonBestsFrame:Hide()
+        else
+            SeasonBestsGetTable()
+            SeasonBestsFrame:Show()
+        end
+    end
+end
 
 function addon:OnInitialize()
     local defaults = {
         profile = {
-            minimap = {
-                 hide = false,
-            },
             chat = {
                 respondkeys = false,
             },
@@ -811,13 +796,7 @@ function addon:OnInitialize()
         }
     }
     self.db = LibStub("AceDB-3.0"):New("DoKeysDB", defaults, true)
-    LibDBIcon:Register("DoKeysIcon", DoKeysLDB, self.db.profile.minimap)
     self:RegisterChatCommand("dokeys", "OpenUI")
-    if self.db.profile.minimap.hide then
-        LibDBIcon:Hide("DoKeysIcon")
-    else
-        LibDBIcon:Show("DoKeysIcon")
-    end
     if self.db.global.dorework then
         if type(_G.DoCharacters) == "table" then
             wipe(_G.DoCharacters)
@@ -834,15 +813,6 @@ function addon:OnInitialize()
 end
 
 function addon:OpenUI(one, two, three, four)
-    if one == "toggle minimap" or one == "tm" then
-        if self.db.profile.minimap.hide then
-            LibDBIcon:Show("DoKeysIcon")
-            self.db.profile.minimap.hide = false
-        else
-            LibDBIcon:Hide("DoKeysIcon")
-            self.db.profile.minimap.hide = true
-        end
-    end
     if one == "options" or one == "o" then
         InterfaceOptionsFrame_OpenToCategory("DoKeys")
         InterfaceOptionsFrame_OpenToCategory("DoKeys")
@@ -864,25 +834,8 @@ function addon:SetupOptions()
     addon.optionspanel.name = "DoKeys"
     InterfaceOptions_AddCategory(DoKeysOptionsPanel)
 
-    local myCheckButton = CreateFrame("CheckButton", "DoKeysOptionsMinimapCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
-    myCheckButton:SetPoint("TOPLEFT", 25, -10)
-    myCheckButton:SetChecked(not self.db.profile.minimap.hide)
-    DoKeysOptionsMinimapCheck.Text:SetText("Show Minimap")
-    myCheckButton.tooltip = "Enable or disable showing minimap button."
-    myCheckButton:SetScript("OnClick",
-        function()
-            if self.db.profile.minimap.hide then
-                LibDBIcon:Show("DoKeysIcon")
-                self.db.profile.minimap.hide = false
-            else
-                LibDBIcon:Hide("DoKeysIcon")
-                self.db.profile.minimap.hide = true
-            end
-        end
-    )
-
     local whoDatButton = CreateFrame("CheckButton", "DoKeysOptionswhoDatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
-    whoDatButton:SetPoint("TOPLEFT", 25, -40)
+    whoDatButton:SetPoint("TOPLEFT", 25, -10)
     whoDatButton:SetChecked(_G.DoCharacters and _G.DoCharacters.whodat or false)
     DoKeysOptionswhoDatCheck.Text:SetText("Print to Chat LFD Invite Details")
     whoDatButton.tooltip = "Print to Chat LFD Invite Details."
