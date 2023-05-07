@@ -9,6 +9,8 @@
 ## SavedVariables: DoCharacters,DoKeysGuild,DoKeysDB,DoKeysUtility,DoKeysBNETFriendsKeys
 ## X-Curse-Project-ID: 554554
 
+## IconTexture: Interface\Icons\spell_nature_moonkey
+
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
