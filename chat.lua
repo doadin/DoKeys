@@ -86,7 +86,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyLevel --data.level
 	                )
                 end
-                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 9 then
+                if data.CurrentKeyLevel >= 7 then --and data.CurrentKeyLevel <= 9 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -99,19 +99,19 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyLevel --data.level
 	                )
                 end
-                if data.CurrentKeyLevel >= 10 then
-	                link = string.format(
-	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
-	                	data.currentkeymapid or 0, --data.mapId
-	                	data.CurrentKeyLevel, --data.level
-                        AffixTable[1].id or 0,
-                        AffixTable[2].id or 0,
-                        AffixTable[3].id or 0,
-                        AffixTable[4].id or 0,
-	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
-	                	data.CurrentKeyLevel --data.level
-	                )
-                end
+                --if data.CurrentKeyLevel >= 10 then
+	            --    link = string.format(
+	            --    	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
+	            --    	data.currentkeymapid or 0, --data.mapId
+	            --    	data.CurrentKeyLevel, --data.level
+                --        AffixTable[1].id or 0,
+                --        AffixTable[2].id or 0,
+                --        AffixTable[3].id or 0,
+                --        AffixTable[4].id or 0,
+	            --    	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
+	            --    	data.CurrentKeyLevel --data.level
+	            --    )
+                --end
 	        else
 	    	    link = "None"
             end
