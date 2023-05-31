@@ -60,7 +60,7 @@ function DoKeysCreateLink(data,keytype)
     if keytype == "normal" or "both" then
 	    if type(data) == "table" then
             if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and type(AffixTable) == "table" then
-                if data.CurrentKeyLevel <= 3 then
+                if data.CurrentKeyLevel <= 6 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -73,7 +73,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyLevel --data.level
 	                )
                 end
-                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
+                if data.CurrentKeyLevel >= 7 and data.CurrentKeyLevel <= 13 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -86,7 +86,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyLevel --data.level
 	                )
                 end
-                if data.CurrentKeyLevel >= 7 then --and data.CurrentKeyLevel <= 9 then
+                if data.CurrentKeyLevel >= 14 then --and data.CurrentKeyLevel <= 9 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
