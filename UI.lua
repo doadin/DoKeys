@@ -266,67 +266,67 @@ do
             --format = 'string',
         },
         {
-            name = 'BH',
+            name = 'DT',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'BH',
+            index = 'DT',
             --format = 'string',
         },
         {
-            name = 'HoI',
+            name = 'BRH',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'HoI',
+            index = 'BRH',
             --format = 'string',
         },
         {
-            name = 'Nelth',
+            name = 'DoIGF',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'Nelth',
+            index = 'DoIGF',
             --format = 'string',
         },
         {
-            name = 'ULoT',
+            name = 'DoIMR',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'ULoT',
+            index = 'DoIMR',
             --format = 'string',
         },
         {
-            name = 'FH',
+            name = 'WM',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'FH',
+            index = 'WM',
             --format = 'string',
         },
         {
-            name = 'TUR',
+            name = 'AD',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'TUR',
+            index = 'AD',
             --format = 'string',
         },
         {
-            name = 'NL',
+            name = 'EB',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'NL',
+            index = 'EB',
             --format = 'string',
         },
         {
-            name = 'TVP',
+            name = 'TotT',
             width = 100,
             align = 'RIGHT',
             defaultsort = 'dsc',
-            index = 'TVP',
+            index = 'TotT',
             --format = 'string',
         },
     }
@@ -599,25 +599,25 @@ local function SeasonBestsGetTable()
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
         if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
         and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Brackenhide Hollow"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Infusion"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharus"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Uldaman: Legacy of Tyr"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Freehold"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Underrot"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharion's Lair"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Vortex Pinnacle"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]
+        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]
         then
             tinsert(SeasonBestsstdata,SeasonBesti+1,
                 { name = _G.DoCharacters[realmgroupid][character].name,
-                  BH = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Brackenhide Hollow"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Brackenhide Hollow"]["Fortified"][1] or 0) ,
-                  HoI = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Infusion"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Halls of Infusion"]["Fortified"][1] or 0) ,
-                  Nelth = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharus"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharus"]["Fortified"][1] or 0) ,
-                  ULoT = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Uldaman: Legacy of Tyr"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Uldaman: Legacy of Tyr"]["Fortified"][1] or 0) ,
-                  FH = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Freehold"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Freehold"]["Fortified"][1] or 0) ,
-                  TUR = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Underrot"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Underrot"]["Fortified"][1] or 0) ,
-                  NL = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharion's Lair"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Neltharion's Lair"]["Fortified"][1] or 0) ,
-                  TVP = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Vortex Pinnacle"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Vortex Pinnacle"]["Fortified"][1] or 0) ,
+                  DT = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]["Fortified"][1] or 0) ,
+                  BRH = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]["Fortified"][1] or 0) ,
+                  DoIGF = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]["Fortified"][1] or 0) ,
+                  DoIMR = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]["Fortified"][1] or 0) ,
+                  WM = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]["Fortified"][1] or 0) ,
+                  AD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]["Fortified"][1] or 0) ,
+                  EB = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]["Fortified"][1] or 0) ,
+                  TotT = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]["Fortified"][1] or 0) ,
                   color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
                 }
             )
