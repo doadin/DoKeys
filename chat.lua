@@ -39,6 +39,7 @@ local lastrunguilddookies
 local lastrunpartydookies
 
 local DoKeysCurrentMaxLevel = 70
+local maxVaultLevel = 18
 
 local realmgroupid
 for i = 1, #connectionData do
@@ -415,7 +416,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
                             end
-                            if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
+                            if v["mythicplus"]["keystone"].WeeklyBest < maxVaultLevel or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "GUILD")
                                 count = count + 1
                             end
@@ -439,7 +440,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
                             end
-                            if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
+                            if v["mythicplus"]["keystone"].WeeklyBest < maxVaultLevel or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "OFFICER")
                                 count = count + 1
                             end
@@ -463,7 +464,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
                             end
-                            if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
+                            if v["mythicplus"]["keystone"].WeeklyBest < maxVaultLevel or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "PARTY")
                                 count = count + 1
                             end
@@ -487,7 +488,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
                             end
-                            if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
+                            if v["mythicplus"]["keystone"].WeeklyBest < maxVaultLevel or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or ""), "WHISPER", nil, sender)
                                 count = count + 1
                             end
@@ -512,7 +513,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
                             end
-                            if v["mythicplus"]["keystone"].WeeklyBest < 15 or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
+                            if v["mythicplus"]["keystone"].WeeklyBest < maxVaultLevel or (v["mythicplus"]["keystone"].WeeklyBest == 15 and v["mythicplus"]["keystone"].WeeklyBestLevelTimed == "Not In Time" ) then --if tonumber(weeklybest) < 15 then
                                 BNSendWhisper(bnSenderID, message)
                                 count = count + 1
                             end
