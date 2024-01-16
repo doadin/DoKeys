@@ -1362,14 +1362,10 @@ local function RequestPartyKeys(_, event)
     end
 end
 
-local OldKeyMapid
-local OldKeyLevel
-local OldTWKeyMapid
-local OldTWKeyLevel
 local function TrackKeyChange(_, event, prevItem, newItem)
     if event == "CHALLENGE_MODE_START" then
-        OldKeyMapid = GetOwnedKeystoneChallengeMapID()
-        OldKeyLevel = GetOwnedKeystoneLevel()
+        _G.DoKeys.OldKeyMapid = GetOwnedKeystoneChallengeMapID()
+        _G.DoKeys.OldKeyLevel = GetOwnedKeystoneLevel()
         --print("OldKeyMapid: ", OldKeyMapid)
         --print("OldKeyLevel: ", OldKeyLevel)
         for Bag = 0, NUM_BAG_SLOTS do
@@ -1378,11 +1374,14 @@ local function TrackKeyChange(_, event, prevItem, newItem)
                 if (ID and ID == 187786) then
                     local ItemLink = GetContainerItemLink(Bag, Slot)
                     local _,_,three = strsplit("|",ItemLink)
-                    _,OldTWKeyMapid,_,OldTWKeyLevel = strsplit(":",ItemLink)
+                    --_,OldTWKeyMapid,_,OldTWKeyLevel = strsplit(":",ItemLink)
+                    _G.DoKeys.OldTWKeyMapid = select(2, strsplit(":",ItemLink))
+                    _G.DoKeys.OldTWKeyLevel = select(4, strsplit(":",ItemLink))
                     break
                 end
             end
         end
+        C_AddOns.SaveAddOns()
     end
     if event == "CHALLENGE_MODE_COMPLETED" then
         --for Bag = 0, NUM_BAG_SLOTS do
@@ -1415,8 +1414,8 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             --end
             local newkeymapid = GetOwnedKeystoneChallengeMapID()
             local newkeylevel = GetOwnedKeystoneLevel()
-            if (OldKeyMapid and newkeymapid and OldKeyLevel and newkeylevel) then
-                if tonumber(OldKeyMapid) ~= tonumber(newkeymapid) and tonumber(OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+            if (_G.DoKeys.OldKeyMapid and _G.DoKeys.newkeymapid and _G.DoKeys.OldKeyLevel and _G.DoKeys.newkeylevel) then
+                if tonumber(_G.DoKeys.OldKeyMapid) ~= tonumber(_G.DoKeys.newkeymapid) and tonumber(_G.DoKeys.OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
                     --print("Should Send New Key!")
                     --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
                     SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
@@ -1452,7 +1451,7 @@ local function TrackKeyChange(_, event, prevItem, newItem)
                         local NewTWKeyMapid
                         local NewTWKeyLevel
                         _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
-                        if OldTWKeyMapid and tonumber(OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
+                        if _G.DoKeys.OldTWKeyMapid and tonumber(_G.DoKeys.OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(_G.DoKeys.OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
                             SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
                         end
                         break
