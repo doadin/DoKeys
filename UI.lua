@@ -77,7 +77,7 @@ do
     local found = false
     for i=1,numDayEvents do
         local info = C_Calendar.GetHolidayInfo(0,C_DateAndTime.GetCurrentCalendarTime().monthDay,i)
-        if info.name == "Timewalking Dungeon Event" then
+        if info and info.name == "Timewalking Dungeon Event" then
             found = true
             break
         end
