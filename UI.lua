@@ -597,27 +597,26 @@ local function SeasonBestsGetTable()
     local SeasonBestsstdata = {}
     local SeasonBesti = 0
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
+        local DT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]
+        local BRH = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]
+        local DoIGF = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]
+        local DoIMR = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]
+        local WM = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]
+        local AD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]
+        local EB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]
+        local TotT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]
         if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]
-        and _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]
         then
             tinsert(SeasonBestsstdata,SeasonBesti+1,
                 { name = _G.DoCharacters[realmgroupid][character].name,
-                  DT = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]["Fortified"][1] or 0) ,
-                  BRH = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]["Fortified"][1] or 0) ,
-                  DoIGF = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]["Fortified"][1] or 0) ,
-                  DoIMR = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]["Fortified"][1] or 0) ,
-                  WM = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]["Fortified"][1] or 0) ,
-                  AD = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]["Fortified"][1] or 0) ,
-                  EB = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]["Fortified"][1] or 0) ,
-                  TotT = (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]["Tyrannical"][1] or 0) .. "/" .. (_G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]["Fortified"][1] or 0) ,
+                  DT = (DT and DT["Tyrannical"][1] or 0) .. "/" .. (DT and DT["Fortified"][1] or 0) ,
+                  BRH = (BRH and BRH["Tyrannical"][1] or 0) .. "/" .. (BRH and BRH["Fortified"][1] or 0) ,
+                  DoIGF = (DoIGF and DoIGF["Tyrannical"][1] or 0) .. "/" .. (DoIGF and DoIGF["Fortified"][1] or 0) ,
+                  DoIMR = (DoIMR and DoIMR["Tyrannical"][1] or 0) .. "/" .. (DoIMR and DoIMR["Fortified"][1] or 0) ,
+                  WM = (WM and WM["Tyrannical"][1] or 0) .. "/" .. (WM and WM["Fortified"][1] or 0) ,
+                  AD = (AD and AD["Tyrannical"][1] or 0) .. "/" .. (AD and AD["Fortified"][1] or 0) ,
+                  EB = (EB and EB["Tyrannical"][1] or 0) .. "/" .. (EB and EB["Fortified"][1] or 0) ,
+                  TotT = (TotT and TotT["Tyrannical"][1] or 0) .. "/" .. (TotT and TotT["Fortified"][1] or 0) ,
                   color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
                 }
             )
