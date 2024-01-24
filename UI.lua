@@ -599,11 +599,11 @@ local function SeasonBestsGetTable()
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
         local DT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]
         local BRH = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]
-        local DoIGF = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Galakrond's Fall"]
-        local DoIMR = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinites: Murozond's Rise"]
+        local DoIGF = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinite: Galakrond's Fall"]
+        local DoIMR = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinite: Murozond's Rise"]
         local WM = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]
         local AD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]
-        local EB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Everbloom"]
+        local EB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Everbloom"]
         local TotT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]
         if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
         then
