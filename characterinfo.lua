@@ -873,7 +873,9 @@ local function TrackGuildKeys(_, event, prefix, text, channel, sender, _, _, _, 
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm]["mythicplus"]["keystone"].Week = Week
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].Class = Class
                         _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].name = NameRealm
-                        _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].avgItemLevelEquipped = AIL and tonumber(AIL) or 0
+                        if AIL then
+                            _G.DoKeysGuild[realmgroupid][GuildName][NameRealm].avgItemLevelEquipped = tonumber(AIL)
+                        end
                     end
                 end
             end
