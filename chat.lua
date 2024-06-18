@@ -39,7 +39,7 @@ local lastrunguilddookies
 local lastrunpartydookies
 
 local DoKeysCurrentMaxLevel = 70
-local maxVaultLevel = 10
+local maxVaultLevel = 8
 
 local realmgroupid
 for i = 1, #connectionData do
