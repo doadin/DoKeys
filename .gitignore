@@ -1,3 +1,8 @@
+Libs/
+release/
+.release/
+TODO.md
+
 # Compiled Lua sources
 luac.out
 
@@ -42,3 +47,4 @@ luac.out
 *.py
 /scripts/*.py
 
+.vscode/
