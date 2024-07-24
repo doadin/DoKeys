@@ -707,7 +707,14 @@ end
 function addon:SetupOptions()
     addon.optionspanel = CreateFrame( "Frame", "DoKeysOptionsPanel", UIParent )
     addon.optionspanel.name = "DoKeys"
-    InterfaceOptions_AddCategory(DoKeysOptionsPanel)
+    --InterfaceOptions_AddCategory(DoKeysOptionsPanel)
+	if InterfaceOptions_AddCategory then
+		InterfaceOptions_AddCategory(DoKeysOptionsPanel)
+	else
+		local category, layout = Settings.RegisterCanvasLayoutCategory(DoKeysOptionsPanel, DoKeysOptionsPanel.name);
+		Settings.RegisterAddOnCategory(category);
+		addon.settingsCategory = category
+	end
 
     local whoDatButton = CreateFrame("CheckButton", "DoKeysOptionswhoDatCheck", DoKeysOptionsPanel, "ChatConfigCheckButtonTemplate")
     whoDatButton:SetPoint("TOPLEFT", 25, -10)
