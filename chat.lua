@@ -38,7 +38,7 @@ local lastrunbnwhisperhelp
 local lastrunguilddookies
 local lastrunpartydookies
 
-local DoKeysCurrentMaxLevel = 70
+local DoKeysCurrentMaxLevel = 80
 local maxVaultLevel = 8
 
 local realmgroupid

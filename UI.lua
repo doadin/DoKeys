@@ -3,7 +3,7 @@ local realm = _G.GetRealmName()
 local CreateFrame = _G.CreateFrame
 local SendChatMessage = _G.SendChatMessage
 local GetAddOnMetadata = _G.C_AddOns.GetAddOnMetadata
-local DoKeysCurrentMaxLevel = 70
+local DoKeysCurrentMaxLevel = 80
 local C_ChallengeMode = _G.C_ChallengeMode
 local C_MythicPlus = _G.C_MythicPlus
 local tinsert = _G.tinsert
@@ -252,86 +252,85 @@ end
 local st = StdUi:ScrollTable(PlayerHeading, columnHeaders, 6)
 StdUi:GlueTop(st, PlayerHeading, 0, -50)
 
-local SeasonBestHeaders
-do
-    --local version, build, date, tocversion = GetBuildInfo()
-    --if tocversion <= 90207 then
-    SeasonBestHeaders = {
-        {
-            name = 'Name',
-            width = 50,
-            align = 'LEFT',
-            defaultsort = 'dsc',
-            index = 'name',
-            --format = 'string',
-        },
-        {
-            name = 'DT',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'DT',
-            --format = 'string',
-        },
-        {
-            name = 'BRH',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'BRH',
-            --format = 'string',
-        },
-        {
-            name = 'DoIGF',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'DoIGF',
-            --format = 'string',
-        },
-        {
-            name = 'DoIMR',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'DoIMR',
-            --format = 'string',
-        },
-        {
-            name = 'WM',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'WM',
-            --format = 'string',
-        },
-        {
-            name = 'AD',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'AD',
-            --format = 'string',
-        },
-        {
-            name = 'EB',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'EB',
-            --format = 'string',
-        },
-        {
-            name = 'TotT',
-            width = 100,
-            align = 'RIGHT',
-            defaultsort = 'dsc',
-            index = 'TotT',
-            --format = 'string',
-        },
-    }
-    --end
-end
+
+--local version, build, date, tocversion = GetBuildInfo()
+--if tocversion <= 90207 then
+local SeasonBestHeaders = {
+    {
+        name = 'Name',
+        width = 50,
+        align = 'LEFT',
+        defaultsort = 'dsc',
+        index = 'name',
+        --format = 'string',
+    },
+    {
+        name = 'ACoE',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'ACoE',
+        --format = 'string',
+    },
+    {
+        name = 'CoT',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'CoT',
+        --format = 'string',
+    },
+    {
+        name = 'TS',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'TS',
+        --format = 'string',
+    },
+    {
+        name = 'TD',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'TD',
+        --format = 'string',
+    },
+    {
+        name = 'MoTS',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'MoTS',
+        --format = 'string',
+    },
+    {
+        name = 'TNW',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'TNW',
+        --format = 'string',
+    },
+    {
+        name = 'SoB',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'SoB',
+        --format = 'string',
+    },
+    {
+        name = 'GB',
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = 'GB',
+        --format = 'string',
+    },
+}
+
+
 
 local SeasonBestsst = StdUi:ScrollTable(SeasonBestsHeading, SeasonBestHeaders)
 StdUi:GlueTop(SeasonBestsst, SeasonBestsHeading, 0, -50)
@@ -475,6 +474,7 @@ StdUi:GlueTop(AffixHeading, MainFrame, 0, -450)
 local function GetAffixes(_,event, one, two)
     local CurrentAffixes = C_MythicPlus.GetCurrentAffixes()
     if not CurrentAffixes then return end
+    if #CurrentAffixes <= 0 then return end
     local AffixOnename, AffixOnedescription, AffixOnefiledataid = C_ChallengeMode.GetAffixInfo(CurrentAffixes[1].id)
     local AffixOne = StdUi:SquareButton(AffixHeading, 32, 32, "")
     AffixOne:SetNormalTexture(AffixOnefiledataid)
@@ -597,26 +597,26 @@ local function SeasonBestsGetTable()
     local SeasonBestsstdata = {}
     local SeasonBesti = 0
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
-        local DT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Darkheart Thicket"]
-        local BRH = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Black Rook Hold"]
-        local DoIGF = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinite: Galakrond's Fall"]
-        local DoIMR = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Dawn of the Infinite: Murozond's Rise"]
-        local WM = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Waycrest Manor"]
-        local AD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Atal'Dazar"]
-        local EB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Everbloom"]
-        local TotT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Throne of the Tides"]
+        local ACoE = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ara-Kara, City of Echoes"]
+        local CoT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["City of Threads"]
+        local TS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Stonevault"]
+        local TD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Dawnbreaker"]
+        local MoTS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
+        local TNW = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
+        local SoB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Siege of Boralus"]
+        local GB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grim Batol"]
         if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
         then
             tinsert(SeasonBestsstdata,SeasonBesti+1,
                 { name = _G.DoCharacters[realmgroupid][character].name,
-                  DT = (DT and DT["Tyrannical"][1] or 0) .. "/" .. (DT and DT["Fortified"][1] or 0) ,
-                  BRH = (BRH and BRH["Tyrannical"][1] or 0) .. "/" .. (BRH and BRH["Fortified"][1] or 0) ,
-                  DoIGF = (DoIGF and DoIGF["Tyrannical"][1] or 0) .. "/" .. (DoIGF and DoIGF["Fortified"][1] or 0) ,
-                  DoIMR = (DoIMR and DoIMR["Tyrannical"][1] or 0) .. "/" .. (DoIMR and DoIMR["Fortified"][1] or 0) ,
-                  WM = (WM and WM["Tyrannical"][1] or 0) .. "/" .. (WM and WM["Fortified"][1] or 0) ,
-                  AD = (AD and AD["Tyrannical"][1] or 0) .. "/" .. (AD and AD["Fortified"][1] or 0) ,
-                  EB = (EB and EB["Tyrannical"][1] or 0) .. "/" .. (EB and EB["Fortified"][1] or 0) ,
-                  TotT = (TotT and TotT["Tyrannical"][1] or 0) .. "/" .. (TotT and TotT["Fortified"][1] or 0) ,
+                  ACoE = (ACoE and ACoE["Tyrannical"][1] or 0) .. "/" .. (ACoE and ACoE["Fortified"][1] or 0) ,
+                  CoT = (CoT and CoT["Tyrannical"][1] or 0) .. "/" .. (CoT and CoT["Fortified"][1] or 0) ,
+                  TS = (TS and TS["Tyrannical"][1] or 0) .. "/" .. (TS and TS["Fortified"][1] or 0) ,
+                  TD = (TD and TD["Tyrannical"][1] or 0) .. "/" .. (TD and TD["Fortified"][1] or 0) ,
+                  MoTS = (MoTS and MoTS["Tyrannical"][1] or 0) .. "/" .. (MoTS and MoTS["Fortified"][1] or 0) ,
+                  TNW = (TNW and TNW["Tyrannical"][1] or 0) .. "/" .. (TNW and TNW["Fortified"][1] or 0) ,
+                  SoB = (SoB and SoB["Tyrannical"][1] or 0) .. "/" .. (SoB and SoB["Fortified"][1] or 0) ,
+                  GB = (GB and GB["Tyrannical"][1] or 0) .. "/" .. (GB and GB["Fortified"][1] or 0) ,
                   color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
                 }
             )
