@@ -1325,7 +1325,9 @@ local function RequestPartyKeys(_, event)
     and (GetLFGMode(LE_LFG_CATEGORY_LFD) == nil)
     and (GetLFGMode(LE_LFG_CATEGORY_RF) == nil)
     and (GetLFGMode(LE_LFG_CATEGORY_SCENARIO) == nil)
-    and (GetLFGMode(LE_LFG_CATEGORY_LFR) == nil)   then
+    and (GetLFGMode(LE_LFG_CATEGORY_LFR) == nil)
+    and UnitInParty("player")
+    and not (select(3, GetInstanceInfo()) == 208) then
         ChatThrottlePlusLib:SendAddonMessage( "NORMAL", "DoKeys", "PartyRequest", "PARTY")
         local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0")
         for i=1,_G.GetNumGroupMembers() do
