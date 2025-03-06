@@ -31,7 +31,7 @@ local SeasonBestsFrame = StdUi:Window(UIParent, 1100, 300, "DoKeys Season Bests"
 SeasonBestsFrame:SetPoint('CENTER')
 SeasonBestsFrame:Hide()
 
-local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 1100, 250, "Player's Season Bests Tyrannical/Fortified", 25, 16)
+local SeasonBestsHeading = StdUi:PanelWithTitle(SeasonBestsFrame, 1100, 250, "Player's Season Bests", 25, 16)
 StdUi:GlueTop(SeasonBestsHeading, SeasonBestsFrame, 0, -40)
 
 local PlayerHeading = StdUi:PanelWithTitle(MainFrame, 850, 160, "Player's Keys", 25, 16)
@@ -264,71 +264,108 @@ local SeasonBestHeaders = {
         index = 'name',
         --format = 'string',
     },
-    {
-        name = 'ACoE',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'ACoE',
-        --format = 'string',
-    },
-    {
-        name = 'CoT',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'CoT',
-        --format = 'string',
-    },
-    {
-        name = 'TS',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'TS',
-        --format = 'string',
-    },
-    {
-        name = 'TD',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'TD',
-        --format = 'string',
-    },
-    {
-        name = 'MoTS',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'MoTS',
-        --format = 'string',
-    },
-    {
-        name = 'TNW',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'TNW',
-        --format = 'string',
-    },
-    {
-        name = 'SoB',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'SoB',
-        --format = 'string',
-    },
-    {
-        name = 'GB',
-        width = 100,
-        align = 'RIGHT',
-        defaultsort = 'dsc',
-        index = 'GB',
-        --format = 'string',
-    },
+    --{
+    --    name = 'ACoE',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'ACoE',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'CoT',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'CoT',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'TS',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'TS',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'TD',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'TD',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'MoTS',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'MoTS',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'TNW',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'TNW',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'SoB',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'SoB',
+    --    --format = 'string',
+    --},
+    --{
+    --    name = 'GB',
+    --    width = 100,
+    --    align = 'RIGHT',
+    --    defaultsort = 'dsc',
+    --    index = 'GB',
+    --    --format = 'string',
+    --},
 }
+for i,mapID in pairs(C_ChallengeMode.GetMapTable()) do
+    local index = ""
+    if i == 1 then
+        index = "one"
+    end
+    if i == 2 then
+        index = "two"
+    end
+    if i == 3 then
+        index = "three"
+    end
+    if i == 4 then
+        index = "four"
+    end
+    if i == 5 then
+        index = "five"
+    end
+    if i == 6 then
+        index = "six"
+    end
+    if i == 7 then
+        index = "seven"
+    end
+    if i == 8 then
+        index = "eight"
+    end
+    table.insert(SeasonBestHeaders,
+    {
+        name = C_ChallengeMode.GetMapUIInfo(mapID):gsub("(%a)%a*", "%1"),
+        width = 100,
+        align = 'RIGHT',
+        defaultsort = 'dsc',
+        index = index,
+        --format = 'string',
+    }
+)
+end
 
 
 
@@ -597,26 +634,34 @@ local function SeasonBestsGetTable()
     local SeasonBestsstdata = {}
     local SeasonBesti = 0
     for character,characterinfo in pairs(_G.DoCharacters[realmgroupid]) do
-        local ACoE = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ara-Kara, City of Echoes"]
-        local CoT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["City of Threads"]
-        local TS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Stonevault"]
-        local TD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Dawnbreaker"]
-        local MoTS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
-        local TNW = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
-        local SoB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Siege of Boralus"]
-        local GB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grim Batol"]
+        --local ACoE = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Ara-Kara, City of Echoes"]
+        --local CoT = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["City of Threads"]
+        --local TS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Stonevault"]
+        --local TD = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Dawnbreaker"]
+        --local MoTS = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Mists of Tirna Scithe"]
+        --local TNW = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["The Necrotic Wake"]
+        --local SoB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Siege of Boralus"]
+        --local GB = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"]["Grim Batol"]
+        local one = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[1])]
+        local two = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[2])]
+        local three = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[3])]
+        local four = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[4])]
+        local five = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[5])]
+        local six = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[6])]
+        local seven = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[7])]
+        local eight = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[8])]
         if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
         then
             tinsert(SeasonBestsstdata,SeasonBesti+1,
                 { name = _G.DoCharacters[realmgroupid][character].name,
-                  ACoE = (ACoE and ACoE["Tyrannical"][1] or 0) .. "/" .. (ACoE and ACoE["Fortified"][1] or 0) ,
-                  CoT = (CoT and CoT["Tyrannical"][1] or 0) .. "/" .. (CoT and CoT["Fortified"][1] or 0) ,
-                  TS = (TS and TS["Tyrannical"][1] or 0) .. "/" .. (TS and TS["Fortified"][1] or 0) ,
-                  TD = (TD and TD["Tyrannical"][1] or 0) .. "/" .. (TD and TD["Fortified"][1] or 0) ,
-                  MoTS = (MoTS and MoTS["Tyrannical"][1] or 0) .. "/" .. (MoTS and MoTS["Fortified"][1] or 0) ,
-                  TNW = (TNW and TNW["Tyrannical"][1] or 0) .. "/" .. (TNW and TNW["Fortified"][1] or 0) ,
-                  SoB = (SoB and SoB["Tyrannical"][1] or 0) .. "/" .. (SoB and SoB["Fortified"][1] or 0) ,
-                  GB = (GB and GB["Tyrannical"][1] or 0) .. "/" .. (GB and GB["Fortified"][1] or 0) ,
+                  one = (one and one[""] and one[""][1] or 0),
+                  two = (two and two[""] and two[""][1] or 0),
+                  three = (three and three[""] and three[""][1] or 0),
+                  four = (four and four[""] and four[""][1] or 0),
+                  five = (five and five[""]and five[""][1] or 0),
+                  six = (six and six[""] and six[""][1] or 0),
+                  seven = (seven and seven[""] and seven[""][1] or 0),
+                  eight = (eight and eight[""] and eight[""][1] or 0),
                   color = RAID_CLASS_COLORS[_G.DoCharacters[realmgroupid][character].class]
                 }
             )
