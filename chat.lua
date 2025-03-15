@@ -61,7 +61,7 @@ function DoKeysCreateLink(data,keytype)
     if keytype == "normal" or "both" then
 	    if type(data) == "table" then
             if data.currentkeymapid and data.CurrentKeyLevel and data.CurrentKeyInstance and type(AffixTable) == "table" then
-                if data.CurrentKeyLevel <= 2 then
+                if data.CurrentKeyLevel <= 3 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -75,7 +75,7 @@ function DoKeysCreateLink(data,keytype)
 	                	data.CurrentKeyLevel --data.level
 	                )
                 end
-                if data.CurrentKeyLevel >= 3 and data.CurrentKeyLevel <= 6 then
+                if data.CurrentKeyLevel >= 4 and data.CurrentKeyLevel <= 6 then
 	                link = string.format(
 	                	'|cffa335ee|Hkeystone:180653:%d:%d:%d:%d:%d:%d:%d|h[Keystone: %s (%d)]|h|r',
 	                	data.currentkeymapid or 0, --data.mapId
@@ -111,7 +111,7 @@ function DoKeysCreateLink(data,keytype)
                         AffixTable[1].id or 0,
                         AffixTable[2].id or 0,
                         AffixTable[3].id or 0,
-                        AffixTable[4].id or 0,
+                        0,
                         0,
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
@@ -125,7 +125,7 @@ function DoKeysCreateLink(data,keytype)
                         AffixTable[2].id or 0,
                         AffixTable[3].id or 0,
                         AffixTable[4].id or 0,
-                        AffixTable[5].id or 0,
+                        0,
                         0,
 	                	data.CurrentKeyInstance, --data.mapNamePlain or data.mapName
 	                	data.CurrentKeyLevel --data.level
