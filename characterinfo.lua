@@ -1258,6 +1258,7 @@ end
 local function OnTooltipSetUnit(self)
     local _, unit = self:GetUnit()
     if not unit then return end
+    if addonTable.issecretvalue(unit) then return end
     local isPlayer = _G.UnitIsPlayer(unit)
     local unitName, unitRealm = UnitName(unit)
     local nameRealm
