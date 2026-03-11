@@ -30,6 +30,7 @@ Libs\LibDeflate\lib.xml
 Libs\StdUi\StdUi.xml
 
 data.lua
+Helpers.lua
 DoKeys.lua
 characterinfo.lua
 chat.lua
