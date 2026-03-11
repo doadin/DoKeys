@@ -1,3 +1,4 @@
+local addonName, addonTable = ...
 local LibStub = _G.LibStub
 local realm = _G.GetRealmName()
 local CreateFrame = _G.CreateFrame
@@ -11,10 +12,10 @@ local RAID_CLASS_COLORS = _G.RAID_CLASS_COLORS
 local realmName = _G.GetRealmName()
 
 local realmgroupid
-for i = 1, #connectionData do
-   local lookforrealm = string.find(connectionData[i], tostring(GetRealmID()))
+for i = 1, #addonTable.connectionData do
+   local lookforrealm = string.find(addonTable.connectionData[i], tostring(GetRealmID()))
     if lookforrealm ~= nil then
-        realmgroupid = strsplit(",", connectionData[i])
+        realmgroupid = strsplit(",", addonTable.connectionData[i])
         break
     else
         realmgroupid = 0

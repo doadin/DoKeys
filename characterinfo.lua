@@ -1,3 +1,4 @@
+local addonName, addonTable = ...
 local GetRealmName = _G.GetRealmName
 local UnitName = _G.UnitName
 local GetOwnedKeystoneChallengeMapID = _G.C_MythicPlus.GetOwnedKeystoneChallengeMapID
@@ -115,10 +116,10 @@ local Covenantstable = {
 local DoKeysPartyKeys = {}
 local realmgroupid
 do
-    for i = 1, #connectionData do
-        local lookforrealm = string.find(connectionData[i], tostring(GetRealmID()))
+    for i = 1, #addonTable.connectionData do
+        local lookforrealm = string.find(addonTable.connectionData[i], tostring(GetRealmID()))
         if lookforrealm ~= nil then
-            realmgroupid = strsplit(",", connectionData[i])
+            realmgroupid = strsplit(",", addonTable.connectionData[i])
             break
         else
             realmgroupid = 0

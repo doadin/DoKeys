@@ -1,3 +1,4 @@
+local addonName, addonTable = ...
 local BNSendWhisper = _G.BNSendWhisper
 local SendChatMessage = _G.SendChatMessage
 local CreateFrame = _G.CreateFrame
@@ -42,10 +43,10 @@ local DoKeysCurrentMaxLevel = 80
 local maxVaultLevel = 8
 
 local realmgroupid
-for i = 1, #connectionData do
-   local lookforrealm = string.find(connectionData[i], tostring(GetRealmID()))
+for i = 1, #addonTable.connectionData do
+   local lookforrealm = string.find(addonTable.connectionData[i], tostring(GetRealmID()))
     if lookforrealm ~= nil then
-        realmgroupid = strsplit(",", connectionData[i])
+        realmgroupid = strsplit(",", addonTable.connectionData[i])
         break
     else
         realmgroupid = 0

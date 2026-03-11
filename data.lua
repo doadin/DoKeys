@@ -1,4 +1,5 @@
-realmData = {
+local addonName, addonTable = ...
+addonTable.realmData = {
 [1]="Lightbringer,PvE,enUS,US,PST",
 [2]="Cenarius,PvE,enUS,US,PST",
 [3]="Uther,PvE,enUS,US,CST",
@@ -557,7 +558,7 @@ realmData = {
 [3738]="Saurfang,PvE,enUS,US,AEST",
 }
 
-connectionData = {
+addonTable.connectionData = {
 "4,US,4,1355",
 "5,US,5",
 "9,US,9",
