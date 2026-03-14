@@ -75,13 +75,13 @@ local columnHeaders
 do
     local numDayEvents = C_Calendar.GetNumDayEvents(0, C_DateAndTime.GetCurrentCalendarTime().monthDay)
     local found = false
-    for i=1,numDayEvents do
-        local info = C_Calendar.GetHolidayInfo(0,C_DateAndTime.GetCurrentCalendarTime().monthDay,i)
-        if info and info.name == "Timewalking Dungeon Event" then
-            found = true
-            break
-        end
-    end
+    --for i=1,numDayEvents do
+    --    local info = C_Calendar.GetHolidayInfo(0,C_DateAndTime.GetCurrentCalendarTime().monthDay,i)
+    --    if info and info.name == "Timewalking Dungeon Event" then
+    --        found = true
+    --        break
+    --    end
+    --end
     if found == true then
         columnHeaders = {
             {
