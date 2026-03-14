@@ -29,8 +29,6 @@ local wipe = _G.wipe
 local strsplit = _G.strsplit
 local GetGuildInfo = _G.GetGuildInfo
 
-local DoKeysCurrentMaxLevel = 80
-
 local DoKeysDBFrame = CreateFrame("FRAME") --PLAYER_ENTERING_WORLD: isInitialLogin, isReloadingUi
 DoKeysDBFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 DoKeysDBFrame:RegisterEvent("ADDON_LOADED")
@@ -340,7 +338,7 @@ end
 
 --local lasttimesendupdatekeys
 local function UpdateKeyStone(_, _)
-    if not type(UnitLevel("player") == "number") or (UnitLevel("player") < DoKeysCurrentMaxLevel) then return end
+    if not type(UnitLevel("player") == "number") or (UnitLevel("player") < addonTable.DoKeysCurrentMaxLevel) then return end
     local currentkeymapid = GetOwnedKeystoneChallengeMapID()
     local name
     local keylevel

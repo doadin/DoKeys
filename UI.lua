@@ -4,7 +4,6 @@ local realm = _G.GetRealmName()
 local CreateFrame = _G.CreateFrame
 local SendChatMessage = _G.SendChatMessage
 local GetAddOnMetadata = _G.C_AddOns.GetAddOnMetadata
-local DoKeysCurrentMaxLevel = 80
 local C_ChallengeMode = _G.C_ChallengeMode
 local C_MythicPlus = _G.C_MythicPlus
 local tinsert = _G.tinsert
@@ -400,7 +399,7 @@ ReportToButton:SetScript('OnClick',
     function()
         if ReportToDropDownValue == "GUILD" or ReportToDropDownValue == "PARTY" or ReportToDropDownValue == "OFFICER" then
             for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                if v.level == DoKeysCurrentMaxLevel then
+                if v.level == addonTable.DoKeysCurrentMaxLevel then
                     SendChatMessage(k .. " Weekly Best: " .. (v["mythicplus"]["keystone"].WeeklyBest or 0), ReportToDropDownValue)
                 end
             end
@@ -430,7 +429,7 @@ ReportKeysToButton:SetScript('OnClick',
     function()
         if ReportKeysToDropDownValue == "GUILD" or ReportKeysToDropDownValue == "PARTY" or ReportKeysToDropDownValue == "OFFICER" then
             for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                if v.level == DoKeysCurrentMaxLevel then
+                if v.level == addonTable.DoKeysCurrentMaxLevel then
                     SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
                 end
             end
@@ -651,7 +650,7 @@ local function SeasonBestsGetTable()
         local six = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[6])]
         local seven = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[7])]
         local eight = _G.DoCharacters[realmgroupid][character]["mythicplus"]["keystone"]["seasonbests"][C_ChallengeMode.GetMapUIInfo(C_ChallengeMode.GetMapTable()[8])]
-        if _G.DoCharacters[realmgroupid][character].level == DoKeysCurrentMaxLevel
+        if _G.DoCharacters[realmgroupid][character].level == addonTable.DoKeysCurrentMaxLevel
         then
             tinsert(SeasonBestsstdata,SeasonBesti+1,
                 { name = _G.DoCharacters[realmgroupid][character].name,

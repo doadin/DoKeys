@@ -39,7 +39,6 @@ local lastrunbnwhisperhelp
 local lastrunguilddookies
 local lastrunpartydookies
 
-local DoKeysCurrentMaxLevel = 80
 local maxVaultLevel = 8
 
 local realmgroupid
@@ -274,7 +273,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             if type(DoKeysCreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), "GUILD")
                             else
@@ -291,7 +290,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             if type(DoKeysCreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), "OFFICER")
                             else
@@ -308,7 +307,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             if type(DoKeysCreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), "PARTY")
                             else
@@ -325,7 +324,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             if type(DoKeysCreateLink(v["mythicplus"]["keystone"],"normal")) == "string" and type(k) == "string" then
                                 SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), "WHISPER", nil, sender)
                             else
@@ -343,7 +342,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         local message = k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal")
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             BNSendWhisper(bnSenderID, message)
                         end
                     end
@@ -363,7 +362,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
 
-                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == DoKeysCurrentMaxLevel then
+                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == addonTable.DoKeysCurrentMaxLevel then
                         SendChatMessage(DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "GUILD")
                     end
 
@@ -376,7 +375,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
 
-                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == DoKeysCurrentMaxLevel then
+                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == addonTable.DoKeysCurrentMaxLevel then
                         SendChatMessage(DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "OFFICER")
                     end
 
@@ -389,7 +388,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
 
-                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == DoKeysCurrentMaxLevel then
+                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == addonTable.DoKeysCurrentMaxLevel then
                         SendChatMessage(DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
                     end
 
@@ -401,7 +400,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
-                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == DoKeysCurrentMaxLevel then
+                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == addonTable.DoKeysCurrentMaxLevel then
                         SendChatMessage(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].name .. " " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "WHISPER", nil, sender)
                     end
                     lastrunwhisperkeys = _G.GetTime()
@@ -412,7 +411,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                             return
                         end
                     end
-                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == DoKeysCurrentMaxLevel then
+                    if _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].level == addonTable.DoKeysCurrentMaxLevel then
                         local message = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()].name .. " " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal")
                         BNSendWhisper(bnSenderID, message)
                     end
@@ -433,7 +432,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
@@ -457,7 +456,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
@@ -481,7 +480,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
@@ -505,7 +504,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
@@ -530,7 +529,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     local count = 0
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         local message = k .. " " .. (v["mythicplus"]["keystone"].WeeklyBest or 0) .. " " .. (v["mythicplus"]["keystone"].WeeklyBestLevelTimed or "")
-                        if v.level == DoKeysCurrentMaxLevel then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel then
                             --local weeklybest = v["mythicplus"]["keystone"].WeeklyBest or 0
                             if type(v["mythicplus"]["keystone"].WeeklyBest) ~= "number" then
                                 v["mythicplus"]["keystone"].WeeklyBest = 0
@@ -560,7 +559,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"tw"), "GUILD")
                         end
                     end
@@ -573,7 +572,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"tw"), "OFFICER")
                         end
                     end
@@ -586,7 +585,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel and type(k) == "string" and type(v["mythicplus"]["keystone"]) == "table" and type(k) == "string" then
                             SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"tw"), "PARTY")
                         end
                     end
@@ -599,7 +598,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                         end
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
-                        if v.level == DoKeysCurrentMaxLevel then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel then
                             SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"tw"), "WHISPER", nil, sender)
                         end
                     end
@@ -613,7 +612,7 @@ local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, 
                     end
                     for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                         local message = k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"tw")
-                        if v.level == DoKeysCurrentMaxLevel then
+                        if v.level == addonTable.DoKeysCurrentMaxLevel then
                             BNSendWhisper(bnSenderID, message)
                         end
                     end
