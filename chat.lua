@@ -236,6 +236,9 @@ local function FindCovenant(data)
 end
 
 local function MessageHandler(_, event, msg, sender, _, _, _, _, _, _, _, _, _, _, bnSenderID, _, _, _, _)
+    if addonTable.issecretvalue(msg) then
+        return
+    end
 
     if type(mas) ~= "table" then
         mas = {}
