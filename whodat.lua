@@ -21,6 +21,10 @@ local function InvitedTo(self, event, searchResultID, newStatus, oldStatus, grou
         --DevTools_Dump(C_LFGList.GetSearchResultInfo(searchResultID))
         local ResultInfo = searchResultID and C_LFGList.GetSearchResultInfo(searchResultID) or {}
         local map = ResultInfo and ResultInfo.leaderDungeonScoreInfo and ResultInfo.leaderDungeonScoreInfo[1].mapName or ""
+        if map == "" then
+            local ActivityInfoTable = C_LFGList.GetActivityInfoTable(ResultInfo["activityIDs"][1])
+            map = ActivityInfoTable and C_Map.GetMapInfo(ActivityInfoTable.mapID) and C_Map.GetMapInfo(ActivityInfoTable.mapID).name or ""
+        end
         local ActivityFullName = ResultInfo["activityIDs"] and C_LFGList.GetActivityFullName(ResultInfo["activityIDs"][1]) or ""
         local ActivityleaderName = ResultInfo and ResultInfo.leaderName or ""
         local ActivitygroupName = ResultInfo and ResultInfo.name or ""

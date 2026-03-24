@@ -399,7 +399,8 @@ local function UpdateWeeklyBest(_, event, one, _, three)
         if one then
             name = one and C_ChallengeMode.GetMapUIInfo(one)
         end
-        local _, _, _, _, keystoneUpgradeLevels, _ = C_ChallengeMode.GetCompletionInfo()
+        local CompletionInfo = C_ChallengeMode.GetChallengeCompletionInfo()
+        local keystoneUpgradeLevels = CompletionInfo and CompletionInfo.keystoneUpgradeLevels
         local weeklybest = _G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"].WeeklyBest or 0
         if weeklybest <= three then
             if keystoneUpgradeLevels == 3 then
