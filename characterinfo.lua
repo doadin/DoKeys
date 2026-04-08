@@ -1254,6 +1254,19 @@ local function UpdateC_MythicPlusEvent(_, event, covenantID)
     end
 end
 
+local function TooltipHasIDLine()
+    for i = 1, GameTooltip:NumLines() do
+        local line = _G[GameTooltip:GetName() .. "TextLeft" .. i]
+        if line then
+            local text = line:GetText()
+            if type(text) == "string" and text:find("DoKeys:") then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 local function OnTooltipSetUnit(self)
     local _, unit = self:GetUnit()
     if not unit then return end
@@ -1273,7 +1286,7 @@ local function OnTooltipSetUnit(self)
     if type(_G.DoKeysGuild) == "table" then
         for guildnametable,playernametable in pairs(_G.DoKeysGuild) do
             for playername in pairs(playernametable) do
-                if playername == nameRealm then
+                if playername == nameRealm and not TooltipHasIDLine() then
                     found = true
                     _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
                     _G.GameTooltip:AddLine("Current Key: " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyInstance or "") .. " " .. tostring(_G.DoKeysGuild[guildnametable][playername]["mythicplus"]["keystone"].CurrentKeyLevel or ""), 1, 1, 1)
@@ -1285,7 +1298,7 @@ local function OnTooltipSetUnit(self)
     if found then return end
     if type(_G.DoKeysPartyKeys) == "table" then
         for playername,keydata in pairs(_G.DoKeysPartyKeys) do
-            if (playername) == nameRealm then
+            if (playername) == nameRealm and not TooltipHasIDLine() then
                 _G.GameTooltip:AddLine("DoKeys:" , 1, 1, 0)
                 _G.GameTooltip:AddLine("Current Key: " .. tostring(keydata.KeyInstanceID and C_ChallengeMode.GetMapUIInfo(keydata.KeyInstanceID) or "") .. " " .. tostring(keydata.KeyLevel or ""), 1, 1, 1)
                 _G.GameTooltip:Show()
