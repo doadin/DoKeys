@@ -1310,6 +1310,93 @@ end
 --_G.GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, OnTooltipSetUnit)
 
+local frame
+local fs
+FriendsTooltip:HookScript("OnShow", function()
+    -- Only add your line once per tooltip
+    --if not FriendsTooltip._DoKeysInjected then
+        --FriendsTooltip:AddLine("|cff00ff00My Custom Text|r")
+        --print("FriendsTooltipGameAccount1Name: ", FriendsTooltipGameAccount1Name:GetText())
+        --print("FriendsTooltipGameAccount1Info: ", FriendsTooltipGameAccount1Info:GetText())
+        local CharacterText = FriendsTooltipGameAccount1Name:GetText()
+        local name = CharacterText and CharacterText:match("([^,]+)") or ""
+        local ZoneRealmText = FriendsTooltipGameAccount1Info:GetText()
+        local realm = ZoneRealmText and ZoneRealmText:match("Realm:%s*(.+)") or ""
+        local keyData = nil
+        local dataMatch = false
+        if not frame then
+            frame = CreateFrame("FRAME", nil, FriendsTooltip, "BackdropTemplate")
+            frame:SetSize(300, 100)
+            frame:SetPoint("LEFT", FriendsTooltip, "RIGHT", 10, 0)
+            frame:SetBackdrop({
+                bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+                edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+                tile = true, tileSize = 16, edgeSize = 16,
+                insets = { left = 4, right = 4, top = 4, bottom = 4 }
+            })
+            frame:SetBackdropColor(0, 0, 0, 0.8)
+            frame:Hide()
+            fs = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            fs:SetPoint("CENTER")
+            fs:SetWidth(300)
+            fs:SetWordWrap(true)
+            fs:SetText("")
+        end
+        --print("Extracted name-realm: ", name .. "-" .. realm)
+        for i = 1, BNGetNumFriends() do
+            local acc = C_BattleNet.GetFriendAccountInfo(i)
+            local game = acc.gameAccountInfo
+            --print(acc.bnetAccountID, acc.accountName, game.gameAccountID, game.isOnline, game.clientProgram, acc.battleTag, acc.isBattleTagFriend, acc.isFriend)
+            if acc.isBattleTagFriend and acc.battleTag then
+                --print("BattleTag: ", acc.battleTag)
+                if type(_G.DoKeysBNETFriendsKeys) == "table" and _G.DoKeysBNETFriendsKeys[acc.battleTag] then
+                    local header = FriendsTooltipHeader:GetText()
+                    local btag = acc.battleTag
+                    local accountName = acc.accountName
+                    if type(header) == "string" and type(btag) == "string" then
+                        if header == accountName then
+                            keyData = _G.DoKeysBNETFriendsKeys[acc.battleTag]
+                            dataMatch = true
+                            break
+                        end
+                    end
+                end
+            end
+        end
+        --print(keyData)
+        if dataMatch and keyData then
+            for nameRealm, keyInfo in pairs(keyData) do
+                --print(nameRealm, keyInfo)
+                if type(keyInfo) == "table" then
+                    --print("KeyInfo for ", nameRealm, ": ", keyInfo.KeyInstance, keyInfo.KeyLevel)
+                    local current = fs:GetText() or ""
+                    fs:SetText(current .. "\n" .. nameRealm .. ": " .. tostring(keyInfo.KeyInstance) .. " " .. tostring(keyInfo.KeyLevel))
+                    --print(fs:GetText())
+                end
+            end
+            if fs:GetText() then
+                frame:Show()
+            else
+                fs:SetText("")
+                frame:Hide()
+            end
+        else
+            fs:SetText("")
+            frame:Hide()
+        end
+        --if not keyData then
+        --    fs:SetText("")
+        --    frame:Hide()
+        --end
+        --FriendsTooltip._DoKeysInjected = true
+    --end
+end)
+
+-- Reset flag when tooltip hides
+FriendsTooltip:HookScript("OnHide", function()
+    --FriendsTooltip._DoKeysInjected = false
+end)
+
 local lastrunpartyrequest
 --local lastrunpartyrequesttimer
 local function RequestPartyKeys(_, event)
