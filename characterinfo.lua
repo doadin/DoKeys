@@ -1268,6 +1268,7 @@ local function TooltipHasIDLine()
 end
 
 local function OnTooltipSetUnit(self)
+    if InCombatLockdown() then return end
     local _, unit = self:GetUnit()
     if not unit then return end
     if addonTable.issecretvalue(unit) then return end
