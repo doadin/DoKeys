@@ -19,6 +19,7 @@ local GetContainerItemID = _G.C_Container.GetContainerItemID and _G.C_Container.
 local GetContainerItemLink = _G.C_Container.GetContainerItemLink and _G.C_Container.GetContainerItemLink or _G.GetContainerItemLink
 local LibDeflate = _G.LibStub:GetLibrary("LibDeflate")
 local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
+local LibKeystone = LibStub("LibKeystone")
 
 local date = _G.date
 local time = _G.time
@@ -326,6 +327,38 @@ local function SetupDB(_, event, one, _)
     if not DokeysRegistered then
         C_ChatInfo.RegisterAddonMessagePrefix("DoKeys")
     end
+
+    if LibKeystone then
+        LibKeystone.Register(addonTable.LibKeystone, function(keyLevel, keyMapID, playerRating, playerName, channel)
+	        -- You can use C_ChallengeMode.GetMapUIInfo(keyMapID) to get info like the map name
+	        local challengeMapName = C_ChallengeMode.GetMapUIInfo(keyMapID)
+	        --print(string.format("%s has a %q keystone that's level %d and has a rating of %d.", playerName, challengeMapName, keyLevel, playerRating))
+            local GuildName = isGuildMember() and GetGuildInfo("player") or "false"
+            -- keyLevel=Number, the level of the keystone
+            -- keyMapID=Number, the challenge map ID of the keystone
+            -- playerRating=Number, the Mythic+ rating of the player
+            -- playerName=String, the name of the player
+            -- channel=String, the channel the data was received from (PARTY or GUILD)
+            if channel == "PARTY" then
+                --_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyLevel = keyLevel
+                --_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyInstance = challengeMapName
+                ----_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].Week = keyInfo.week
+                ----_G.DoKeysGuild[realmgroupid][GuildName][playerName].Class = keyInfo.class
+                --_G.DoKeysGuild[realmgroupid][GuildName][playerName].name = playerName
+                _G.DoKeysPartyKeys[playerName] = {
+                    KeyInstanceID = keyMapID,
+                    KeyLevel = keyLevel,
+                    KeyInstance = challengeMapName}
+            end
+            if channel == "GUILD" and isGuildMember() then
+                _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyLevel = keyLevel
+                _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyInstance = challengeMapName
+                --_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].Week = keyInfo.week
+                --_G.DoKeysGuild[realmgroupid][GuildName][playerName].Class = keyInfo.class
+                _G.DoKeysGuild[realmgroupid][GuildName][playerName].name = playerName
+            end
+        end)
+    end
 end
 
 local function UpdateCovenant(_, event, covenantID)
@@ -518,6 +551,9 @@ local function RequestGuildKeys(_, event)
         end
         if DokeysRegistered then
             ChatThrottlePlusLib:SendAddonMessage( "NORMAL", 'DoKeys', 'request', 'GUILD')
+        end
+        if LibKeystone then
+            LibKeystone.Request("GUILD")
         end
     end
 end
@@ -1466,6 +1502,9 @@ local function RequestPartyKeys(_, event)
            end
             --_G.DoKeysPartyKeys[NameRealm] = {KeyInstanceID = KeyInstanceID, KeyLevel = KeyLevel, weeklyBest = weeklyBest, KeyInstance = C_ChallengeMode.GetMapUIInfo(KeyInstanceID)}
         end
+    end
+    if LibKeystone then
+        LibKeystone.Request("PARTY")
     end
 end
 

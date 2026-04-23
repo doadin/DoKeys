@@ -28,6 +28,7 @@ Libs\Ace3\AceSerializer-3.0\AceSerializer-3.0.lua
 Libs\LibDBIcon-1.0\lib.xml
 Libs\LibDeflate\lib.xml
 Libs\StdUi\StdUi.xml
+Libs\LibKeystone\LibKeystone.lua
 
 data.lua
 Helpers.lua
