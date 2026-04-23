@@ -608,8 +608,10 @@ local function GetTable()
                     local charname, charrealm = strsplit("-",character.name)
                     if charrealm and charrealm == realmName then
                         charname = charname
-                    else
+                    elseif charname and charrealm then
                         charname = charname .. "-" .. charrealm
+                    else
+                        charname = charname
                     end
                     tinsert(guilddata,guildi+1,
                         {name = charname,

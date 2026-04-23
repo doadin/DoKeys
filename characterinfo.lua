@@ -329,6 +329,7 @@ local function SetupDB(_, event, one, _)
     end
 
     if LibKeystone then
+        addonTable.LibKeystone = {}
         LibKeystone.Register(addonTable.LibKeystone, function(keyLevel, keyMapID, playerRating, playerName, channel)
 	        -- You can use C_ChallengeMode.GetMapUIInfo(keyMapID) to get info like the map name
 	        local challengeMapName = C_ChallengeMode.GetMapUIInfo(keyMapID)
@@ -345,12 +346,40 @@ local function SetupDB(_, event, one, _)
                 ----_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].Week = keyInfo.week
                 ----_G.DoKeysGuild[realmgroupid][GuildName][playerName].Class = keyInfo.class
                 --_G.DoKeysGuild[realmgroupid][GuildName][playerName].name = playerName
+                if type(_G.DoKeysPartyKeys) ~= "table" then
+                    _G.DoKeysPartyKeys = {}
+                end
                 _G.DoKeysPartyKeys[playerName] = {
                     KeyInstanceID = keyMapID,
                     KeyLevel = keyLevel,
                     KeyInstance = challengeMapName}
             end
             if channel == "GUILD" and isGuildMember() then
+                local UnitNamePlayer = UnitName("player")
+                if playerName == UnitNamePlayer then
+                    if _G.DoKeysGuild[realmgroupid][GuildName][playerName] then
+                        _G.DoKeysGuild[realmgroupid][GuildName][playerName] = nil
+                    end
+                    return
+                end
+                if type(_G.DoKeysGuild) ~= "table" then
+                    _G.DoKeysGuild = {}
+                end
+                if type(_G.DoKeysGuild[realmgroupid]) ~= "table" then
+                    _G.DoKeysGuild[realmgroupid] = {}
+                end
+                if type(_G.DoKeysGuild[realmgroupid][GuildName]) ~= "table" then
+                    _G.DoKeysGuild[realmgroupid][GuildName] = {}
+                end
+                if type(_G.DoKeysGuild[realmgroupid][GuildName][playerName]) ~= "table" then
+                    _G.DoKeysGuild[realmgroupid][GuildName][playerName] = {}
+                end
+                if type(_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]) ~= "table" then
+                    _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"] = {}
+                end
+                if type(_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"]) ~= "table" then
+                    _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"] = {}
+                end
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyLevel = keyLevel
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyInstance = challengeMapName
                 --_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].Week = keyInfo.week
