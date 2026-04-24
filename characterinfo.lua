@@ -362,6 +362,10 @@ local function SetupDB(_, event, one, _)
                     end
                     return
                 end
+                local realm = GetRealmName()
+                if realm and not string.find(playerName, "-", 1, true) then
+                    playerName = playerName .. "-" .. realm
+                end
                 if type(_G.DoKeysGuild) ~= "table" then
                     _G.DoKeysGuild = {}
                 end
