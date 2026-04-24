@@ -1332,9 +1332,19 @@ local function TooltipHasIDLine()
     return false
 end
 
+local function safeCallGetUnit(tt)
+    local unit, success, result
+    if tt and tt.GetUnit then
+        success, result = xpcall(tt.GetUnit, function(err) return debug.traceback(err) end, tt)
+        if success and result then
+            unit = result
+        end
+    end
+    return unit
+end
+
 local function OnTooltipSetUnit(self)
-    if InCombatLockdown() then return end
-    local _, unit = self:GetUnit()
+    local unit = safeCallGetUnit(self)
     if not unit then return end
     if addonTable.issecretvalue(unit) then return end
     local isPlayer = _G.UnitIsPlayer(unit)
