@@ -366,6 +366,14 @@ local function SetupDB(_, event, one, _)
                 if realm and not string.find(playerName, "-", 1, true) then
                     playerName = playerName .. "-" .. realm
                 end
+                local name, _, _, _, class, _, _, _, _, _, classFileName
+                for i = 1, GetNumGuildMembers() do
+                    name, _, _, _, class, _, _, _, _, _, classFileName = GetGuildRosterInfo(i)
+                    if name == playerName then
+                        class = classFileName
+                        break
+                    end
+                end
                 if type(_G.DoKeysGuild) ~= "table" then
                     _G.DoKeysGuild = {}
                 end
@@ -387,7 +395,9 @@ local function SetupDB(_, event, one, _)
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyLevel = keyLevel
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].CurrentKeyInstance = challengeMapName
                 --_G.DoKeysGuild[realmgroupid][GuildName][playerName]["mythicplus"]["keystone"].Week = keyInfo.week
-                --_G.DoKeysGuild[realmgroupid][GuildName][playerName].Class = keyInfo.class
+                if class then
+                    _G.DoKeysGuild[realmgroupid][GuildName][playerName].Class = class
+                end
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName].name = playerName
             end
         end)
