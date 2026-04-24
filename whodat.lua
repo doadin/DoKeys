@@ -10,8 +10,8 @@ local function InvitedTo(self, event, searchResultID, newStatus, oldStatus, grou
     --name="|Kq92|k", is unknown
     if newStatus == "invited" and groupName ~= "Unknown" then
         local ResultInfo = searchResultID and C_LFGList.GetSearchResultInfo(searchResultID) or {}
-        local map = ResultInfo and ResultInfo.leaderDungeonScoreInfo and ResultInfo.leaderDungeonScoreInfo[1].mapName or ""
-        local ActivityFullName = ResultInfo["activityIDs"] and C_LFGList.GetActivityFullName(ResultInfo["activityIDs"][1]) or ""
+        local map = ResultInfo and ResultInfo.leaderDungeonScoreInfo and ResultInfo.leaderDungeonScoreInfo[1] and ResultInfo.leaderDungeonScoreInfo[1].mapName or ""
+        local ActivityFullName = ResultInfo and ResultInfo["activityIDs"] and ResultInfo["activityIDs"][1] and C_LFGList.GetActivityFullName(ResultInfo["activityIDs"][1]) or ""
         local ActivityleaderName = ResultInfo and ResultInfo.leaderName or ""
         local ActivitygroupName = ResultInfo and ResultInfo.name or ""
         DEFAULT_CHAT_FRAME:AddMessage("DoKeys: Received Invite To: " ..  ActivitygroupName .. " " .. map .. " By: " .. ActivityleaderName,1,1,0)
@@ -20,12 +20,12 @@ local function InvitedTo(self, event, searchResultID, newStatus, oldStatus, grou
     if newStatus == "inviteaccepted" then
         --DevTools_Dump(C_LFGList.GetSearchResultInfo(searchResultID))
         local ResultInfo = searchResultID and C_LFGList.GetSearchResultInfo(searchResultID) or {}
-        local map = ResultInfo and ResultInfo.leaderDungeonScoreInfo and ResultInfo.leaderDungeonScoreInfo[1].mapName or ""
+        local map = ResultInfo and ResultInfo.leaderDungeonScoreInfo and ResultInfo.leaderDungeonScoreInfo[1] and ResultInfo.leaderDungeonScoreInfo[1].mapName or ""
         if map == "" then
-            local ActivityInfoTable = C_LFGList.GetActivityInfoTable(ResultInfo["activityIDs"][1])
-            map = ActivityInfoTable and C_Map.GetMapInfo(ActivityInfoTable.mapID) and C_Map.GetMapInfo(ActivityInfoTable.mapID).name or ""
+            local ActivityInfoTable = ResultInfo and ResultInfo["activityIDs"] and ResultInfo["activityIDs"][1] andC_LFGList.GetActivityInfoTable(ResultInfo["activityIDs"][1])
+            map = ActivityInfoTable and ActivityInfoTable.mapID and C_Map.GetMapInfo(ActivityInfoTable.mapID) and C_Map.GetMapInfo(ActivityInfoTable.mapID).name or ""
         end
-        local ActivityFullName = ResultInfo["activityIDs"] and C_LFGList.GetActivityFullName(ResultInfo["activityIDs"][1]) or ""
+        local ActivityFullName = ResultInfo and ResultInfo["activityIDs"] and ResultInfo["activityIDs"][1] and C_LFGList.GetActivityFullName(ResultInfo["activityIDs"][1]) or ""
         local ActivityleaderName = ResultInfo and ResultInfo.leaderName or ""
         local ActivitygroupName = ResultInfo and ResultInfo.name or ""
         DEFAULT_CHAT_FRAME:AddMessage("DoKeys: Accepted Invite To: " ..  ActivitygroupName .. " " .. map .. " By: " .. ActivityleaderName,1,1,0)
