@@ -357,7 +357,7 @@ local function SetupDB(_, event, one, _)
             if channel == "GUILD" and isGuildMember() then
                 local UnitNamePlayer = UnitName("player")
                 if playerName == UnitNamePlayer then
-                    if _G.DoKeysGuild[realmgroupid][GuildName][playerName] then
+                    if _G.DoKeysGuild and _G.DoKeysGuild[realmgroupid] and _G.DoKeysGuild[realmgroupid][GuildName] and _G.DoKeysGuild[realmgroupid][GuildName][playerName] then
                         _G.DoKeysGuild[realmgroupid][GuildName][playerName] = nil
                     end
                     return
