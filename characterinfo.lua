@@ -1611,10 +1611,10 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             --if OldKeyLevel ~= GetOwnedKeystoneLevel()then
             --    print("old key level is not new key level")
             --end
-            local newkeymapid = GetOwnedKeystoneChallengeMapID()
-            local newkeylevel = GetOwnedKeystoneLevel()
+            _G.DoKeys.newkeymapid = GetOwnedKeystoneChallengeMapID()
+            _G.DoKeys.newkeylevel = GetOwnedKeystoneLevel()
             if (_G.DoKeys.OldKeyMapid and _G.DoKeys.newkeymapid and _G.DoKeys.OldKeyLevel and _G.DoKeys.newkeylevel) then
-                if tonumber(_G.DoKeys.OldKeyMapid) ~= tonumber(_G.DoKeys.newkeymapid) and tonumber(_G.DoKeys.OldKeyLevel) ~= tonumber(GetOwnedKeystoneLevel()) then
+                if tonumber(_G.DoKeys.OldKeyMapid) ~= tonumber(_G.DoKeys.newkeymapid) and tonumber(_G.DoKeys.OldKeyLevel) ~= tonumber(_G.DoKeys.newkeylevel) then
                     --print("Should Send New Key!")
                     --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
                     SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
