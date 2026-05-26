@@ -430,7 +430,7 @@ ReportKeysToButton:SetScript('OnClick',
         if ReportKeysToDropDownValue == "GUILD" or ReportKeysToDropDownValue == "PARTY" or ReportKeysToDropDownValue == "OFFICER" then
             for k, v in pairs(_G.DoCharacters[realmgroupid]) do -- luacheck: ignore 423
                 if v.level == addonTable.DoKeysCurrentMaxLevel then
-                    SendChatMessage(k .. " " .. DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
+                    SendChatMessage(k .. " " .. addonTable:DoKeysCreateLink(v["mythicplus"]["keystone"],"normal"), ReportKeysToDropDownValue)
                 end
             end
         end

@@ -1596,7 +1596,7 @@ local function TrackKeyChange(_, event, prevItem, newItem)
         --            NewKeyLevel = tonumber(NewKeyLevel)
         --            if tonumber(OldKeyMapid) ~= tonumber(NewKeyMapid) and tonumber(OldKeyLevel) ~= tonumber(NewKeyLevel) then
         --                --print("Should Send New Key!")
-        --                SendChatMessage("New-Key: " .. DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
+        --                SendChatMessage("New-Key: " .. addonTable:DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
         --            end
         --            break
         --        end
@@ -1616,8 +1616,8 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             if (_G.DoKeys.OldKeyMapid and _G.DoKeys.newkeymapid and _G.DoKeys.OldKeyLevel and _G.DoKeys.newkeylevel) then
                 if tonumber(_G.DoKeys.OldKeyMapid) ~= tonumber(_G.DoKeys.newkeymapid) and tonumber(_G.DoKeys.OldKeyLevel) ~= tonumber(_G.DoKeys.newkeylevel) then
                     --print("Should Send New Key!")
-                    --SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
-                    SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+                    --SendChatMessage("New Key: " .. addonTable:DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"normal"), "PARTY")
+                    SendChatMessage("New Key: " .. addonTable:DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
                 end
             end
 
@@ -1634,7 +1634,7 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             --            NewKeyLevel = tonumber(NewKeyLevel)
             --            if tonumber(OldKeyMapid) ~= tonumber(NewKeyMapid) and tonumber(OldKeyLevel) ~= tonumber(NewKeyLevel) then
             --                --print("Should Send New Key!")
-            --                SendChatMessage("New Key: " .. DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
+            --                SendChatMessage("New Key: " .. addonTable:DoKeysCreateLink( {currentkeymapid = NewKeyMapid, CurrentKeyLevel = NewKeyLevel, CurrentKeyInstance = NewKeyMapid and C_ChallengeMode.GetMapUIInfo(NewKeyMapid) or ""} ,"normal"), "PARTY")
             --            end
             --            break
             --        end
@@ -1651,7 +1651,7 @@ local function TrackKeyChange(_, event, prevItem, newItem)
                         local NewTWKeyLevel
                         _,NewTWKeyMapid,_,NewTWKeyLevel = strsplit(":",ItemLink)
                         if _G.DoKeys.OldTWKeyMapid and tonumber(_G.DoKeys.OldTWKeyMapid) ~= tonumber(NewTWKeyMapid) and tonumber(_G.DoKeys.OldTWKeyLevel) ~= tonumber(NewTWKeyLevel) then
-                            SendChatMessage("New Key: " .. DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
+                            SendChatMessage("New Key: " .. addonTable:DoKeysCreateLink(_G.DoCharacters[realmgroupid][UnitName("player") .. "-" .. GetRealmName()]["mythicplus"]["keystone"],"tw"), "PARTY")
                         end
                         break
                     end
@@ -1666,8 +1666,8 @@ local function TrackKeyChange(_, event, prevItem, newItem)
             --local _,olditemid = string.split(":",prevItem)
             local _,newitemid = string.split(":",newItem)
             if newitemid == "180653" then
-                SendChatMessage("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
-                --print("Re-Rolled Key To: " .. DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""}))
+                SendChatMessage("Re-Rolled Key To: " .. addonTable:DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""} ,"normal"), "PARTY")
+                --print("Re-Rolled Key To: " .. addonTable:DoKeysCreateLink( {currentkeymapid = GetOwnedKeystoneChallengeMapID(), CurrentKeyLevel = GetOwnedKeystoneLevel(), CurrentKeyInstance = GetOwnedKeystoneChallengeMapID() and C_ChallengeMode.GetMapUIInfo(GetOwnedKeystoneChallengeMapID()) or ""}))
             end
         end)
     end
