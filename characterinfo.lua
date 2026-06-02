@@ -1432,6 +1432,7 @@ FriendsTooltip:HookScript("OnShow", function()
             fs:SetWordWrap(true)
             fs:SetText("")
         end
+        fs:SetText("")
         --print("Extracted name-realm: ", name .. "-" .. realm)
         for i = 1, BNGetNumFriends() do
             local acc = C_BattleNet.GetFriendAccountInfo(i)
