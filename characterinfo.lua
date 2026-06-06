@@ -17,8 +17,8 @@ local tinsert = _G.tinsert
 local GetContainerNumSlots = _G.C_Container.GetContainerNumSlots and _G.C_Container.GetContainerNumSlots or _G.GetContainerNumSlots
 local GetContainerItemID = _G.C_Container.GetContainerItemID and _G.C_Container.GetContainerItemID or _G.GetContainerItemID
 local GetContainerItemLink = _G.C_Container.GetContainerItemLink and _G.C_Container.GetContainerItemLink or _G.GetContainerItemLink
-local LibDeflate = _G.LibStub:GetLibrary("LibDeflate")
-local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0")
+local LibDeflate = _G.LibStub:GetLibrary("LibDeflate", true)
+local AceSerializer = _G.LibStub:GetLibrary("AceSerializer-3.0", true)
 local LibKeystone = LibStub("LibKeystone")
 
 local date = _G.date
@@ -1522,7 +1522,8 @@ local function RequestPartyKeys(_, event)
     and not (select(3, GetInstanceInfo()) == 205)
     and not (select(3, GetInstanceInfo()) == 208)then
         ChatThrottlePlusLib:SendAddonMessage( "NORMAL", "DoKeys", "PartyRequest", "PARTY")
-        local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0")
+        local openRaidLib = LibStub:GetLibrary("LibOpenRaid-1.0", true)
+        if not openRaidLib then return end
         for i=1,_G.GetNumGroupMembers() do
             local sentRequest = openRaidLib and openRaidLib.RequestAllData()
             --local unitID = unit..i
