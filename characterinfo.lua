@@ -334,7 +334,10 @@ local function SetupDB(_, event, one, _)
 	        -- You can use C_ChallengeMode.GetMapUIInfo(keyMapID) to get info like the map name
 	        local challengeMapName = C_ChallengeMode.GetMapUIInfo(keyMapID)
 	        --print(string.format("%s has a %q keystone that's level %d and has a rating of %d.", playerName, challengeMapName, keyLevel, playerRating))
-            local GuildName = isGuildMember() and GetGuildInfo("player") or "false"
+            local GuildName
+            if isGuildMember() then
+                GuildName = GetGuildInfo("player")
+            end
             -- keyLevel=Number, the level of the keystone
             -- keyMapID=Number, the challenge map ID of the keystone
             -- playerRating=Number, the Mythic+ rating of the player
@@ -355,6 +358,9 @@ local function SetupDB(_, event, one, _)
                     KeyInstance = challengeMapName}
             end
             if channel == "GUILD" and isGuildMember() then
+                if not GuildName then
+                    return
+                end
                 local UnitNamePlayer = UnitName("player")
                 if playerName == UnitNamePlayer then
                     if _G.DoKeysGuild and _G.DoKeysGuild[realmgroupid] and _G.DoKeysGuild[realmgroupid][GuildName] and _G.DoKeysGuild[realmgroupid][GuildName][playerName] then
@@ -401,6 +407,12 @@ local function SetupDB(_, event, one, _)
                 _G.DoKeysGuild[realmgroupid][GuildName][playerName].name = playerName
             end
         end)
+    end
+    --print("DoKeys: Database setup complete.")
+    for _, sub in pairs(_G.DoKeysGuild) do
+        if type(sub) == "table" and sub["false"] ~= nil then
+            sub["false"] = nil
+        end
     end
 end
 
