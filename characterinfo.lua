@@ -1132,9 +1132,13 @@ local function TrackBNETFriends(_, event, prefix, text, channel, senderID)
                 end
             end
             local btag = accountInfo and accountInfo.isBattleTagFriend and accountInfo.battleTag
-            local _, NewText2 = strsplit(" ",text)
+            --print(text)
+            --local _, NewText2 = strsplit(" ",text)
+            --print(NewText2)
+            local NewText2 = text:gsub("sync4", "")
+            NewText2 = NewText2:gsub(" ", "")
             local AstralCharacterTable = {strsplit("_",NewText2)}
-            for i,data in pairs(AstralCharacterTable) do
+            for _,data in pairs(AstralCharacterTable) do
                 local NameRealm, class, KeyInstanceID, KeyLevel, Week = strsplit(":",data)
                 if not NameRealm or NameRealm == "" then return end
                 if accountInfo.isFriend or accountInfo.isBattleTagFriend then
